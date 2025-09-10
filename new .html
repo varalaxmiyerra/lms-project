@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LMS Admin Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      display: flex;
+      background: #f5f7ff;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: #fff;
+      padding: 20px 0;
+      transition: width 0.3s ease;
+      min-height: 100vh;
+      position: fixed;
+    }
+    .sidebar.collapsed {
+      width: 70px;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar ul li {
+      padding: 15px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: background 0.3s;
+    }
+    .sidebar ul li i {
+      margin-right: 15px;
+      width: 20px;
+      text-align: center;
+    }
+    .sidebar ul li:hover,
+    .sidebar ul li.active {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+    }
+    .sidebar.collapsed ul li span {
+      display: none;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      flex-grow: 1;
+      transition: margin-left 0.3s ease;
+    }
+    .sidebar.collapsed ~ .main-content {
+      margin-left: 70px;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      color: #333;
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .navbar .menu-toggle {
+      cursor: pointer;
+      font-size: 20px;
+      color: #4f46e5;
+    }
+    .navbar input[type="text"] {
+      padding: 8px 12px;
+      border-radius: 20px;
+      border: 1px solid #ddd;
+      outline: none;
+      width: 250px;
+      transition: 0.3s;
+    }
+    .navbar input[type="text"]:focus {
+      border-color: #7c3aed;
+    }
+    .navbar .profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .navbar .profile img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+    }
+
+    /* Dashboard Cards */
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+      border-top: 4px solid transparent;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+    }
+    .card h3 {
+      margin-bottom: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #444;
+    }
+    .card p {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #4f46e5;
+    }
+    .card small {
+      color: #777;
+    }
+
+    /* Card Accent Colors */
+    .card.sales { border-top-color: #4f46e5; }
+    .card.purchases { border-top-color: #f97316; }
+    .card.orders { border-top-color: #22c55e; }
+    .card.overview { border-top-color: #7c3aed; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        z-index: 1000;
+        left: -250px;
+        top: 0;
+        height: 100%;
+      }
+      .sidebar.active {
+        left: 0;
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>LMS Admin</h2>
+    <ul>
+      <li class="active"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></li>
+      <li><i class="fas fa-users"></i><span>Trainers</span></li>
+      <li><i class="fas fa-user-graduate"></i><span>Students</span></li>
+      <li><i class="fas fa-book"></i><span>Courses</span></li>
+      <li><i class="fas fa-chart-line"></i><span>Analytics</span></li>
+      <li><i class="fas fa-video"></i><span>Materials</span></li>
+      <li><i class="fas fa-cog"></i><span>Settings</span></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Navbar -->
+    <div class="navbar">
+      <i class="fas fa-bars menu-toggle"></i>
+      <input type="text" placeholder="Search...">
+      <div class="profile">
+        <img src="https://via.placeholder.com/40" alt="Profile">
+        <span>Admin</span>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard">
+      <div class="card sales">
+        <h3>Sales</h3>
+        <p>67,343</p>
+        <small>+15% since last month</small>
+      </div>
+      <div class="card purchases">
+        <h3>Purchases</h3>
+        <p>2,343</p>
+        <small>-5% since last month</small>
+      </div>
+      <div class="card orders">
+        <h3>Orders</h3>
+        <p>35,343</p>
+        <small>+8% since last month</small>
+      </div>
+      <div class="card overview">
+        <h3>Overview</h3>
+        <p>Profit +2343</p>
+        <small>Last 30 days</small>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sidebar toggle
+    const toggleBtn = document.querySelector(".menu-toggle");
+    const sidebar = document.querySelector(".sidebar");
+    toggleBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("collapsed");
+    });
+
+    // Sidebar active state
+    const menuItems = document.querySelectorAll(".sidebar ul li");
+    menuItems.forEach(item => {
+      item.addEventListener("click", () => {
+        menuItems.forEach(i => i.classList.remove("active"));
+        item.classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>
+

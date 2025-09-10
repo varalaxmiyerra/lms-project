@@ -1,0 +1,429 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LMS Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="dashboard-ui-update.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h2>ADMIN DASHBOARD</h2>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html" class="active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+        <li><a href="#" data-page="trainer"><i class="fas fa-chalkboard-teacher"></i><span>Trainer</span></a></li>
+        <li><a href="#" data-page="student"><i class="fas fa-user-graduate"></i><span>Student</span></a></li>
+        <li><a href="#" data-page="courses"><i class="fas fa-book"></i><span>Courses</span></a></li>
+        <li><a href="#" data-page="reports"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
+        <li><a href="#" data-page="material"><i class="fas fa-file-alt"></i><span>Material Page</span></a></li>
+        <li><a href="#" data-page="video"><i class="fas fa-video"></i><span>Video Page</span></a></li>
+        <li><a href="#" data-page="about"><i class="fas fa-info-circle"></i><span>About Page</span></a></li>
+        <li><a href="#" data-page="contact"><i class="fas fa-envelope"></i><span>Contact Page</span></a></li>
+        <li><a href="#" data-page="settings"><i class="fas fa-cog"></i><span>Settings Page</span></a></li>
+      </ul>
+    </aside>
+
+    <!-- Top Navbar -->
+    <nav class="top-navbar redesigned-navbar">
+      <div class="navbar-left">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="search-bar">
+          <input type="text" placeholder="Search...">
+          <button><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+      <div class="navbar-right">
+        <button class="navbar-icon" id="notifications">
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge">3</span>
+        </button>
+        <div class="profile-info">
+          <span class="profile-name">vara</span>
+          <img src="https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757430111/Screenshot_217_dys7md.png" alt="Profile Picture" class="profile-pic" />
+        </div>
+        <button class="navbar-icon" id="logout">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Removed duplicate Top Navbar -->
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+      <div class="content-header">
+        <h1 id="page-title">Dashboard</h1>
+        <p id="page-description">Welcome back! Here’s a quick look at what’s happening today</p>
+      </div>
+
+      <div class="dashboard-cards" id="dashboard-cards">
+        <div class="card">
+          <i class="fas fa-users card-icon"></i>
+          <div>
+            <h3>Total Students</h3>
+            <p>1,250</p>
+          </div>
+        </div>
+        <div class="card">
+          <i class="fas fa-user card-icon"></i>
+          <div>
+            <h3>Total Trainers</h3>
+            <p>75</p>
+          </div>
+        </div>
+        <div class="card">
+          <i class="fas fa-book card-icon"></i>
+          <div>
+            <h3>Total Courses</h3>
+            <p>45</p>
+          </div>
+        </div>
+        <div class="card">
+          <i class="fas fa-user-clock card-icon"></i>
+          <div>
+            <h3>Active Users</h3>
+            <p>250</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="graphs-row">
+        <div class="graph-container">
+          <h3>Combined Enrollment and Completion Trends</h3>
+          <canvas id="combinedChart" style="height: 250px;"></canvas>
+        </div>
+
+        <div class="graph-container">
+          <h3>User Distribution</h3>
+          <canvas id="userDistributionChart" style="height: 250px;"></canvas>
+        </div>
+      </div>
+
+      <div class="dashboard-lower">
+        <div class="recent-activity card">
+          <h3>Recent Activity</h3>
+          <ul>
+            <li><i class="fas fa-check-circle"></i> New student Ravi Kumar registered</li>
+            <li><i class="fas fa-calendar-alt"></i> Course Java Basics added</li>
+            <li><i class="fas fa-user"></i> Trainer Anjall Sharma uploaded new material</li>
+            <li><i class="fas fa-arrow-up-right-from-square"></i> Access request approved for John Doe</li>
+          </ul>
+        </div>
+        <div class="tasks-reminders card">
+          <h3>Tasks / Reminders</h3>
+          <ul>
+            <li><i class="fas fa-check"></i> Approve 3 access requests</li>
+            <li><i class="fas fa-check"></i> Update 2 course materials</li>
+            <li><i class="fas fa-check"></i> Check student performance reports</li>
+          </ul>
+        </div>
+        <div class="user-profile card">
+          <h3>User Profile / Shortcuts</h3>
+          <div class="profile-info">
+            <img src="https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757430111/Screenshot_217_dys7md.png" alt="VARALAXMI" class="profile-pic" />
+            <div>
+              <p class="profile-name">VARALAXMI Y</p>
+              <p class="profile-role">Admin</p>
+            </div>
+          </div>
+          <div class="profile-buttons">
+            <button>Add Student</button>
+            <button>Add Trainer</button>
+            <button>Add Course</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-content">
+        <!-- Dynamic content will be loaded here -->
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menu-toggle');
+    const mainContent = document.getElementById('main-content');
+    const topNavbar = document.querySelector('.top-navbar');
+
+    if(menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+      });
+    }
+
+    // Menu item click handler
+    const menuItems = document.querySelectorAll('.sidebar-menu a');
+    const pageTitle = document.getElementById('page-title');
+    const pageDescription = document.getElementById('page-description');
+    const pageContent = document.getElementById('page-content');
+    const dashboardCards = document.getElementById('dashboard-cards');
+
+    menuItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const page = item.getAttribute('data-page');
+
+        // Remove active class from all items
+        menuItems.forEach(i => i.classList.remove('active'));
+        // Add active class to clicked item
+        item.classList.add('active');
+
+        // Update page title and description
+        switch(page) {
+          case 'dashboard':
+            pageTitle.textContent = 'Dashboard';
+            pageDescription.textContent = 'Welcome to your Learning Management System dashboard';
+            dashboardCards.style.display = 'grid';
+            pageContent.innerHTML = '';
+            break;
+          case 'trainer':
+            pageTitle.textContent = 'Trainer Management';
+            pageDescription.textContent = 'Manage trainers and their courses';
+            dashboardCards.style.display = 'none';
+            pageContent.innerHTML = '<p>Trainer management content will be displayed here.</p>';
+            break;
+          case 'student':
+            pageTitle.textContent = 'Student Management';
+            pageDescription.textContent = 'Manage student enrollments and progress';
+            dashboardCards.style.display = 'none';
+            pageContent.innerHTML = '<p>Student management content will be displayed here.</p>';
+            break;
+          case 'courses':
+            pageTitle.textContent = 'Courses';
+            pageDescription.textContent = 'Browse and manage all courses';
+            dashboardCards.style.display = 'none';
+            pageContent.innerHTML = '<p>Courses content will be displayed here.</p>';
+            break;
+          case 'reports':
+            pageTitle.textContent = 'Reports';
+            pageDescription.textContent = 'View analytics and generate reports';
+            dashboardCards.style.display = 'none';
+            pageContent.innerHTML = '<p>Reports content will be displayed here.</p>';
+            break;
+          case 'material':
+            pageTitle.textContent = 'Material Page';
+            pageDescription.textContent = 'Access course materials and resources';
+            dashboardCards.style.display = 'none';
+            pageContent.innerHTML = '<p>Material page content will be displayed here.</p>';
+            break;
+          case 'video':
+            pageTitle.textContent = 'Video Page';
+            pageDescription.textContent = 'Watch course videos and lectures';
+            dashboardCards.style.display = 'none';
+            pageContent.innerHTML = '<p>Video page content will be displayed here.</p>';
+            break;
+          case 'about':
+            pageTitle.textContent = 'About';
+            pageDescription.textContent = 'Learn more about our Learning Management System';
+            dashboardCards.style.display = 'none';
+            pageContent.innerHTML = '<p>About page content will be displayed here.</p>';
+            break;
+          case 'contact':
+            pageTitle.textContent = 'Contact';
+            pageDescription.textContent = 'Get in touch with our support team';
+            dashboardCards.style.display = 'none';
+            pageContent.innerHTML = '<p>Contact page content will be displayed here.</p>';
+            break;
+          case 'settings':
+            pageTitle.textContent = 'Settings';
+            pageDescription.textContent = 'Configure your account and system preferences';
+            dashboardCards.style.display = 'none';
+            pageContent.innerHTML = '<p>Settings page content will be displayed here.</p>';
+            break;
+        }
+      });
+    });
+
+    // Navbar icon handlers
+    document.getElementById('notifications').addEventListener('click', () => {
+      alert('Notifications clicked');
+    });
+
+    // Removed profile element event listener because no element with id 'profile' exists
+
+    document.getElementById('logout').addEventListener('click', () => {
+      if (confirm('Are you sure you want to logout?')) {
+        window.location.href = 'lms_login_new.html';
+      }
+    });
+
+    // Responsive sidebar
+    window.addEventListener('resize', () => {
+      if (window.innerWidth <= 768) {
+        sidebar.classList.add('collapsed');
+      } else {
+        sidebar.classList.remove('collapsed');
+      }
+    });
+
+    // Initialize
+    if (window.innerWidth <= 768) {
+      sidebar.classList.add('collapsed');
+    }
+
+
+  </script>
+
+  <script>
+    // Combined Enrollment and Completion Chart
+    const ctxCombined = document.getElementById('combinedChart').getContext('2d');
+    const combinedChart = new Chart(ctxCombined, {
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+          type: 'line',
+          label: 'Enrollments',
+          data: [30, 45, 60, 50, 70, 80, 90, 100, 110, 95, 85, 75],
+          borderColor: 'rgba(20, 161, 145, 1)',
+          backgroundColor: 'rgba(20, 161, 145, 0.2)',
+          fill: false,
+          tension: 0.3,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          borderWidth: 3
+        }, {
+          type: 'line',
+          label: 'Avg Completion Rate (%)',
+          data: [75, 80, 90, 60, 70, 99, 95, 85, 100, 90, 95, 50],
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          fill: false,
+          tension: 0.3,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          borderWidth: 3
+        }]
+      },
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        width: 600,
+        height: 350,
+        animation: false,
+        hover: {
+          mode: null
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              color: '#035e47',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            }
+          },
+          tooltip: {
+            enabled: true,
+            mode: 'nearest',
+            intersect: false
+          }
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: '#035e47',
+              font: {
+                size: 12,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              display: false
+            }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: '#035e47',
+              font: {
+                size: 12,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              color: 'rgba(3, 94, 71, 0.1)'
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+
+
+  <script>
+    // User Distribution Chart
+    const ctxDistribution = document.getElementById('userDistributionChart').getContext('2d');
+    const userDistributionChart = new Chart(ctxDistribution, {
+      type: 'pie',
+      data: {
+        labels: ['Students', 'Trainers', 'Admins'],
+        datasets: [{
+          label: 'User Distribution',
+          data: [1250, 75, 10],
+          backgroundColor: [
+            'rgba(20, 161, 145, 0.6)',
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(54, 162, 235, 0.6)'
+          ],
+          borderColor: [
+            'rgba(20, 161, 145, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        width: 600,
+        height: 350,
+        animation: false,
+        hover: {
+          mode: null
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              color: '#035e47',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            }
+          },
+          tooltip: {
+            enabled: true,
+            callbacks: {
+              label: function(context) {
+                const label = context.label || '';
+                const value = context.parsed;
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percentage = ((value / total) * 100).toFixed(1);
+                return `${label}: ${value} (${percentage}%)`;
+              }
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LMS Login</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1a002b, #3a0f5a);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Main container */
+    .container {
+      width: 900px;
+      max-width: 95%;
+      height: 550px;
+      background: linear-gradient(135deg, #2e0050, #4b007b);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(139, 0, 255, 0.7);
+      display: flex;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Left panel */
+    .left-panel {
+      flex: 1.2;
+      padding: 30px 40px;
+      background: #3a0f5a;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      border-radius: 20px 0 0 20px;
+    }
+
+    .left-panel h1 {
+      font-size: 36px;
+      margin: 0 0 10px 0;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+
+    .left-panel hr {
+      width: 50px;
+      border: 2px solid #ff4e50;
+      margin: 10px 0 20px 0;
+      border-radius: 2px;
+    }
+
+    .left-panel p {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #d1c4e9;
+      max-width: 300px;
+      margin-bottom: 30px;
+    }
+
+    .left-panel button {
+      width: 120px;
+      padding: 10px 0;
+      background: linear-gradient(90deg, #ff4e50, #f9d423);
+      border: none;
+      border-radius: 25px;
+      color: #1a0529;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 78, 80, 0.7);
+      transition: background 0.3s ease;
+    }
+
+    .left-panel button:hover {
+      background: linear-gradient(90deg, #f9d423, #ff4e50);
+    }
+
+    /* Right panel */
+    .right-panel {
+      flex: 1;
+      max-width: 350px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-radius: 0 20px 20px 0;
+      box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.1);
+    }
+
+    .right-panel h2 {
+      margin: 0 0 30px 0;
+      font-weight: 700;
+      font-size: 28px;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #ddd;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      padding: 12px 15px;
+      border-radius: 25px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.2);
+      transition: background 0.3s ease;
+    }
+
+    input[type="text"]::placeholder,
+    input[type="password"]::placeholder {
+      color: #ccc;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      background: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 10px #ff4e50;
+    }
+
+    button[type="submit"] {
+      padding: 12px 0;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(90deg, #ff4e50, #f9d423);
+      color: #1a0529;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 78, 80, 0.7);
+      transition: background 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background: linear-gradient(90deg, #f9d423, #ff4e50);
+    }
+
+    .social-icons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .social-icons a {
+      color: #fff;
+      font-size: 20px;
+      transition: color 0.3s ease;
+    }
+
+    .social-icons a:hover {
+      color: #ff4e50;
+    }
+
+    /* Decorative shapes */
+    .shape1, .shape2, .shape3 {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.15;
+      filter: blur(20px);
+      z-index: 0;
+    }
+
+    .shape1 {
+      width: 220px;
+      height: 220px;
+      background: #7b2ff7;
+      top: 10px;
+      left: 10px;
+    }
+
+    .shape2 {
+      width: 180px;
+      height: 180px;
+      background: #9a4dff;
+      bottom: 30px;
+      right: 50px;
+    }
+
+    .shape3 {
+      width: 120px;
+      height: 120px;
+      background: #7b2ff7;
+      top: 50px;
+      right: 90px;
+    }
+
+    /* Animated study icons */
+    .animated-icon {
+      position: absolute;
+      font-size: 50px;
+      color: rgba(255, 255, 255, 0.5);
+      z-index: 1;
+    }
+
+    #book-icon {
+      top: 50px;
+      left: 50px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    #grad-icon {
+      top: 150px;
+      right: 100px;
+      animation: rotate 4s linear infinite;
+    }
+
+    #pencil-icon {
+      bottom: 100px;
+      right: 50px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    #flask-icon {
+      top: 50px;
+      right: 150px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    #microscope-icon {
+      bottom: 80px;
+      left: 200px;
+      animation: bounce 3s ease-in-out infinite;
+    }
+
+    /* Animated background study images */
+    .background-icon {
+      position: absolute;
+      font-size: 60px;
+      color: rgba(255, 255, 255, 0.1);
+      z-index: 0;
+      animation: slow-float 6s ease-in-out infinite;
+    }
+
+    #bg-book { top: 20px; right: 150px; }
+    #bg-grad { bottom: 50px; left: 100px; animation-delay: 2s; }
+    #bg-pencil { bottom: 300px; left: 100px; animation-delay: 4s; }
+    #bg-flask { top: 100px; left: 100px; animation-delay: 1s; }
+    #bg-microscope { bottom: 100px; right: 100px; animation-delay: 3s; }
+    #bg-teacher { top: 150px; right: 50px; animation-delay: 5s; }
+    #bg-laptop { bottom: 200px; right: 200px; animation-delay: 6s; }
+    #bg-lightbulb { top: 250px; left: 50px; animation-delay: 7s; }
+    #bg-graduate { top: 300px; right: 100px; animation-delay: 8s; }
+    #bg-atom { top: 200px; right: 200px; animation-delay: 10s; }
+
+    @keyframes slow-float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-40px); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-30px); }
+      60% { transform: translateY(-15px); }
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        flex-direction: column;
+        height: auto;
+      }
+      .left-panel, .right-panel {
+        flex: none;
+        width: 100%;
+        border-radius: 0;
+        padding: 30px 20px;
+      }
+      .left-panel {
+        border-radius: 20px 20px 0 0;
+      }
+      .right-panel {
+        border-radius: 0 0 20px 20px;
+      }
+    }
+
+    /* Input container for toggles */
+    .input-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-container input {
+      flex: 1;
+      padding-right: 40px; /* Space for button */
+    }
+
+    .toggle-btn {
+      position: absolute;
+      right: 10px;
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      transition: color 0.3s ease;
+    }
+
+    .toggle-btn:hover {
+      color: #ff4e50;
+    }
+
+    .strength-indicator {
+      font-size: 12px;
+      margin-top: 5px;
+      text-align: center;
+    }
+
+    .strength-weak { color: #ff4e50; }
+    .strength-medium { color: #f9d423; }
+    .strength-strong { color: #4caf50; }
+
+    .forgot-password-container {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .forgot-password-container a {
+      color: #ddd;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+
+    .forgot-password-container a:hover {
+      color: #ff4e50;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-panel">
+      <h1>Welcome!</h1>
+      <hr />
+      <p>Login to your Learning Management System to manage courses, users, and reports.</p>
+      
+      <p>Teachers can manage courses and track student progress in one place.</p>
+     
+      <p>Students can access lessons, assignments, and exams with just one click.</p>
+      <button onclick="showModal()">Learn More</button>
+      <i class="fas fa-book animated-icon" id="book-icon"></i>
+      <i class="fas fa-graduation-cap animated-icon" id="grad-icon"></i>
+      <i class="fas fa-pencil-alt animated-icon" id="pencil-icon"></i>
+      <i class="fas fa-flask animated-icon" id="flask-icon"></i>
+      <i class="fas fa-microscope animated-icon" id="microscope-icon"></i>
+      <div class="shape1"></div>
+      <div class="shape2"></div>
+      <div class="shape3"></div>
+    </div>
+    <div class="right-panel">
+      <h2>Sign in</h2>
+      <form action="admin_home.html" method="post" onsubmit="return validateForm()">
+        <label for="username">User Name</label>
+        <div class="input-container">
+          <input type="text" id="username" name="username" placeholder="username" required />
+          <button type="button" id="clear-username" class="toggle-btn" title="Clear username"><i class="fas fa-user"></i></button>
+        </div>
+        <label for="password">Password</label>
+        <div class="input-container">
+          <input type="password" id="password" name="password" placeholder="password" required />
+          <button type="button" id="toggle-password" class="toggle-btn" title="Show/Hide password"><i class="fas fa-eye"></i></button>
+        </div>
+        <div id="password-strength" class="strength-indicator"></div>
+        <label for="user-role">Select Role</label>
+        <div class="role-selection">
+          <button type="button" class="role-btn active" data-role="admin">Admin</button>
+          <button type="button" class="role-btn" data-role="student">Student</button>
+          <button type="button" class="role-btn" data-role="trainer">Trainer</button>
+        </div>
+        <input type="hidden" id="user-role" name="user-role" value="admin" />
+        <button type="submit">Submit</button>
+        <div class="forgot-password-container">
+          <a href="#" id="forgot-password-link">Forgot Password?</a>
+        </div>
+      </form>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="lms-modal" class="modal">
+    <div class="modal-content" >
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>About LMS</h2>
+      <img src="https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757333469/7d25e3d8-dbc1-46be-b30a-04481326894f_hcoxfu.jpg" alt="LMS Image" style="width: 100%; max-width: 300px; margin: 10px 0; border-radius: 10px;">
+      <p>A Learning Management System (LMS) is a software application for the administration, documentation, tracking, reporting, and delivery of educational courses or training programs. It helps educators create and deliver content, monitor student participation, and assess performance.</p>
+      <p>Key features include:</p>
+      <ul>
+        <li>Course creation and management</li>
+        <li>Student enrollment and progress tracking</li>
+        <li>Assignment and quiz delivery</li>
+        <li>Communication tools</li>
+        <li>Reporting and analytics</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- background icons -->
+  <i class="fas fa-book background-icon" id="bg-book"></i>
+  <i class="fas fa-graduation-cap background-icon" id="bg-grad"></i>
+  <i class="fas fa-pencil-alt background-icon" id="bg-pencil"></i>
+  <i class="fas fa-flask background-icon" id="bg-flask"></i>
+  <i class="fas fa-microscope background-icon" id="bg-microscope"></i>
+  <i class="fas fa-chalkboard-teacher background-icon" id="bg-teacher"></i>
+  <i class="fas fa-laptop-code background-icon" id="bg-laptop"></i>
+  <i class="fas fa-lightbulb background-icon" id="bg-lightbulb"></i>
+  <i class="fas fa-user-graduate background-icon" id="bg-graduate"></i>
+  <i class="fas fa-brain background-icon" id="bg-brain"></i>
+  <i class="fas fa-atom background-icon" id="bg-atom"></i>
+
+  <script>
+    function validateForm() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      if (!username) {
+        alert('Please enter your username.');
+        return false;
+      }
+      if (!password) {
+        alert('Please enter your password.');
+        return false;
+      }
+
+      // Check password strength
+      let strength = 0;
+      if (password.length >= 8) strength++;
+      if (/[a-z]/.test(password)) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+      if (strength < 5) {
+        alert('Password must be strong: at least 8 characters, including uppercase, lowercase, number, and special character.');
+        return false;
+      }
+
+      return true;
+    }
+
+    // Clear username
+    document.getElementById('clear-username').addEventListener('click', function() {
+      document.getElementById('username').value = '';
+    });
+
+    // Toggle password visibility
+    document.getElementById('toggle-password').addEventListener('click', function() {
+      const passwordInput = document.getElementById('password');
+      const toggleBtn = this;
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+      } else {
+        passwordInput.type = 'password';
+        toggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
+      }
+    });
+
+    // Password strength checker
+    document.getElementById('password').addEventListener('input', function() {
+      const password = this.value;
+      const strengthDiv = document.getElementById('password-strength');
+      let strength = 0;
+      let feedback = '';
+
+      if (password.length >= 8) strength++;
+      if (/[a-z]/.test(password)) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+      if (strength < 3) {
+        feedback = 'Weak';
+        strengthDiv.className = 'strength-indicator strength-weak';
+      } else if (strength < 5) {
+        feedback = 'Medium';
+        strengthDiv.className = 'strength-indicator strength-medium';
+      } else {
+        feedback = 'Strong';
+        strengthDiv.className = 'strength-indicator strength-strong';
+      }
+
+      strengthDiv.textContent = feedback;
+    });
+  </script>
+
+  <style>
+    /* Modal styles */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 10; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, #4d0553, #5a087a);
+      margin: 10% auto; /* 10% from the top and centered */
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 500px;
+      color: #fcf5f5;
+      box-shadow: 0 0 15px rgba(240, 237, 237, 0.7);
+      font-size: 16px;
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+      font-weight: 700;
+      font-size: 24px;
+      color: #f5f0f0;
+    }
+
+    .modal-content ul { 
+      padding-left: 20px;
+    }
+
+    .modal-content ul li {
+      margin-bottom: 8px;
+    }
+
+    .close {
+      color: #ff4e50;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #f9d423;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+
+  <script>
+    function showModal() {
+      document.getElementById('lms-modal').style.display = 'block';
+    }
+
+    function closeModal() {
+      document.getElementById('lms-modal').style.display = 'none';
+    }
+
+    // Close modal when clicking outside of modal content
+    window.onclick = function(event) {
+      const modal = document.getElementById('lms-modal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+  </script>
+
+  <style>
+    .role-selection {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .role-btn {
+      flex: 1;
+      padding: 10px 0;
+      margin: 0 5px;
+      border-radius: 25px;
+      border: none;
+      background: linear-gradient(90deg, #6a0dad, #9b30ff);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(155, 48, 255, 0.7);
+      transition: background 0.3s ease;
+    }
+    .role-btn.active {
+      background: linear-gradient(90deg, #ff4e50, #f9d423);
+      color: #1a0529;
+      box-shadow: 0 4px 15px rgba(255, 78, 80, 0.7);
+    }
+    .role-btn:hover:not(.active) {
+      background: linear-gradient(90deg, #9b30ff, #6a0dad);
+    }
+  </style>
+  <script>
+    document.querySelectorAll('.role-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        document.getElementById('user-role').value = button.getAttribute('data-role');
+      });
+    });
+  </script>
+</body>
+</html>
