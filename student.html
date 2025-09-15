@@ -1,0 +1,842 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Students Management - LMS Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="dashboard-ui-update.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h2>ADMIN DASHBOARD</h2>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+        <li><a href="trainers.html"><i class="fas fa-chalkboard-teacher"></i><span>Trainer</span></a></li>
+        <li><a href="student.html" class="active"><i class="fas fa-user-graduate"></i><span>Student</span></a></li>
+        <li><a href="#"><i class="fas fa-book"></i><span>Courses</span></a></li>
+        <li><a href="#"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
+        <li><a href="material.html"><i class="fas fa-file-alt"></i><span>Material Page</span></a></li>
+        <li><a href="#"><i class="fas fa-video"></i><span>Video Page</span></a></li>
+        <li><a href="#"><i class="fas fa-info-circle"></i><span>About Page</span></a></li>
+        <li><a href="#"><i class="fas fa-envelope"></i><span>Contact Page</span></a></li>
+        <li><a href="#"><i class="fas fa-cog"></i><span>Settings Page</span></a></li>
+      </ul>
+    </aside>
+
+    <!-- Top Navbar -->
+    <nav class="top-navbar redesigned-navbar">
+      <div class="navbar-left">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="search-bar">
+          <input type="text" placeholder="Search students...">
+          <button><i class="fas fa-search"></i></button>
+          
+        </div>
+      </div>
+      <div class="navbar-right">
+        <button class="navbar-icon" id="notifications">
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge">3</span>
+        </button>
+        <div class="profile-info">
+          <span class="profile-name">vara</span>
+          <img src="https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757430111/Screenshot_217_dys7md.png" alt="Profile Picture" class="profile-pic" />
+        </div>
+        <button class="navbar-icon" id="logout">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+      <div class="content-header">
+        <h1>Student Management</h1>
+        <p>Manage student enrollments and progress</p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons" style="margin-bottom: 30px;">
+        <button class="btn-primary" id="add-student-btn" onclick="window.location.href='lms_register.html'">
+          <i class="fas fa-plus"></i> Add New Student
+        </button>
+        <button class="btn-secondary" id="export-students-btn">
+          <i class="fas fa-download"></i> Export List
+        </button>
+      </div>
+
+      <!-- Students Stats Cards -->
+      <div class="dashboard-cards">
+        <div class="card">
+          <i class="fas fa-user-graduate card-icon"></i>
+          <div>
+            <h3>Total Students</h3>
+            <p>3</p>
+          </div>
+        </div>
+        <div class="card">
+          <i class="fas fa-user-check card-icon"></i>
+          <div>
+            <h3>Active Students</h3>
+            <p>2</p>
+          </div>
+        </div>
+        <div class="card">
+          <i class="fas fa-clock card-icon"></i>
+          <div>
+            <h3>Pending Enrollments</h3>
+            <p>1</p>
+          </div>
+        </div>
+        <div class="card">
+          <i class="fas fa-star card-icon"></i>
+          <div>
+            <h3>Avg Grade</h3>
+            <p>85%</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Students List -->
+      <div class="students-section">
+        <div class="card">
+          <h3>All Students</h3>
+          <div class="students-table-container">
+            <table class="students-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Enrolled Courses</th>
+                  <th>Progress</th>
+                  <th>Grade</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="student-info">
+                      <img src="https://via.placeholder.com/40" alt="Alice Johnson" class="student-avatar">
+                      <div>
+                        <strong>Y VARALAXMI</strong>
+                        <small>ID: ST001</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>vara20@gmail.com
+                  <td>75%</td>
+                  <td>B+</td>
+                  <td><span class="status active">Active</span></td>
+                  <td>
+                    <button class="action-btn edit-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                    <button class="action-btn view-btn" title="View"><i class="fas fa-eye"></i></button>
+                    <button class="action-btn delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="student-info">
+                      <img src="https://via.placeholder.com/40" alt="Bob Smith" class="student-avatar">
+                      <div>
+                        <strong>l Jagadeesh</strong>
+                        <small>ID: ST002</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Jagadeesh@gmail.com</td>
+                  <td>2</td>
+                  <td>90%</td>
+                  <td>A-</td>
+                  <td><span class="status active">Active</span></td>
+                  <td>
+                    <button class="action-btn edit-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                    <button class="action-btn view-btn" title="View"><i class="fas fa-eye"></i></button>
+                    <button class="action-btn delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="student-info">
+                      <img src="https://via.placeholder.com/40" alt="Charlie Brown" class="student-avatar">
+                      <div>
+                        <strong>Y ANANTH</strong>
+                        <small>ID: ST003</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>ananth@gmail.com</td>
+                  <td>1</td>
+                  <td>60%</td>
+                  <td>C</td>
+                  <td><span class="status inactive">Inactive</span></td>
+                  <td>
+                    <button class="action-btn edit-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                    <button class="action-btn view-btn" title="View"><i class="fas fa-eye"></i></button>
+                    <button class="action-btn delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Student Modal -->
+  <!-- Removed Add Student Modal as per new plan -->
+
+  <style>
+    /* Additional styles for students page */
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .btn-primary, .btn-secondary {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #555756, #0a6b4b);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(20, 161, 145, 0.3);
+    }
+
+    .btn-secondary {
+      background: #f5f7f3;
+      color: #2f4f4f;
+      border: 1px solid #a3c9a8;
+    }
+
+    .btn-secondary:hover {
+      background: #a3c9a8;
+      color: #1f3d2f;
+    }
+
+    .students-section .card {
+      padding: 30px;
+    }
+
+    .students-table-container {
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+
+    .students-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .students-table th,
+    .students-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e6f3e6;
+    }
+
+    .students-table th {
+      background: rgb(97, 94, 94);
+      color: white;
+      font-weight: 600;
+    }
+
+    .student-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .student-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .student-info small {
+      color: #6b8e6b;
+      font-size: 12px;
+    }
+
+    .status {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status.active {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status.inactive {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      padding: 8px;
+      margin-right: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .edit-btn:hover { background: #cce5ff; color: #0066cc; }
+    .view-btn:hover { background: #d1ecf1; color: #0c5460; }
+    .delete-btn:hover { background: #f8d7da; color: #721c24; }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 10% auto;
+      padding: 0;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 30px;
+      border-bottom: 1px solid #e6f3e6;
+      background: linear-gradient(135deg, #f5f7f3, #e6f3e6);
+      border-radius: 12px 12px 0 0;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      color: #2f4f4f;
+    }
+
+    .close-modal {
+      font-size: 28px;
+      cursor: pointer;
+      color: #6b8e6b;
+    }
+
+    .close-modal:hover {
+      color: #2f4f4f;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #2f4f4f;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #a3c9a8;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 20px 30px;
+      border-top: 1px solid #e6f3e6;
+    }
+
+    #add-student-form {
+      padding: 30px;
+    }
+
+    .status-filters {
+      display: flex;
+      gap: 10px;
+      margin-left: 10px;
+    }
+
+    .status-btn {
+      padding: 8px 16px;
+      border: 1px solid #a3c9a8;
+      background: #f5f7f3;
+      color: #2f4f4f;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .status-btn.active {
+      background: #a3c9a8;
+      color: #1f3d2f;
+    }
+
+    .status-btn:hover {
+      background: #a3c9a8;
+      color: #1f3d2f;
+    }
+  </style>
+
+  <script>
+    // Sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menu-toggle');
+
+    if(menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+      });
+    }
+
+    // Logout functionality
+    document.getElementById('logout').addEventListener('click', () => {
+      if (confirm('Are you sure you want to logout?')) {
+        window.location.href = 'lms_login_new.html';
+      }
+    });
+
+    // Modal functionality
+    // Removed add student modal JS as per new plan
+
+    // Students data array
+    let students = [
+      {
+        id: 'ST001',
+        name: 'Alice Johnson',
+        email: 'alice.johnson@example.com',
+        enrolledCourses: 3,
+        progress: '75%',
+        grade: 'B+',
+        status: 'Active',
+        avatar: 'https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757430111/Screenshot_217_dys7md.png'
+      },
+      {
+        id: 'ST002',
+        name: 'Bob Smith',
+        email: 'bob.smith@example.com',
+        enrolledCourses: 2,
+        progress: '90%',
+        grade: 'A-',
+        status: 'Active',
+        avatar: 'https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757430111/Screenshot_217_dys7md.png'
+      },
+      {
+        id: 'ST003',
+        name: 'Charlie Brown',
+        email: 'charlie.brown@example.com',
+        enrolledCourses: 1,
+        progress: '60%',
+        grade: 'C',
+        status: 'Inactive',
+        avatar: 'https://via.placeholder.com/40'
+      }
+    ];
+
+    let currentStatusFilter = 'all';
+
+    // Utility to generate unique ID
+    function generateStudentId() {
+      return 'ST' + Math.floor(1000 + Math.random() * 9000);
+    }
+
+    // Render students table
+    function renderStudentsTable(filter = '', statusFilter = 'all') {
+      const tbody = document.querySelector('.students-table tbody');
+      tbody.innerHTML = '';
+
+      const searchStr = filter.toLowerCase();
+      // If search text is "active" or "inactive", override statusFilter
+      let effectiveStatusFilter = statusFilter;
+      if (searchStr === 'active' || searchStr === 'inactive') {
+        effectiveStatusFilter = searchStr;
+      }
+
+      const filteredStudents = students.filter(student => {
+        const matchesSearch = (
+          student.name.toLowerCase().includes(searchStr) ||
+          student.email.toLowerCase().includes(searchStr) ||
+          student.id.toLowerCase().includes(searchStr) ||
+          student.status.toLowerCase().includes(searchStr)
+        );
+        const matchesStatus = effectiveStatusFilter === 'all' || student.status.toLowerCase() === effectiveStatusFilter;
+        return matchesSearch && matchesStatus;
+      });
+
+      filteredStudents.forEach(student => {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>
+            <div class="student-info">
+              <img src="${student.avatar}" alt="${student.name}" class="student-avatar">
+              <div>
+                <strong>${student.name}</strong>
+                <small>ID: ${student.id}</small>
+              </div>
+            </div>
+          </td>
+          <td>${student.email}</td>
+          <td>${student.enrolledCourses}</td>
+          <td>${student.progress}</td>
+          <td>${student.grade}</td>
+          <td><span class="status ${student.status.toLowerCase()}">${student.status}</span></td>
+          <td>
+            <button class="action-btn edit-btn" title="Edit" data-id="${student.id}"><i class="fas fa-edit"></i></button>
+            <button class="action-btn view-btn" title="View" data-id="${student.id}"><i class="fas fa-eye"></i></button>
+            <button class="action-btn delete-btn" title="Delete" data-id="${student.id}"><i class="fas fa-trash"></i></button>
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+
+      attachTableEventListeners();
+
+      // Status filter buttons
+      const statusButtons = document.querySelectorAll('.status-btn');
+      statusButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons
+          statusButtons.forEach(b => b.classList.remove('active'));
+          // Add active to clicked
+          btn.classList.add('active');
+          currentStatusFilter = btn.getAttribute('data-status');
+          renderStudentsTable(document.getElementById('search-input').value, currentStatusFilter);
+        });
+      });
+    }
+
+    // Attach event listeners to table buttons
+    function attachTableEventListeners() {
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          openEditModal(id);
+        });
+      });
+
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          openViewModal(id);
+        });
+      });
+
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this student?')) {
+            students = students.filter(s => s.id !== id);
+            renderStudentsTable(document.getElementById('search-input').value);
+            alert('Student deleted successfully!');
+          }
+        });
+      });
+    }
+
+    // Add new student form submission
+    // Removed add student form submission JS as per new plan
+
+    // Search functionality
+    const searchInput = document.querySelector('.search-bar input');
+    searchInput.setAttribute('id', 'search-input');
+    searchInput.addEventListener('input', () => {
+      renderStudentsTable(searchInput.value, currentStatusFilter);
+    });
+
+    // Export students list as CSV
+    document.getElementById('export-students-btn').addEventListener('click', () => {
+      if (students.length === 0) {
+        alert('No students to export.');
+        return;
+      }
+
+      const csvRows = [];
+      const headers = ['ID', 'Name', 'Email', 'Enrolled Courses', 'Progress', 'Grade', 'Status', 'Phone'];
+      csvRows.push(headers.join(','));
+
+      students.forEach(student => {
+        const row = [
+          student.id,
+          `"${student.name}"`,
+          student.email,
+          student.enrolledCourses,
+          student.progress,
+          student.grade,
+          student.status,
+          student.phone || ''
+        ];
+        csvRows.push(row.join(','));
+      });
+
+      const csvString = csvRows.join('\n');
+      const blob = new Blob([csvString], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('hidden', '');
+      a.setAttribute('href', url);
+      a.setAttribute('download', 'students_list.csv');
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+
+    // Responsive sidebar
+    window.addEventListener('resize', () => {
+      if (window.innerWidth <= 768) {
+        sidebar.classList.add('collapsed');
+      } else {
+        sidebar.classList.remove('collapsed');
+      }
+    });
+
+    // Initialize
+    if (window.innerWidth <= 768) {
+      sidebar.classList.add('collapsed');
+    }
+
+    // Initial render
+    renderStudentsTable();
+  </script>
+
+  <!-- Edit Student Modal -->
+  <div id="edit-student-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Edit Student</h3>
+        <span class="close-modal" id="close-edit-modal">&times;</span>
+      </div>
+      <form id="edit-student-form">
+        <div class="form-group">
+          <label for="edit-id">ID</label>
+          <input type="text" id="edit-id" readonly>
+        </div>
+        <div class="form-group">
+          <label for="edit-avatar">Avatar URL</label>
+          <input type="url" id="edit-avatar" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-name">Full Name</label>
+          <input type="text" id="edit-name" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-email">Email</label>
+          <input type="email" id="edit-email" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-phone">Phone</label>
+          <input type="tel" id="edit-phone">
+        </div>
+        <div class="form-group">
+          <label for="edit-courses">Enrolled Courses</label>
+          <select id="edit-courses" multiple>
+            <option value="web-development">Web Development</option>
+            <option value="data-science">Data Science</option>
+            <option value="python">Python Programming</option>
+            <option value="java">Java Programming</option>
+            <option value="javascript">JavaScript</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="edit-grade">Grade</label>
+          <input type="text" id="edit-grade">
+        </div>
+        <div class="form-group">
+          <label for="edit-progress">Progress</label>
+          <input type="text" id="edit-progress">
+        </div>
+        <div class="form-group">
+          <label for="edit-status">Status</label>
+          <select id="edit-status" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" id="cancel-edit-btn">Cancel</button>
+          <button type="submit" class="btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- View Student Modal -->
+  <div id="view-student-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Student Details</h3>
+        <span class="close-modal" id="close-view-modal">&times;</span>
+      </div>
+      <div id="view-student-content">
+        <div class="student-detail">
+          <img id="view-avatar" src="" alt="Avatar" class="student-avatar">
+          <div>
+            <h4 id="view-name"></h4>
+            <p><strong>ID:</strong> <span id="view-id"></span></p>
+            <p><strong>Email:</strong> <span id="view-email"></span></p>
+            <p><strong>Phone:</strong> <span id="view-phone"></span></p>
+            <p><strong>Enrolled Courses:</strong> <span id="view-courses"></span></p>
+            <p><strong>Status:</strong> <span id="view-status" class="status"></span></p>
+            <p><strong>Grade:</strong> <span id="view-grade"></span></p>
+            <p><strong>Progress:</strong> <span id="view-progress"></span></p>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" id="close-view-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Edit modal elements
+    const editModal = document.getElementById('edit-student-modal');
+    const closeEditModalBtn = document.getElementById('close-edit-modal');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const editForm = document.getElementById('edit-student-form');
+
+    let currentEditId = null;
+
+    // Open edit modal and populate fields
+    function openEditModal(id) {
+      currentEditId = id;
+      const student = students.find(s => s.id === id);
+      if (!student) return;
+
+      document.getElementById('edit-id').value = student.id;
+      document.getElementById('edit-avatar').value = student.avatar || '';
+      document.getElementById('edit-name').value = student.name;
+      document.getElementById('edit-email').value = student.email;
+      document.getElementById('edit-phone').value = student.phone || '';
+      document.getElementById('edit-status').value = student.status;
+      document.getElementById('edit-grade').value = student.grade || '';
+      document.getElementById('edit-progress').value = student.progress || '';
+
+      // Set enrolled courses in multi-select
+      const coursesSelect = document.getElementById('edit-courses');
+      for (let option of coursesSelect.options) {
+        option.selected = student.enrolledCoursesList ? student.enrolledCoursesList.includes(option.value) : false;
+      }
+
+      editModal.style.display = 'block';
+    }
+
+    // Close edit modal
+    function closeEditModal() {
+      editModal.style.display = 'none';
+      currentEditId = null;
+      editForm.reset();
+    }
+
+    closeEditModalBtn.addEventListener('click', closeEditModal);
+    cancelEditBtn.addEventListener('click', closeEditModal);
+
+    // Handle edit form submission
+    editForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!currentEditId) return;
+
+      const student = students.find(s => s.id === currentEditId);
+      if (!student) return;
+
+      student.avatar = document.getElementById('edit-avatar').value.trim();
+      student.name = document.getElementById('edit-name').value.trim();
+      student.email = document.getElementById('edit-email').value.trim();
+      student.phone = document.getElementById('edit-phone').value.trim();
+      student.status = document.getElementById('edit-status').value;
+      student.grade = document.getElementById('edit-grade').value.trim();
+      student.progress = document.getElementById('edit-progress').value.trim();
+
+      // Get selected courses
+      const coursesSelect = document.getElementById('edit-courses');
+      const selectedCourses = Array.from(coursesSelect.selectedOptions).map(option => option.value);
+      student.enrolledCoursesList = selectedCourses;
+      student.enrolledCourses = selectedCourses.length;
+
+      renderStudentsTable(document.getElementById('search-input').value);
+      closeEditModal();
+    });
+
+    // View modal elements
+    const viewModal = document.getElementById('view-student-modal');
+    const closeViewModalBtn = document.getElementById('close-view-modal');
+    const closeViewBtn = document.getElementById('close-view-btn');
+
+    // Open view modal and populate
+    function openViewModal(id) {
+      const student = students.find(s => s.id === id);
+      if (!student) return;
+
+      document.getElementById('view-avatar').src = student.avatar || '';
+      document.getElementById('view-name').textContent = student.name;
+      document.getElementById('view-id').textContent = student.id;
+      document.getElementById('view-email').textContent = student.email;
+      document.getElementById('view-phone').textContent = student.phone || 'Not provided';
+      document.getElementById('view-courses').textContent = student.enrolledCourses;
+      document.getElementById('view-status').textContent = student.status;
+      document.getElementById('view-status').className = `status ${student.status.toLowerCase()}`;
+      document.getElementById('view-grade').textContent = student.grade || 'N/A';
+      document.getElementById('view-progress').textContent = student.progress || 'N/A';
+
+      viewModal.style.display = 'block';
+    }
+
+    // Close view modal
+    function closeViewModal() {
+      viewModal.style.display = 'none';
+    }
+
+    closeViewModalBtn.addEventListener('click', closeViewModal);
+    closeViewBtn.addEventListener('click', closeViewModal);
+
+  </script>
+</body>
+</html>

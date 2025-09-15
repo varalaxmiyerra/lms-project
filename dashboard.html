@@ -8,6 +8,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <link href="dashboard-ui-update.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
   <div class="dashboard-container">
@@ -18,15 +19,15 @@
       </div>
       <ul class="sidebar-menu">
         <li><a href="dashboard.html" class="active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-        <li><a href="#" data-page="trainer"><i class="fas fa-chalkboard-teacher"></i><span>Trainer</span></a></li>
-        <li><a href="#" data-page="student"><i class="fas fa-user-graduate"></i><span>Student</span></a></li>
-        <li><a href="#" data-page="courses"><i class="fas fa-book"></i><span>Courses</span></a></li>
-        <li><a href="#" data-page="reports"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
-        <li><a href="#" data-page="material"><i class="fas fa-file-alt"></i><span>Material Page</span></a></li>
-        <li><a href="#" data-page="video"><i class="fas fa-video"></i><span>Video Page</span></a></li>
-        <li><a href="#" data-page="about"><i class="fas fa-info-circle"></i><span>About Page</span></a></li>
-        <li><a href="#" data-page="contact"><i class="fas fa-envelope"></i><span>Contact Page</span></a></li>
-        <li><a href="#" data-page="settings"><i class="fas fa-cog"></i><span>Settings Page</span></a></li>
+        <li><a href="trainers.html"><i class="fas fa-chalkboard-teacher"></i><span>Trainer</span></a></li>
+        <li><a href="student.html"><i class="fas fa-user-graduate"></i><span>Student</span></a></li>
+        <li><a href="courses.html"><i class="fas fa-book"></i><span>Courses</span></a></li>
+        <li><a href="analytics.html"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
+        <li><a href="material.html"><i class="fas fa-file-alt"></i><span>Material Page</span></a></li>
+        <li><a href="video.html" data-page="video"><i class="fas fa-video"></i><span>Video Page</span></a></li>
+        <li><a href="about.html"><i class="fas fa-info-circle"></i><span>About Page</span></a></li>
+        <li><a href="contact.html" data-page="contact"><i class="fas fa-envelope"></i><span>Contact Page</span></a></li>
+        <li><a href="settings.html" data-page="settings"><i class="fas fa-cog"></i><span>Settings Page</span></a></li>
       </ul>
     </aside>
 
@@ -54,6 +55,7 @@
           <i class="fas fa-sign-out-alt"></i>
         </button>
       </div>
+      
     </nav>
 
     <!-- Removed duplicate Top Navbar -->
@@ -99,53 +101,133 @@
       <div class="graphs-row">
         <div class="graph-container">
           <h3>Combined Enrollment and Completion Trends</h3>
-          <canvas id="combinedChart" style="height: 250px;"></canvas>
+          <canvas id="combinedChart" style="height: 500px; width: 100%;"></canvas>
         </div>
 
         <div class="graph-container">
           <h3>User Distribution</h3>
-          <canvas id="userDistributionChart" style="height: 250px;"></canvas>
+          <canvas id="userDistributionChart" style="height: 500px; width: 100%;"></canvas>
+        </div>
+      </div>
+      <div class="graphs-row">
+        <div class="graph-container">
+          <h3>Enrollment by Course</h3>
+          <canvas id="enrollmentByCourseChart" style="height: 500px; width: 100%;"></canvas>
+        </div>
+        <div class="graph-container">
+          <h3>Trainer Performance</h3>
+          <canvas id="trainerPerformanceChart" style="height: 500px; width: 100%;"></canvas>
         </div>
       </div>
 
-      <div class="dashboard-lower">
-        <div class="recent-activity card">
-          <h3>Recent Activity</h3>
-          <ul>
-            <li><i class="fas fa-check-circle"></i> New student Ravi Kumar registered</li>
-            <li><i class="fas fa-calendar-alt"></i> Course Java Basics added</li>
-            <li><i class="fas fa-user"></i> Trainer Anjall Sharma uploaded new material</li>
-            <li><i class="fas fa-arrow-up-right-from-square"></i> Access request approved for John Doe</li>
-          </ul>
+      <!-- Course Overview Section -->
+      <div class="course-overview-section">
+        <div class="card">
+          <div class="card-header">
+            <h3>Course Overview</h3>
+            <a href="courses.html" class="btn-secondary">View All Courses</a>
+          </div>
+          <div class="courses-table-container">
+            <table class="courses-table">
+              <thead>
+                <tr>
+                  <th>Course Name</th>
+                  <th>Trainer</th>
+                  <th>Enrolled Students</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="courses-table-body">
+                <!-- Courses will be populated here -->
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div class="tasks-reminders card">
-          <h3>Tasks / Reminders</h3>
-          <ul>
-            <li><i class="fas fa-check"></i> Approve 3 access requests</li>
-            <li><i class="fas fa-check"></i> Update 2 course materials</li>
-            <li><i class="fas fa-check"></i> Check student performance reports</li>
-          </ul>
+      </div>
+
+      <div class="dashboard-low active">
+        <div class="chart-like-container">
+          <div class="recent-activity card">
+            <h3>Recent Activity</h3>
+            <ul>
+              <li><i class="fas fa-check-circle"></i> New student Ravi Kumar registered</li>
+              <li><i class="fas fa-calendar-alt"></i> Course Java Basics added</li>
+              <li><i class="fas fa-user"></i> Trainer Anjall Sharma uploaded new material</li>
+              <li><i class="fas fa-arrow-up-right-from-square"></i> Access request approved for John Doe</li>
+              <li><i class="fas fa-graduation-cap"></i> Student Priya completed Python course</li>
+              <li><i class="fas fa-book-open"></i> New course Data Structures added to catalog</li>
+              <li><i class="fas fa-user-plus"></i> Trainer Michael joined the platform</li>
+              <li><i class="fas fa-certificate"></i> Certificates issued for 15 students</li>
+            </ul>
+          </div>
         </div>
-        <div class="user-profile card">
-          <h3>User Profile / Shortcuts</h3>
-          <div class="profile-info">
-            <img src="https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757430111/Screenshot_217_dys7md.png" alt="VARALAXMI" class="profile-pic" />
-            <div>
-              <p class="profile-name">VARALAXMI Y</p>
-              <p class="profile-role">Admin</p>
+        <div class="chart-like-container">
+          <div class="tasks-reminders card">
+            <h3>Tasks / Reminders</h3>
+            <ul>
+              <li><i class="fas fa-check"></i> Approve 3 access requests</li>
+              <li><i class="fas fa-check"></i> Update 2 course materials</li>
+              <li><i class="fas fa-check"></i> Check student performance reports</li>
+              <li><i class="fas fa-check"></i> Schedule trainer feedback sessions</li>
+              <li><i class="fas fa-check"></i> Upload new video content for Web Development</li>
+              <li><i class="fas fa-check"></i> Send weekly progress emails to students</li>
+              <li><i class="fas fa-check"></i> Review analytics dashboard metrics</li>
+              <li><i class="fas fa-check"></i> Update security protocols</li>
+            </ul>
+          </div>
+        </div>
+        <div class="chart-like-container">
+          <div class="notifications-panel card">
+            <h3>Notifications</h3>
+            <ul class="notifications-list">
+              <li class="notification-item" data-id="1">
+                <i class="fas fa-bell"></i>
+                <div class="notification-content">
+                  <p class="notification-title">New enrollment request</p>
+                  <p class="notification-desc">John Doe requested to enroll in Python Course</p>
+                  <span class="notification-time">2 hours ago</span>
+                </div>
+              </li>
+              <li class="notification-item" data-id="2">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div class="notification-content">
+                  <p class="notification-title">System maintenance</p>
+                  <p class="notification-desc">Scheduled maintenance tonight at 11 PM</p>
+                  <span class="notification-time">1 day ago</span>
+                </div>
+              </li>
+              <li class="notification-item" data-id="3">
+                <i class="fas fa-user-plus"></i>
+                <div class="notification-content">
+                  <p class="notification-title">New trainer onboarded</p>
+                  <p class="notification-desc">Sarah Johnson joined as a new trainer</p>
+                  <span class="notification-time">3 days ago</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="chart-like-container">
+          <div class="user-profile card">
+            <h3>User Profile / Shortcuts</h3>
+            <div class="profile-info">
+              <img src="https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757430111/Screenshot_217_dys7md.png" alt="VARALAXMI" class="profile-pic" />
+              <div>
+                <p class="profile-name">VARALAXMI Y</p>
+                <p class="profile-role">Admin</p>
+              </div>
+            </div>
+            <div class="profile-buttons">
+              <button class="quick-action-btn" data-action="add-student"><i class="fas fa-user-plus"></i> Add Student</button>
+              <button class="quick-action-btn" data-action="add-trainer"><i class="fas fa-chalkboard-teacher"></i> Add Trainer</button>
+              <button class="quick-action-btn" data-action="add-course"><i class="fas fa-book"></i> Add Course</button>
+              <button class="quick-action-btn" data-action="view-reports"><i class="fas fa-chart-bar"></i> View Reports</button>
+              <button class="quick-action-btn" data-action="manage-users"><i class="fas fa-users-cog"></i> Manage Users</button>
             </div>
           </div>
-          <div class="profile-buttons">
-            <button>Add Student</button>
-            <button>Add Trainer</button>
-            <button>Add Course</button>
-          </div>
         </div>
       </div>
 
-      <div id="page-content">
-        <!-- Dynamic content will be loaded here -->
-      </div>
     </main>
   </div>
 
@@ -162,95 +244,11 @@
       });
     }
 
-    // Menu item click handler
-    const menuItems = document.querySelectorAll('.sidebar-menu a');
-    const pageTitle = document.getElementById('page-title');
-    const pageDescription = document.getElementById('page-description');
-    const pageContent = document.getElementById('page-content');
-    const dashboardCards = document.getElementById('dashboard-cards');
-
-    menuItems.forEach(item => {
-      item.addEventListener('click', (e) => {
-        e.preventDefault();
-        const page = item.getAttribute('data-page');
-
-        // Remove active class from all items
-        menuItems.forEach(i => i.classList.remove('active'));
-        // Add active class to clicked item
-        item.classList.add('active');
-
-        // Update page title and description
-        switch(page) {
-          case 'dashboard':
-            pageTitle.textContent = 'Dashboard';
-            pageDescription.textContent = 'Welcome to your Learning Management System dashboard';
-            dashboardCards.style.display = 'grid';
-            pageContent.innerHTML = '';
-            break;
-          case 'trainer':
-            pageTitle.textContent = 'Trainer Management';
-            pageDescription.textContent = 'Manage trainers and their courses';
-            dashboardCards.style.display = 'none';
-            pageContent.innerHTML = '<p>Trainer management content will be displayed here.</p>';
-            break;
-          case 'student':
-            pageTitle.textContent = 'Student Management';
-            pageDescription.textContent = 'Manage student enrollments and progress';
-            dashboardCards.style.display = 'none';
-            pageContent.innerHTML = '<p>Student management content will be displayed here.</p>';
-            break;
-          case 'courses':
-            pageTitle.textContent = 'Courses';
-            pageDescription.textContent = 'Browse and manage all courses';
-            dashboardCards.style.display = 'none';
-            pageContent.innerHTML = '<p>Courses content will be displayed here.</p>';
-            break;
-          case 'reports':
-            pageTitle.textContent = 'Reports';
-            pageDescription.textContent = 'View analytics and generate reports';
-            dashboardCards.style.display = 'none';
-            pageContent.innerHTML = '<p>Reports content will be displayed here.</p>';
-            break;
-          case 'material':
-            pageTitle.textContent = 'Material Page';
-            pageDescription.textContent = 'Access course materials and resources';
-            dashboardCards.style.display = 'none';
-            pageContent.innerHTML = '<p>Material page content will be displayed here.</p>';
-            break;
-          case 'video':
-            pageTitle.textContent = 'Video Page';
-            pageDescription.textContent = 'Watch course videos and lectures';
-            dashboardCards.style.display = 'none';
-            pageContent.innerHTML = '<p>Video page content will be displayed here.</p>';
-            break;
-          case 'about':
-            pageTitle.textContent = 'About';
-            pageDescription.textContent = 'Learn more about our Learning Management System';
-            dashboardCards.style.display = 'none';
-            pageContent.innerHTML = '<p>About page content will be displayed here.</p>';
-            break;
-          case 'contact':
-            pageTitle.textContent = 'Contact';
-            pageDescription.textContent = 'Get in touch with our support team';
-            dashboardCards.style.display = 'none';
-            pageContent.innerHTML = '<p>Contact page content will be displayed here.</p>';
-            break;
-          case 'settings':
-            pageTitle.textContent = 'Settings';
-            pageDescription.textContent = 'Configure your account and system preferences';
-            dashboardCards.style.display = 'none';
-            pageContent.innerHTML = '<p>Settings page content will be displayed here.</p>';
-            break;
-        }
-      });
-    });
-
+   
     // Navbar icon handlers
     document.getElementById('notifications').addEventListener('click', () => {
       alert('Notifications clicked');
     });
-
-    // Removed profile element event listener because no element with id 'profile' exists
 
     document.getElementById('logout').addEventListener('click', () => {
       if (confirm('Are you sure you want to logout?')) {
@@ -272,6 +270,44 @@
       sidebar.classList.add('collapsed');
     }
 
+    // Notifications panel interactions
+    const notificationItems = document.querySelectorAll('.notification-item');
+    notificationItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const id = item.getAttribute('data-id');
+        const title = item.querySelector('.notification-title').textContent;
+        alert(`Notification: ${title}\nID: ${id}`);
+      });
+    });
+
+    // Quick action buttons
+    const quickActionBtns = document.querySelectorAll('.quick-action-btn');
+    quickActionBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.getAttribute('data-action');
+        switch(action) {
+          case 'add-student':
+            alert('Redirecting to Add Student page...');
+            // window.location.href = 'add_student.html';
+            break;
+          case 'add-trainer':
+            alert('Redirecting to Add Trainer page...');
+            // window.location.href = 'add_trainer.html';
+            break;
+          case 'add-course':
+            window.location.href = 'courses.html';
+            break;
+          case 'view-reports':
+            alert('Redirecting to Reports page...');
+            // window.location.href = 'reports.html';
+            break;
+          case 'manage-users':
+            alert('Redirecting to User Management page...');
+            // window.location.href = 'manage_users.html';
+            break;
+        }
+      });
+    });
 
   </script>
 
@@ -308,8 +344,8 @@
       options: {
         responsive: false,
         maintainAspectRatio: false,
-        width: 600,
-        height: 350,
+        width: 800,
+        height: 500,
         animation: false,
         hover: {
           mode: null
@@ -362,6 +398,136 @@
       }
     });
   </script>
+  <script>
+    // Enrollment by Course Chart
+    const ctxEnrollmentByCourse = document.getElementById('enrollmentByCourseChart').getContext('2d');
+    const enrollmentByCourseChart = new Chart(ctxEnrollmentByCourse, {
+      type: 'bar',
+      data: {
+        labels: ['Java Basics', 'Python Fundamentals', 'Web Development', 'Data Science', 'Machine Learning'],
+        datasets: [{
+          label: 'Enrollments',
+          data: [120, 150, 100, 80, 60],
+          backgroundColor: 'rgba(20, 161, 145, 0.7)',
+          borderColor: 'rgba(20, 161, 145, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        width: 800,
+        height: 500,
+        scales: {
+          x: {
+            ticks: {
+              color: '#035e47',
+              font: {
+                size: 12,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              display: false
+            }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: '#035e47',
+              font: {
+                size: 12,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              color: 'rgba(3, 94, 71, 0.1)'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            enabled: true
+          }
+        }
+      }
+    });
+  </script>
+  <script>
+    // Trainer Performance Chart
+    const ctxTrainerPerformance = document.getElementById('trainerPerformanceChart').getContext('2d');
+    const trainerPerformanceChart = new Chart(ctxTrainerPerformance, {
+      type: 'radar',
+      data: {
+        labels: ['Teaching Quality', 'Student Engagement', 'Course Completion', 'Feedback Score', 'Timeliness'],
+        datasets: [{
+          label: 'Trainer A',
+          data: [85, 90, 88, 92, 87],
+          backgroundColor: 'rgba(20, 161, 145, 0.2)',
+          borderColor: 'rgba(20, 161, 145, 1)',
+          borderWidth: 2,
+          pointBackgroundColor: 'rgba(20, 161, 145, 1)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgba(20, 161, 145, 1)'
+        }, {
+          label: 'Trainer B',
+          data: [78, 85, 82, 88, 90],
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 2,
+          pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgba(255, 99, 132, 1)'
+        }]
+      },
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        width: 800,
+        height: 500,
+        animation: false,
+        hover: {
+          mode: null
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              color: '#035e47',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            }
+          },
+          tooltip: {
+            enabled: true
+          }
+        },
+        scales: {
+          r: {
+            beginAtZero: true,
+            ticks: {
+              color: '#035e47',
+              font: {
+                size: 12,
+                weight: 'bold'
+              }
+            },
+            grid: {
+              color: 'rgba(3, 94, 71, 0.1)'
+            }
+          }
+        }
+      }
+    });
+  </script>
 
 
 
@@ -391,8 +557,8 @@
       options: {
         responsive: false,
         maintainAspectRatio: false,
-        width: 600,
-        height: 350,
+        width: 800,
+        height: 500,
         animation: false,
         hover: {
           mode: null
@@ -422,8 +588,61 @@
             }
           }
         }
+    }
+  });
+
+  </script>
+
+  <script>
+    // Courses data array
+    let courses = [
+      {
+        id: 'CS001',
+        name: 'Java Basics',
+        trainer: 'John Doe',
+        enrolledStudents: 120,
+        duration: '8 weeks',
+        status: 'Active',
+        avatar: 'https://via.placeholder.com/40'
+      },
+      {
+        id: 'CS002',
+        name: 'Python Fundamentals',
+        trainer: 'Jane Smith',
+        enrolledStudents: 150,
+        duration: '10 weeks',
+        status: 'Active',
+        avatar: 'https://via.placeholder.com/40'
+      },
+      {
+        id: 'CS003',
+        name: 'Web Development',
+        trainer: 'Mike Johnson',
+        enrolledStudents: 100,
+        duration: '12 weeks',
+        status: 'Inactive',
+        avatar: 'https://via.placeholder.com/40'
       }
-    });
+    ];
+
+    // Render courses table
+    function renderCoursesTable() {
+      const tbody = document.getElementById('courses-table-body');
+      tbody.innerHTML = '';
+      courses.forEach(course => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${course.name}</td>
+          <td>${course.trainer}</td>
+          <td>${course.enrolledStudents}</td>
+          <td><span class="status ${course.status.toLowerCase()}">${course.status}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Call render on load
+    renderCoursesTable();
   </script>
 </body>
 </html>
