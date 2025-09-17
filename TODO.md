@@ -1,7 +1,9 @@
-# TODO for Analytics Page Filter Functionality
+# TODO: Clean Up Videos Page (video.html)
 
-- [x] Add JavaScript event listener for the date range select element.
-- [x] Define different data sets for charts and stats for each date range option.
-- [x] Update the charts (engagementChart, popularityChart, revenueChart, geographicChart) dynamically based on selected date range.
-- [x] Update the stats cards (Total Views, Avg. Session Time, Active Users, Avg. Rating) dynamically based on selected date range.
-- [ ] Test the filter functionality to ensure charts and stats update correctly.
+## Tasks
+- [x] Analyze embedded styles in video.html and identify duplicates with dashboard-ui-update.css
+- [x] Remove unnecessary embedded styles from video.html
+- [x] Review JavaScript code for redundancy or unused functions
+- [x] Remove any redundant JavaScript code
+- [x] Check for unnecessary HTML elements and remove them
+- [x] Test the videos page functionality after cleanup

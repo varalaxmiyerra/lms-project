@@ -821,38 +821,7 @@
     // Initial render
     renderVideosGrid();
   </script>
-  <script>
-  const universalSearchInput = document.getElementById('universal-search-input');
 
-  universalSearchInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      const query = this.value.trim().toLowerCase();
-      if (!query) return;
-
-      // Check keywords and redirect accordingly
-      if (query.includes("course")) {
-        window.location.href = "courses.html";
-      } else if (query.includes("trainer")) {
-        window.location.href = "trainers.html";
-      } else if (query.includes("video")) {
-        window.location.href = "video.html";
-      } else if (query.includes("analytic") || query.includes("report")) {
-        window.location.href = "analytics.html";
-      } else if (query.includes("student")) {
-        window.location.href = "student.html";
-      } else if (query.includes("contact")) {
-        window.location.href = "contact.html";
-      } else if (query.includes("about")) {
-        window.location.href = "about.html";
-      } else if (query.includes("setting")) {
-        window.location.href = "settings.html";
-      } else {
-        // Default → Dashboard
-        window.location.href = "dashboard.html";
-      }
-    }
-  });
-</script>
 
 </body>
 </html>

@@ -284,9 +284,7 @@
         }
       }
     });
-  </script>
 
-  <script>
     // Course Popularity Chart
     const ctxPopularity = document.getElementById('popularityChart').getContext('2d');
     const popularityChart = new Chart(ctxPopularity, {
@@ -315,9 +313,7 @@
         }
       }
     });
-  </script>
 
-  <script>
     // Revenue Analytics Chart
     const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
     const revenueChart = new Chart(ctxRevenue, {
@@ -342,9 +338,7 @@
         }
       }
     });
-  </script>
 
-  <script>
     // Geographic Distribution Chart
     const ctxGeographic = document.getElementById('geographicChart').getContext('2d');
     const geographicChart = new Chart(ctxGeographic, {
@@ -375,34 +369,39 @@
   </script>
   <script>
   const universalSearchInput = document.getElementById('universal-search-input');
+  const universalSearchButton = document.getElementById('universal-search-button');
+
+  function performSearch() {
+    const query = universalSearchInput.value.trim().toLowerCase();
+    if (!query) return;
+
+    // Search within analytics page
+    if (query.includes("engagement") || query.includes("trend")) {
+      document.getElementById('engagementChart').scrollIntoView({ behavior: 'smooth' });
+    } else if (query.includes("course") || query.includes("popularity")) {
+      document.getElementById('popularityChart').scrollIntoView({ behavior: 'smooth' });
+    } else if (query.includes("revenue") || query.includes("income")) {
+      document.getElementById('revenueChart').scrollIntoView({ behavior: 'smooth' });
+    } else if (query.includes("geographic") || query.includes("distribution") || query.includes("location")) {
+      document.getElementById('geographicChart').scrollIntoView({ behavior: 'smooth' });
+    } else if (query.includes("progress") || query.includes("student")) {
+      document.querySelector('.analytics-details .card:nth-child(2)').scrollIntoView({ behavior: 'smooth' });
+    } else if (query.includes("performance") || query.includes("system")) {
+      document.querySelector('.analytics-details .card:nth-child(3)').scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // If not found, show alert
+      alert('No matching section found for: ' + query);
+    }
+  }
 
   universalSearchInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
-      const query = this.value.trim().toLowerCase();
-      if (!query) return;
-
-      // Check keywords and redirect accordingly
-      if (query.includes("course")) {
-        window.location.href = "courses.html";
-      } else if (query.includes("trainer")) {
-        window.location.href = "trainers.html";
-      } else if (query.includes("video")) {
-        window.location.href = "video.html";
-      } else if (query.includes("analytic") || query.includes("report")) {
-        window.location.href = "analytics.html";
-      } else if (query.includes("student")) {
-        window.location.href = "student.html";
-      } else if (query.includes("contact")) {
-        window.location.href = "contact.html";
-      } else if (query.includes("about")) {
-        window.location.href = "about.html";
-      } else if (query.includes("setting")) {
-        window.location.href = "settings.html";
-      } else {
-        // Default → Dashboard
-        window.location.href = "dashboard.html";
-      }
+      performSearch();
     }
+  });
+
+  universalSearchButton.addEventListener('click', function() {
+    performSearch();
   });
 </script>
 
