@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -569,6 +569,72 @@
       color: var(--primary);
       margin-bottom: 10px;
     }
+
+    /* Bulk Actions Bar */
+    .bulk-actions-bar {
+      background: linear-gradient(135deg, var(--primary-light), #e8f4f2);
+      border: 1px solid var(--primary);
+      border-radius: var(--border-radius);
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bulk-actions-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .bulk-action-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .bulk-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 14px;
+    }
+
+    .bulk-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    /* Checkbox styling */
+    .checkbox-column {
+      width: 40px;
+      text-align: center;
+    }
+
+    .material-checkbox {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    .select-all-checkbox {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
   </style>
 </head>
 <body>
@@ -669,6 +735,30 @@
         </div>
       </div>
 
+      <!-- Bulk Actions Bar -->
+      <div class="bulk-actions-bar" id="bulk-actions-bar" style="display: none;">
+        <div class="bulk-actions-content">
+          <span id="selected-count">0 items selected</span>
+          <div class="bulk-action-buttons">
+            <button class="btn-secondary bulk-btn" id="bulk-delete-btn">
+              <i class="fas fa-trash"></i> Delete Selected
+            </button>
+            <button class="btn-secondary bulk-btn" id="bulk-activate-btn">
+              <i class="fas fa-check-circle"></i> Activate Selected
+            </button>
+            <button class="btn-secondary bulk-btn" id="bulk-deactivate-btn">
+              <i class="fas fa-pause-circle"></i> Deactivate Selected
+            </button>
+            <button class="btn-secondary bulk-btn" id="bulk-export-btn">
+              <i class="fas fa-download"></i> Export Selected
+            </button>
+            <button class="btn-secondary bulk-btn" id="clear-selection-btn">
+              <i class="fas fa-times"></i> Clear Selection
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Filters -->
       <div class="materials-filter">
         <div class="filter-group">
@@ -724,6 +814,9 @@
             <table class="materials-table">
               <thead>
                 <tr>
+                  <th class="checkbox-column">
+                    <input type="checkbox" id="select-all-checkbox" class="select-all-checkbox">
+                  </th>
                   <th>Material Name</th>
                   <th>Type</th>
                   <th>Course</th>
@@ -1174,6 +1267,9 @@
         const tr = document.createElement('tr');
 
         tr.innerHTML = `
+          <td class="checkbox-column">
+            <input type="checkbox" class="material-checkbox" data-id="${material.id}">
+          </td>
           <td>
             <div class="material-info">
               <i class="${material.icon} material-icon"></i>
@@ -1301,10 +1397,10 @@
       document.getElementById('add-material-form').reset();
       document.getElementById('material-file').required = true;
       document.querySelector('.modal-header h3').textContent = 'Add New Material';
-      document.querySelector('add-material-form button[type="submit').textContent = 'Add Material';
+      document.querySelector('#add-material-form button[type="submit"]').textContent = 'Add Material';
       document.getElementById('add-material-form').removeAttribute('data-edit-id');
       fileNameDisplay.textContent = 'Choose a file or drag it here';
-      
+
       // Clear validation errors
       document.querySelectorAll('.form-group').forEach(group => {
         group.classList.remove('error');
@@ -1469,6 +1565,153 @@
 
     // Initial render
     renderMaterialsTable();
+
+    // Bulk selection functionality
+    let selectedMaterials = new Set();
+
+    // Select all checkbox functionality
+    document.getElementById('select-all-checkbox').addEventListener('change', function() {
+      const checkboxes = document.querySelectorAll('.material-checkbox');
+      const isChecked = this.checked;
+
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = isChecked;
+        const materialId = checkbox.getAttribute('data-id');
+        if (isChecked) {
+          selectedMaterials.add(materialId);
+        } else {
+          selectedMaterials.delete(materialId);
+        }
+      });
+
+      updateBulkActionsBar();
+    });
+
+    // Individual checkbox functionality
+    document.addEventListener('change', function(e) {
+      if (e.target.classList.contains('material-checkbox')) {
+        const materialId = e.target.getAttribute('data-id');
+        if (e.target.checked) {
+          selectedMaterials.add(materialId);
+        } else {
+          selectedMaterials.delete(materialId);
+        }
+
+        // Update select all checkbox state
+        const allCheckboxes = document.querySelectorAll('.material-checkbox');
+        const checkedCheckboxes = document.querySelectorAll('.material-checkbox:checked');
+        const selectAllCheckbox = document.getElementById('select-all-checkbox');
+
+        if (checkedCheckboxes.length === 0) {
+          selectAllCheckbox.checked = false;
+          selectAllCheckbox.indeterminate = false;
+        } else if (checkedCheckboxes.length === allCheckboxes.length) {
+          selectAllCheckbox.checked = true;
+          selectAllCheckbox.indeterminate = false;
+        } else {
+          selectAllCheckbox.checked = false;
+          selectAllCheckbox.indeterminate = true;
+        }
+
+        updateBulkActionsBar();
+      }
+    });
+
+    // Update bulk actions bar visibility and count
+    function updateBulkActionsBar() {
+      const bulkActionsBar = document.getElementById('bulk-actions-bar');
+      const selectedCount = document.getElementById('selected-count');
+
+      if (selectedMaterials.size > 0) {
+        bulkActionsBar.style.display = 'flex';
+        selectedCount.textContent = `${selectedMaterials.size} item${selectedMaterials.size > 1 ? 's' : ''} selected`;
+      } else {
+        bulkActionsBar.style.display = 'none';
+      }
+    }
+
+    // Bulk delete functionality
+    document.getElementById('bulk-delete-btn').addEventListener('click', function() {
+      if (selectedMaterials.size === 0) return;
+
+      const confirmMessage = `Are you sure you want to delete ${selectedMaterials.size} selected material${selectedMaterials.size > 1 ? 's' : ''}?`;
+      if (confirm(confirmMessage)) {
+        const deletedCount = selectedMaterials.size;
+        materials = materials.filter(material => !selectedMaterials.has(material.id));
+        selectedMaterials.clear();
+        renderMaterialsTable(document.getElementById('search-input').value);
+        updateBulkActionsBar();
+        showToast(`${deletedCount} material${deletedCount > 1 ? 's' : ''} deleted successfully!`);
+      }
+    });
+
+    // Bulk activate functionality
+    document.getElementById('bulk-activate-btn').addEventListener('click', function() {
+      if (selectedMaterials.size === 0) return;
+
+      materials.forEach(material => {
+        if (selectedMaterials.has(material.id)) {
+          material.status = 'Active';
+        }
+      });
+
+      selectedMaterials.clear();
+      renderMaterialsTable(document.getElementById('search-input').value);
+      updateBulkActionsBar();
+      showToast(`${selectedMaterials.size} material${selectedMaterials.size > 1 ? 's' : ''} activated successfully!`);
+    });
+
+    // Bulk deactivate functionality
+    document.getElementById('bulk-deactivate-btn').addEventListener('click', function() {
+      if (selectedMaterials.size === 0) return;
+
+      materials.forEach(material => {
+        if (selectedMaterials.has(material.id)) {
+          material.status = 'Inactive';
+        }
+      });
+
+      selectedMaterials.clear();
+      renderMaterialsTable(document.getElementById('search-input').value);
+      updateBulkActionsBar();
+      showToast(`${selectedMaterials.size} material${selectedMaterials.size > 1 ? 's' : ''} deactivated successfully!`);
+    });
+
+    // Bulk export functionality
+    document.getElementById('bulk-export-btn').addEventListener('click', function() {
+      if (selectedMaterials.size === 0) return;
+
+      const selectedMaterialsData = materials.filter(material => selectedMaterials.has(material.id));
+      const csvContent = 'data:text/csv;charset=utf-8,' +
+        'ID,Name,Type,Course,Size,Upload Date,Status,Downloads\n' +
+        selectedMaterialsData.map(m => `${m.id},${m.name},${m.type},${m.course},${m.size},${m.uploadDate},${m.status},${m.downloads}`).join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', 'selected_materials.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast(`${selectedMaterials.size} selected material${selectedMaterials.size > 1 ? 's' : ''} exported successfully!`);
+    });
+
+    // Clear selection functionality
+    document.getElementById('clear-selection-btn').addEventListener('click', function() {
+      selectedMaterials.clear();
+      document.querySelectorAll('.material-checkbox').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+      document.getElementById('select-all-checkbox').checked = false;
+      document.getElementById('select-all-checkbox').indeterminate = false;
+      updateBulkActionsBar();
+    });
+
+    // Update bulk actions bar when table is re-rendered
+    const originalRenderMaterialsTable = renderMaterialsTable;
+    renderMaterialsTable = function(searchFilter = '') {
+      originalRenderMaterialsTable(searchFilter);
+      updateBulkActionsBar();
+    };
   </script>
 </body>
 </html>

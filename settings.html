@@ -268,15 +268,15 @@
 
       <div class="settings-container">
         <!-- System Configuration -->
-        <div class="settings-section">
+        <div class="settings-section" id="systemConfig">
           <h3><i class="fas fa-cogs"></i> System Configuration</h3>
           <div class="form-group">
             <label>Site Name</label>
-            <input type="text" placeholder="Enter site name" value="LMS Dashboard" />
+            <input type="text" placeholder="Enter site name" value="LMS Dashboard" name="siteName" />
           </div>
           <div class="form-group">
             <label>Default Language</label>
-            <select>
+            <select name="defaultLanguage">
               <option value="en" selected>English</option>
               <option value="es">Spanish</option>
               <option value="fr">French</option>
@@ -284,53 +284,53 @@
           </div>
           <div class="form-group">
             <label>Time Zone</label>
-            <input type="text" placeholder="e.g., UTC+5:30" />
+            <input type="text" placeholder="e.g., UTC+5:30" name="timeZone" />
           </div>
           <button id="saveConfigBtn" type="button">Save Configuration</button>
         </div>
 
         <!-- Notification Settings -->
-        <div class="settings-section">
+        <div class="settings-section" id="notificationSettings">
           <h3><i class="fas fa-bell"></i> Notification Settings</h3>
           <div class="form-group">
             <label>Enable Email Notifications</label>
-            <input type="checkbox" checked />
+            <input type="checkbox" checked name="enableEmailNotifications" />
           </div>
           <div class="form-group">
             <label>SMTP Server</label>
-            <input type="text" placeholder="smtp.example.com" />
+            <input type="text" placeholder="smtp.example.com" name="smtpServer" />
           </div>
           <div class="form-group">
             <label>Admin Email</label>
-            <input type="email" placeholder="admin@example.com" />
+            <input type="email" placeholder="admin@example.com" name="adminEmail" />
           </div>
           <button id="saveNotifBtn" type="button">Save Notifications</button>
         </div>
 
         <!-- Security Policies -->
-        <div class="settings-section">
+        <div class="settings-section" id="securityPolicies">
           <h3><i class="fas fa-shield-alt"></i> Security Policies</h3>
           <div class="form-group">
             <label>Minimum Password Length</label>
-            <input type="number" value="8" min="6" max="20" />
+            <input type="number" value="8" min="6" max="20" name="minPasswordLength" />
           </div>
           <div class="form-group">
             <label>Session Timeout (minutes)</label>
-            <input type="number" value="30" min="5" max="120" />
+            <input type="number" value="30" min="5" max="120" name="sessionTimeout" />
           </div>
           <div class="form-group">
             <label>Enable Two-Factor Authentication</label>
-            <input type="checkbox" />
+            <input type="checkbox" name="enableTwoFactor" />
           </div>
           <button id="saveSecurityBtn" type="button">Save Security</button>
         </div>
 
         <!-- Appearance Settings -->
-        <div class="settings-section">
+        <div class="settings-section" id="appearanceSettings">
           <h3><i class="fas fa-palette"></i> Appearance Settings</h3>
           <div class="form-group">
             <label>Theme</label>
-            <select>
+            <select name="theme">
               <option value="light" selected>Light</option>
               <option value="dark">Dark</option>
               <option value="auto">Auto</option>
@@ -338,11 +338,11 @@
           </div>
           <div class="form-group">
             <label>Primary Color</label>
-            <input type="color" value="#55cea6" />
+            <input type="color" value="#55cea6" name="primaryColor" />
           </div>
           <div class="form-group">
             <label>Font Size</label>
-            <select>
+            <select name="fontSize">
               <option value="small">Small</option>
               <option value="medium" selected>Medium</option>
               <option value="large">Large</option>
@@ -352,96 +352,52 @@
         </div>
 
         <!-- Backup & Restore -->
-        <div class="settings-section">
-          <h3><i class="fas fa-database"></i> Backup & Restore</h3>
-          <div class="form-group">
-            <label>Enable Automatic Backups</label>
-            <input type="checkbox" checked />
-          </div>
-          <div class="form-group">
-            <label>Backup Frequency</label>
-            <select>
-              <option value="daily">Daily</option>
-              <option value="weekly" selected>Weekly</option>
-              <option value="monthly">Monthly</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Backup Retention (days)</label>
-            <input type="number" value="30" min="1" max="365" />
-          </div>
-          <div class="form-group">
-            <label>Last Backup</label>
-            <input type="text" value="2023-10-15 14:30" readonly />
-          </div>
-          <button id="saveBackupBtn" type="button">Save Backup Settings</button>
-          <button id="restoreBackupBtn" type="button" style="margin-left: 10px; background: #ff6b6b;">Restore from Backup</button>
-        </div>
+        <!-- Removed as per user request -->
 
         <!-- Advanced Security -->
-        <div class="settings-section">
+        <div class="settings-section" id="advancedSecurity">
           <h3><i class="fas fa-lock"></i> Advanced Security</h3>
           <div class="form-group">
             <label>Password Complexity Requirements</label>
             <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-              <label><input type="checkbox" checked /> Uppercase</label>
-              <label><input type="checkbox" checked /> Lowercase</label>
-              <label><input type="checkbox" checked /> Numbers</label>
-              <label><input type="checkbox" checked /> Symbols</label>
+              <label><input type="checkbox" checked name="requireUppercase" /> Uppercase</label>
+              <label><input type="checkbox" checked name="requireLowercase" /> Lowercase</label>
+              <label><input type="checkbox" checked name="requireNumbers" /> Numbers</label>
+              <label><input type="checkbox" checked name="requireSymbols" /> Symbols</label>
             </div>
           </div>
           <div class="form-group">
             <label>Account Lockout Attempts</label>
-            <input type="number" value="5" min="1" max="10" />
+            <input type="number" value="5" min="1" max="10" name="lockoutAttempts" />
           </div>
           <div class="form-group">
             <label>Lockout Duration (minutes)</label>
-            <input type="number" value="15" min="5" max="60" />
+            <input type="number" value="15" min="5" max="60" name="lockoutDuration" />
           </div>
           <div class="form-group">
             <label>IP Whitelisting (one per line)</label>
-            <textarea rows="3" placeholder="192.168.1.1&#10;10.0.0.1"></textarea>
+            <textarea rows="3" placeholder="192.168.1.1&#10;10.0.0.1" name="ipWhitelist"></textarea>
           </div>
           <button id="saveAdvSecurityBtn" type="button">Save Advanced Security</button>
         </div>
 
         <!-- Data Management -->
-        <div class="settings-section">
-          <h3><i class="fas fa-folder-open"></i> Data Management</h3>
-          <div class="form-group">
-            <label>Data Retention Period (days)</label>
-            <input type="number" value="365" min="30" max="2555" />
-          </div>
-          <div class="form-group">
-            <label>Enable Data Export</label>
-            <input type="checkbox" checked />
-          </div>
-          <div class="form-group">
-            <label>GDPR Compliance</label>
-            <input type="checkbox" checked />
-          </div>
-          <div class="form-group">
-            <label>Anonymize Old Data</label>
-            <input type="checkbox" />
-          </div>
-          <button id="saveDataBtn" type="button">Save Data Settings</button>
-          <button id="exportDataBtn" type="button" style="margin-left: 10px; background: #4ecdc4;">Export Data</button>
-        </div>
+        <!-- Removed as per user request -->
 
         <!-- System Maintenance -->
-        <div class="settings-section">
+        <div class="settings-section" id="systemMaintenance">
           <h3><i class="fas fa-tools"></i> System Maintenance</h3>
           <div class="form-group">
             <label>Log Retention (days)</label>
-            <input type="number" value="90" min="7" max="365" />
+            <input type="number" value="90" min="7" max="365" name="logRetention" />
           </div>
           <div class="form-group">
             <label>Enable Health Checks</label>
-            <input type="checkbox" checked />
+            <input type="checkbox" checked name="enableHealthChecks" />
           </div>
           <div class="form-group">
             <label>Last Health Check</label>
-            <input type="text" value="2023-10-15 12:00 - All systems operational" readonly />
+            <input type="text" value="2023-10-15 12:00 - All systems operational" readonly name="lastHealthCheck" />
           </div>
           <button id="clearCacheBtn" type="button" style="background: #ffa726;">Clear Cache</button>
           <button id="runHealthCheckBtn" type="button" style="margin-left: 10px; background: #66bb6a;">Run Health Check</button>
@@ -471,136 +427,168 @@
   </script>
 
   <script>
-    // Form validation and save functionality
-
-    function showAlert(message) {
-      alert(message);
+    // Utility functions for inline messages
+    function showMessage(element, message, isError = false) {
+      element.textContent = message;
+      element.style.color = isError ? 'red' : 'green';
+      element.style.display = 'block';
+      setTimeout(() => {
+        element.style.display = 'none';
+      }, 3000);
     }
 
-    // Save Configuration
-    document.getElementById('saveConfigBtn').addEventListener('click', () => {
-      const siteName = document.querySelector('input[placeholder="Enter site name"]').value.trim();
-      const timeZone = document.querySelector('input[placeholder="e.g., UTC+5:30"]').value.trim();
-
-      if (!siteName) {
-        showAlert('Please enter a site name.');
-        return;
+    // Save and Reset handlers with localStorage persistence
+    function saveSettings(sectionId, fields) {
+      const data = {};
+      for (const field of fields) {
+        if (field.type === 'checkbox') {
+          data[field.name] = field.checked;
+        } else if (field.type === 'radio') {
+          if (field.checked) data[field.name] = field.value;
+        } else {
+          data[field.name] = field.value;
+        }
       }
-      if (!timeZone) {
-        showAlert('Please enter a time zone.');
-        return;
-      }
-      showAlert('System configuration saved successfully!');
-    });
-
-    // Save Notifications
-    document.getElementById('saveNotifBtn').addEventListener('click', () => {
-      const smtpServer = document.querySelector('input[placeholder="smtp.example.com"]').value.trim();
-      const adminEmail = document.querySelector('input[placeholder="admin@example.com"]').value.trim();
-
-      if (!smtpServer) {
-        showAlert('Please enter an SMTP server.');
-        return;
-      }
-      if (!adminEmail || !validateEmail(adminEmail)) {
-        showAlert('Please enter a valid admin email address.');
-        return;
-      }
-      showAlert('Notification settings saved successfully!');
-    });
-
-    // Save Security
-    document.getElementById('saveSecurityBtn').addEventListener('click', () => {
-      const minPasswordLength = document.querySelector('input[type="number"][value="8"]').value;
-      const sessionTimeout = document.querySelector('input[type="number"][value="30"]').value;
-
-      if (minPasswordLength < 6 || minPasswordLength > 20) {
-        showAlert('Minimum password length must be between 6 and 20.');
-        return;
-      }
-      if (sessionTimeout < 5 || sessionTimeout > 120) {
-        showAlert('Session timeout must be between 5 and 120 minutes.');
-        return;
-      }
-      showAlert('Security policies saved successfully!');
-    });
-
-    // Email validation helper
-    function validateEmail(email) {
-      const re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-      return re.test(email);
+      localStorage.setItem(sectionId, JSON.stringify(data));
     }
 
-    // Save Appearance
-    document.getElementById('saveAppearanceBtn').addEventListener('click', () => {
-      showAlert('Appearance settings saved successfully!');
-    });
-
-    // Save Backup Settings
-    document.getElementById('saveBackupBtn').addEventListener('click', () => {
-      const retention = document.querySelector('input[placeholder="30"]').value;
-      if (retention < 1 || retention > 365) {
-        showAlert('Backup retention must be between 1 and 365 days.');
-        return;
+    function loadSettings(sectionId, fields) {
+      const data = JSON.parse(localStorage.getItem(sectionId));
+      if (!data) return;
+      for (const field of fields) {
+        if (field.name in data) {
+          if (field.type === 'checkbox') {
+            field.checked = data[field.name];
+          } else if (field.type === 'radio') {
+            field.checked = (field.value === data[field.name]);
+          } else {
+            field.value = data[field.name];
+          }
+        }
       }
-      showAlert('Backup settings saved successfully!');
+    }
+
+    function getFields(container) {
+      return Array.from(container.querySelectorAll('input, select, textarea'));
+    }
+
+    // Add reset button dynamically
+    function addResetButton(section, saveBtn, sectionId, fields, messageEl) {
+      const resetBtn = document.createElement('button');
+      resetBtn.type = 'button';
+      resetBtn.textContent = 'Reset';
+      resetBtn.style.marginLeft = '10px';
+      resetBtn.style.background = '#ff6b6b';
+      resetBtn.style.color = '#fff';
+      resetBtn.style.border = 'none';
+      resetBtn.style.padding = '15px 30px';
+      resetBtn.style.borderRadius = '12px';
+      resetBtn.style.cursor = 'pointer';
+      resetBtn.style.fontWeight = '700';
+      resetBtn.style.fontSize = '16px';
+      resetBtn.style.textTransform = 'uppercase';
+      resetBtn.style.letterSpacing = '1px';
+      resetBtn.style.boxShadow = '0 4px 15px rgba(255, 107, 107, 0.3)';
+      resetBtn.addEventListener('click', () => {
+        loadSettings(sectionId, fields);
+        showMessage(messageEl, 'Settings reset to last saved state.');
+      });
+      saveBtn.insertAdjacentElement('afterend', resetBtn);
+    }
+
+    // Initialize each settings section
+    function initSettingsSection(sectionId, saveBtnId) {
+      const section = document.getElementById(sectionId);
+      if (!section) return;
+      const saveBtn = document.getElementById(saveBtnId);
+      if (!saveBtn) return;
+      const messageEl = document.createElement('div');
+      messageEl.style.display = 'none';
+      messageEl.style.marginTop = '10px';
+      section.appendChild(messageEl);
+
+      const fields = getFields(section);
+      loadSettings(sectionId, fields);
+
+      saveBtn.addEventListener('click', () => {
+        // Basic validation example for some fields
+        if (sectionId === 'systemConfig') {
+          const siteName = section.querySelector('input[name="siteName"]').value.trim();
+          const timeZone = section.querySelector('input[name="timeZone"]').value.trim();
+          if (!siteName) {
+            showMessage(messageEl, 'Please enter a site name.', true);
+            return;
+          }
+          if (!timeZone) {
+            showMessage(messageEl, 'Please enter a time zone.', true);
+            return;
+          }
+        }
+        if (sectionId === 'notificationSettings') {
+          const smtpServer = section.querySelector('input[name="smtpServer"]').value.trim();
+          const adminEmail = section.querySelector('input[name="adminEmail"]').value.trim();
+          const emailRegex = /^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$/;
+          if (!smtpServer) {
+            showMessage(messageEl, 'Please enter an SMTP server.', true);
+            return;
+          }
+          if (!adminEmail || !emailRegex.test(adminEmail)) {
+            showMessage(messageEl, 'Please enter a valid admin email address.', true);
+            return;
+          }
+        }
+      // Add other validations as needed
+
+      saveSettings(sectionId, fields);
+      showMessage(messageEl, 'Settings saved successfully!');
     });
 
-    // Restore from Backup
-    document.getElementById('restoreBackupBtn').addEventListener('click', () => {
-      if (confirm('Are you sure you want to restore from backup? This may overwrite current data.')) {
-        showAlert('Restore initiated. This may take a few minutes.');
-      }
-    });
+    addResetButton(section, saveBtn, sectionId, fields, messageEl);
+  }
 
-    // Save Advanced Security
-    document.getElementById('saveAdvSecurityBtn').addEventListener('click', () => {
-      const attempts = document.querySelector('input[value="5"]').value;
-      const duration = document.querySelector('input[value="15"]').value;
-      if (attempts < 1 || attempts > 10) {
-        showAlert('Account lockout attempts must be between 1 and 10.');
-        return;
-      }
-      if (duration < 5 || duration > 60) {
-        showAlert('Lockout duration must be between 5 and 60 minutes.');
-        return;
-      }
-      showAlert('Advanced security settings saved successfully!');
-    });
+  // Initialize all sections on DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', () => {
+    initSettingsSection('systemConfig', 'saveConfigBtn');
+    initSettingsSection('notificationSettings', 'saveNotifBtn');
+    initSettingsSection('securityPolicies', 'saveSecurityBtn');
+    initSettingsSection('appearanceSettings', 'saveAppearanceBtn');
+    initSettingsSection('advancedSecurity', 'saveAdvSecurityBtn');
+    initSettingsSection('systemMaintenance', 'clearCacheBtn'); // For clear cache, we keep original behavior
+  });
 
-    // Save Data Settings
-    document.getElementById('saveDataBtn').addEventListener('click', () => {
-      const retention = document.querySelector('input[value="365"]').value;
-      if (retention < 30 || retention > 2555) {
-        showAlert('Data retention must be between 30 and 2555 days.');
-        return;
-      }
-      showAlert('Data management settings saved successfully!');
-    });
-
-    // Export Data
-    document.getElementById('exportDataBtn').addEventListener('click', () => {
-      showAlert('Data export initiated. You will receive an email when ready.');
-    });
-
-    // Clear Cache
-    document.getElementById('clearCacheBtn').addEventListener('click', () => {
-      if (confirm('Are you sure you want to clear the cache?')) {
-        showAlert('Cache cleared successfully!');
-      }
-    });
-
-    // Run Health Check
-    document.getElementById('runHealthCheckBtn').addEventListener('click', () => {
-      showAlert('Health check initiated. Results will be displayed shortly.');
-    });
-  </script>
+</script>
 
 
   <script>
   const universalSearchInput = document.querySelector('.search-bar input[type="text"]');
 
   if (universalSearchInput) {
+    universalSearchInput.addEventListener('input', function(e) {
+      const query = this.value.trim().toLowerCase();
+      const settingsSections = document.querySelectorAll('.settings-section');
+
+      if (!query) {
+        // Show all sections if no query
+        settingsSections.forEach(section => {
+          section.style.display = 'block';
+        });
+        return;
+      }
+
+      // Filter sections based on query
+      settingsSections.forEach(section => {
+        const sectionText = section.textContent.toLowerCase();
+        const sectionId = section.id.toLowerCase();
+
+        if (sectionText.includes(query) || sectionId.includes(query)) {
+          section.style.display = 'block';
+        } else {
+          section.style.display = 'none';
+        }
+      });
+    });
+
+    // Keep the original redirect functionality for Enter key
     universalSearchInput.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         const query = this.value.trim().toLowerCase();
