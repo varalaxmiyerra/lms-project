@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Settings - LMS Dashboard</title>
+  <title>System Settings - LMS Dashboard</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <link href="dashboard-ui-update.css" rel="stylesheet" />
   <style>
@@ -236,7 +236,7 @@
         <li><a href="video.html"><i class="fas fa-video"></i><span>Video</span></a></li>
         <li><a href="about.html"><i class="fas fa-info-circle"></i><span>About</span></a></li>
         <li><a href="contact.html"><i class="fas fa-envelope"></i><span>Contact</span></a></li>
-        <li><a href="settings.html" class="active"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+        <li><a href="settings.html" class="active"><i class="fas fa-cog"></i><span>System Settings</span></a></li>
       </ul>
     </aside>
 
@@ -245,7 +245,7 @@
       <div class="navbar-left">
         <button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button>
         <div class="search-bar">
-          <input type="text" placeholder="Search settings..." />
+          <input type="text" placeholder="Search system settings..." />
           <button><i class="fas fa-search"></i></button>
         </div>
       </div>
@@ -262,60 +262,190 @@
     <!-- Main Content -->
     <main class="main-content">
       <div class="content-header">
-        <h1>Settings</h1>
-        <p>Update your account preferences and security</p>
+        <h1>System Settings</h1>
+        <p>Configure system-wide preferences and settings</p>
       </div>
 
       <div class="settings-container">
-        <!-- Profile Settings -->
+        <!-- System Configuration -->
         <div class="settings-section">
-          <h3><i class="fas fa-user"></i> Profile Settings</h3>
+          <h3><i class="fas fa-cogs"></i> System Configuration</h3>
           <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" placeholder="Enter full name" />
+            <label>Site Name</label>
+            <input type="text" placeholder="Enter site name" value="LMS Dashboard" />
           </div>
           <div class="form-group">
-            <label>Email Address</label>
-            <input type="email" placeholder="Enter email" />
+            <label>Default Language</label>
+            <select>
+              <option value="en" selected>English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+            </select>
           </div>
-      <button id="saveProfileBtn" type="button">Save Profile</button>
-    </div>
+          <div class="form-group">
+            <label>Time Zone</label>
+            <input type="text" placeholder="e.g., UTC+5:30" />
+          </div>
+          <button id="saveConfigBtn" type="button">Save Configuration</button>
+        </div>
 
-    <!-- Account Settings -->
-    <div class="settings-section">
-      <h3><i class="fas fa-user-cog"></i> Account Settings</h3>
-      <div class="form-group">
-        <label for="usernameInput">Username</label>
-        <input id="usernameInput" type="text" placeholder="Enter username" />
-      </div>
-      <div class="form-group">
-        <label for="roleInput">Role</label>
-        <select id="roleInput" aria-label="Select role">
-          <option value="admin" selected>Admin</option>
-          <option value="trainer">Trainer</option>
-          <option value="student">Student</option>
-        </select>
-      </div>
-      <button id="updateAccountBtn" type="button">Update Account</button>
-    </div>
+        <!-- Notification Settings -->
+        <div class="settings-section">
+          <h3><i class="fas fa-bell"></i> Notification Settings</h3>
+          <div class="form-group">
+            <label>Enable Email Notifications</label>
+            <input type="checkbox" checked />
+          </div>
+          <div class="form-group">
+            <label>SMTP Server</label>
+            <input type="text" placeholder="smtp.example.com" />
+          </div>
+          <div class="form-group">
+            <label>Admin Email</label>
+            <input type="email" placeholder="admin@example.com" />
+          </div>
+          <button id="saveNotifBtn" type="button">Save Notifications</button>
+        </div>
 
-    <!-- Security Settings -->
-    <div class="settings-section">
-      <h3><i class="fas fa-lock"></i> Security Settings</h3>
-      <div class="form-group">
-        <label for="currentPasswordInput">Current Password</label>
-        <input id="currentPasswordInput" type="password" placeholder="Enter current password" />
-      </div>
-      <div class="form-group">
-        <label for="newPasswordInput">New Password</label>
-        <input id="newPasswordInput" type="password" placeholder="Enter new password" />
-      </div>
-      <div class="form-group">
-        <label for="confirmPasswordInput">Confirm Password</label>
-        <input id="confirmPasswordInput" type="password" placeholder="Confirm new password" />
-      </div>
-      <button id="changePasswordBtn" type="button">Change Password</button>
-    </div>
+        <!-- Security Policies -->
+        <div class="settings-section">
+          <h3><i class="fas fa-shield-alt"></i> Security Policies</h3>
+          <div class="form-group">
+            <label>Minimum Password Length</label>
+            <input type="number" value="8" min="6" max="20" />
+          </div>
+          <div class="form-group">
+            <label>Session Timeout (minutes)</label>
+            <input type="number" value="30" min="5" max="120" />
+          </div>
+          <div class="form-group">
+            <label>Enable Two-Factor Authentication</label>
+            <input type="checkbox" />
+          </div>
+          <button id="saveSecurityBtn" type="button">Save Security</button>
+        </div>
+
+        <!-- Appearance Settings -->
+        <div class="settings-section">
+          <h3><i class="fas fa-palette"></i> Appearance Settings</h3>
+          <div class="form-group">
+            <label>Theme</label>
+            <select>
+              <option value="light" selected>Light</option>
+              <option value="dark">Dark</option>
+              <option value="auto">Auto</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Primary Color</label>
+            <input type="color" value="#55cea6" />
+          </div>
+          <div class="form-group">
+            <label>Font Size</label>
+            <select>
+              <option value="small">Small</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+          <button id="saveAppearanceBtn" type="button">Save Appearance</button>
+        </div>
+
+        <!-- Backup & Restore -->
+        <div class="settings-section">
+          <h3><i class="fas fa-database"></i> Backup & Restore</h3>
+          <div class="form-group">
+            <label>Enable Automatic Backups</label>
+            <input type="checkbox" checked />
+          </div>
+          <div class="form-group">
+            <label>Backup Frequency</label>
+            <select>
+              <option value="daily">Daily</option>
+              <option value="weekly" selected>Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Backup Retention (days)</label>
+            <input type="number" value="30" min="1" max="365" />
+          </div>
+          <div class="form-group">
+            <label>Last Backup</label>
+            <input type="text" value="2023-10-15 14:30" readonly />
+          </div>
+          <button id="saveBackupBtn" type="button">Save Backup Settings</button>
+          <button id="restoreBackupBtn" type="button" style="margin-left: 10px; background: #ff6b6b;">Restore from Backup</button>
+        </div>
+
+        <!-- Advanced Security -->
+        <div class="settings-section">
+          <h3><i class="fas fa-lock"></i> Advanced Security</h3>
+          <div class="form-group">
+            <label>Password Complexity Requirements</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+              <label><input type="checkbox" checked /> Uppercase</label>
+              <label><input type="checkbox" checked /> Lowercase</label>
+              <label><input type="checkbox" checked /> Numbers</label>
+              <label><input type="checkbox" checked /> Symbols</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Account Lockout Attempts</label>
+            <input type="number" value="5" min="1" max="10" />
+          </div>
+          <div class="form-group">
+            <label>Lockout Duration (minutes)</label>
+            <input type="number" value="15" min="5" max="60" />
+          </div>
+          <div class="form-group">
+            <label>IP Whitelisting (one per line)</label>
+            <textarea rows="3" placeholder="192.168.1.1&#10;10.0.0.1"></textarea>
+          </div>
+          <button id="saveAdvSecurityBtn" type="button">Save Advanced Security</button>
+        </div>
+
+        <!-- Data Management -->
+        <div class="settings-section">
+          <h3><i class="fas fa-folder-open"></i> Data Management</h3>
+          <div class="form-group">
+            <label>Data Retention Period (days)</label>
+            <input type="number" value="365" min="30" max="2555" />
+          </div>
+          <div class="form-group">
+            <label>Enable Data Export</label>
+            <input type="checkbox" checked />
+          </div>
+          <div class="form-group">
+            <label>GDPR Compliance</label>
+            <input type="checkbox" checked />
+          </div>
+          <div class="form-group">
+            <label>Anonymize Old Data</label>
+            <input type="checkbox" />
+          </div>
+          <button id="saveDataBtn" type="button">Save Data Settings</button>
+          <button id="exportDataBtn" type="button" style="margin-left: 10px; background: #4ecdc4;">Export Data</button>
+        </div>
+
+        <!-- System Maintenance -->
+        <div class="settings-section">
+          <h3><i class="fas fa-tools"></i> System Maintenance</h3>
+          <div class="form-group">
+            <label>Log Retention (days)</label>
+            <input type="number" value="90" min="7" max="365" />
+          </div>
+          <div class="form-group">
+            <label>Enable Health Checks</label>
+            <input type="checkbox" checked />
+          </div>
+          <div class="form-group">
+            <label>Last Health Check</label>
+            <input type="text" value="2023-10-15 12:00 - All systems operational" readonly />
+          </div>
+          <button id="clearCacheBtn" type="button" style="background: #ffa726;">Clear Cache</button>
+          <button id="runHealthCheckBtn" type="button" style="margin-left: 10px; background: #66bb6a;">Run Health Check</button>
+        </div>
       </div>
     </main>
   </div>
@@ -347,51 +477,52 @@
       alert(message);
     }
 
-    // Profile Save
-    document.getElementById('saveProfileBtn').addEventListener('click', () => {
-      const fullName = document.querySelector('.settings-section input[placeholder="Enter full name"]').value.trim();
-      const email = document.querySelector('.settings-section input[placeholder="Enter email"]').value.trim();
+    // Save Configuration
+    document.getElementById('saveConfigBtn').addEventListener('click', () => {
+      const siteName = document.querySelector('input[placeholder="Enter site name"]').value.trim();
+      const timeZone = document.querySelector('input[placeholder="e.g., UTC+5:30"]').value.trim();
 
-      if (!fullName) {
-        showAlert('Please enter your full name.');
+      if (!siteName) {
+        showAlert('Please enter a site name.');
         return;
       }
-      if (!email || !validateEmail(email)) {
-        showAlert('Please enter a valid email address.');
+      if (!timeZone) {
+        showAlert('Please enter a time zone.');
         return;
       }
-      showAlert('Profile saved successfully!');
+      showAlert('System configuration saved successfully!');
     });
 
-    // Account Update
-    document.getElementById('updateAccountBtn').addEventListener('click', () => {
-      const username = document.getElementById('usernameInput').value.trim();
-      if (!username) {
-        showAlert('Please enter a username.');
+    // Save Notifications
+    document.getElementById('saveNotifBtn').addEventListener('click', () => {
+      const smtpServer = document.querySelector('input[placeholder="smtp.example.com"]').value.trim();
+      const adminEmail = document.querySelector('input[placeholder="admin@example.com"]').value.trim();
+
+      if (!smtpServer) {
+        showAlert('Please enter an SMTP server.');
         return;
       }
-      showAlert('Account updated successfully!');
+      if (!adminEmail || !validateEmail(adminEmail)) {
+        showAlert('Please enter a valid admin email address.');
+        return;
+      }
+      showAlert('Notification settings saved successfully!');
     });
 
-    // Password Change
-    document.getElementById('changePasswordBtn').addEventListener('click', () => {
-      const currentPassword = document.getElementById('currentPasswordInput').value.trim();
-      const newPassword = document.getElementById('newPasswordInput').value.trim();
-      const confirmPassword = document.getElementById('confirmPasswordInput').value.trim();
+    // Save Security
+    document.getElementById('saveSecurityBtn').addEventListener('click', () => {
+      const minPasswordLength = document.querySelector('input[type="number"][value="8"]').value;
+      const sessionTimeout = document.querySelector('input[type="number"][value="30"]').value;
 
-      if (!currentPassword) {
-        showAlert('Please enter your current password.');
+      if (minPasswordLength < 6 || minPasswordLength > 20) {
+        showAlert('Minimum password length must be between 6 and 20.');
         return;
       }
-      if (!newPassword) {
-        showAlert('Please enter a new password.');
+      if (sessionTimeout < 5 || sessionTimeout > 120) {
+        showAlert('Session timeout must be between 5 and 120 minutes.');
         return;
       }
-      if (newPassword !== confirmPassword) {
-        showAlert('New password and confirm password do not match.');
-        return;
-      }
-      showAlert('Password changed successfully!');
+      showAlert('Security policies saved successfully!');
     });
 
     // Email validation helper
@@ -399,94 +530,106 @@
       const re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
       return re.test(email);
     }
-  </script>
 
-  <script>
-    // Additional feature: Toggle password visibility for password fields
+    // Save Appearance
+    document.getElementById('saveAppearanceBtn').addEventListener('click', () => {
+      showAlert('Appearance settings saved successfully!');
+    });
 
-    function togglePasswordVisibility(inputId, toggleBtnId) {
-      const input = document.getElementById(inputId);
-      const toggleBtn = document.getElementById(toggleBtnId);
-
-      toggleBtn.addEventListener('click', () => {
-        if (input.type === 'password') {
-          input.type = 'text';
-          toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
-        } else {
-          input.type = 'password';
-          toggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
-        }
-      });
-    }
-
-    // Add toggle buttons dynamically next to password inputs
-    function addPasswordToggle(inputId) {
-      const input = document.getElementById(inputId);
-      const wrapper = document.createElement('div');
-      wrapper.style.position = 'relative';
-      input.parentNode.insertBefore(wrapper, input);
-      wrapper.appendChild(input);
-
-      const toggleBtn = document.createElement('button');
-      toggleBtn.type = 'button';
-      toggleBtn.id = inputId + 'Toggle';
-      toggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
-      toggleBtn.style.position = 'absolute';
-      toggleBtn.style.top = '50%';
-      toggleBtn.style.right = '15px';
-      toggleBtn.style.transform = 'translateY(-50%)';
-      toggleBtn.style.background = 'none';
-      toggleBtn.style.border = 'none';
-      toggleBtn.style.cursor = 'pointer';
-      toggleBtn.style.color = '#55cea6';
-      toggleBtn.style.fontSize = '16px';
-      toggleBtn.style.padding = '0';
-
-      wrapper.style.display = 'inline-block';
-      wrapper.style.width = '100%';
-      input.style.paddingRight = '40px';
-
-      wrapper.appendChild(toggleBtn);
-
-      togglePasswordVisibility(inputId, toggleBtn.id);
-    }
-
-    // Initialize toggle buttons for password fields
-    addPasswordToggle('currentPasswordInput');
-    addPasswordToggle('newPasswordInput');
-    addPasswordToggle('confirmPasswordInput');
-  </script>
-  <script>
-  const universalSearchInput = document.getElementById('universal-search-input');
-
-  universalSearchInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      const query = this.value.trim().toLowerCase();
-      if (!query) return;
-
-      // Check keywords and redirect accordingly
-      if (query.includes("course")) {
-        window.location.href = "courses.html";
-      } else if (query.includes("trainer")) {
-        window.location.href = "trainers.html";
-      } else if (query.includes("video")) {
-        window.location.href = "video.html";
-      } else if (query.includes("analytic") || query.includes("report")) {
-        window.location.href = "analytics.html";
-      } else if (query.includes("student")) {
-        window.location.href = "student.html";
-      } else if (query.includes("contact")) {
-        window.location.href = "contact.html";
-      } else if (query.includes("about")) {
-        window.location.href = "about.html";
-      } else if (query.includes("setting")) {
-        window.location.href = "settings.html";
-      } else {
-        // Default → Dashboard
-        window.location.href = "dashboard.html";
+    // Save Backup Settings
+    document.getElementById('saveBackupBtn').addEventListener('click', () => {
+      const retention = document.querySelector('input[placeholder="30"]').value;
+      if (retention < 1 || retention > 365) {
+        showAlert('Backup retention must be between 1 and 365 days.');
+        return;
       }
-    }
-  });
+      showAlert('Backup settings saved successfully!');
+    });
+
+    // Restore from Backup
+    document.getElementById('restoreBackupBtn').addEventListener('click', () => {
+      if (confirm('Are you sure you want to restore from backup? This may overwrite current data.')) {
+        showAlert('Restore initiated. This may take a few minutes.');
+      }
+    });
+
+    // Save Advanced Security
+    document.getElementById('saveAdvSecurityBtn').addEventListener('click', () => {
+      const attempts = document.querySelector('input[value="5"]').value;
+      const duration = document.querySelector('input[value="15"]').value;
+      if (attempts < 1 || attempts > 10) {
+        showAlert('Account lockout attempts must be between 1 and 10.');
+        return;
+      }
+      if (duration < 5 || duration > 60) {
+        showAlert('Lockout duration must be between 5 and 60 minutes.');
+        return;
+      }
+      showAlert('Advanced security settings saved successfully!');
+    });
+
+    // Save Data Settings
+    document.getElementById('saveDataBtn').addEventListener('click', () => {
+      const retention = document.querySelector('input[value="365"]').value;
+      if (retention < 30 || retention > 2555) {
+        showAlert('Data retention must be between 30 and 2555 days.');
+        return;
+      }
+      showAlert('Data management settings saved successfully!');
+    });
+
+    // Export Data
+    document.getElementById('exportDataBtn').addEventListener('click', () => {
+      showAlert('Data export initiated. You will receive an email when ready.');
+    });
+
+    // Clear Cache
+    document.getElementById('clearCacheBtn').addEventListener('click', () => {
+      if (confirm('Are you sure you want to clear the cache?')) {
+        showAlert('Cache cleared successfully!');
+      }
+    });
+
+    // Run Health Check
+    document.getElementById('runHealthCheckBtn').addEventListener('click', () => {
+      showAlert('Health check initiated. Results will be displayed shortly.');
+    });
+  </script>
+
+
+  <script>
+  const universalSearchInput = document.querySelector('.search-bar input[type="text"]');
+
+  if (universalSearchInput) {
+    universalSearchInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const query = this.value.trim().toLowerCase();
+        if (!query) return;
+
+        // Check keywords and redirect accordingly
+        if (query.includes("course")) {
+          window.location.href = "courses.html";
+        } else if (query.includes("trainer")) {
+          window.location.href = "trainers.html";
+        } else if (query.includes("video")) {
+          window.location.href = "video.html";
+        } else if (query.includes("analytic") || query.includes("report")) {
+          window.location.href = "analytics.html";
+        } else if (query.includes("student")) {
+          window.location.href = "student.html";
+        } else if (query.includes("contact")) {
+          window.location.href = "contact.html";
+        } else if (query.includes("about")) {
+          window.location.href = "about.html";
+        } else if (query.includes("setting")) {
+          window.location.href = "settings.html";
+        } else {
+          // Default → Dashboard
+          window.location.href = "dashboard.html";
+        }
+      }
+    });
+  }
 </script>
 
 </body>

@@ -147,6 +147,10 @@
           <label for="course-description">Description</label>
           <textarea id="course-description" rows="3"></textarea>
         </div>
+        <div class="form-group">
+          <label for="course-avatar">Avatar URL</label>
+          <input type="url" id="course-avatar" placeholder="https://example.com/avatar.jpg">
+        </div>
         <div class="form-actions">
           <button type="button" class="btn-secondary" id="cancel-add">Cancel</button>
           <button type="submit" class="btn-primary">Add Course</button>
@@ -200,6 +204,10 @@
           <label for="edit-course-description">Description</label>
           <textarea id="edit-course-description" rows="3"></textarea>
         </div>
+        <div class="form-group">
+          <label for="edit-course-avatar">Avatar URL</label>
+          <input type="url" id="edit-course-avatar" placeholder="https://example.com/avatar.jpg">
+        </div>
         <div class="form-actions">
           <button type="button" class="btn-secondary" id="cancel-edit">Cancel</button>
           <button type="submit" class="btn-primary">Save Changes</button>
@@ -234,7 +242,7 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #14a191, #e74684);
+      background: linear-gradient(135deg, #059483, #726b6e);
       color: white;
     }
 
@@ -628,7 +636,7 @@
         enrolledStudents: 120,
         duration: '8 weeks',
         status: 'Active',
-        avatar: 'https://via.placeholder.com/50',
+        avatar: 'https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757678323/Java_final_keyword____How_to_use_final_keyword_in_bi0fjn.jpg',
         description: 'Learn the fundamentals of Java programming language.'
       },
       {
@@ -638,7 +646,7 @@
         enrolledStudents: 150,
         duration: '10 weeks',
         status: 'Active',
-        avatar: 'https://via.placeholder.com/50',
+        avatar: 'https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757678139/1020ec0d-9745-433f-a1c4-2aaf3b0a4141_jh3vco.jpg',
         description: 'Master Python programming from basics to advanced concepts.'
       },
       {
@@ -648,7 +656,7 @@
         enrolledStudents: 100,
         duration: '12 weeks',
         status: 'Inactive',
-        avatar: 'https://via.placeholder.com/50',
+        avatar: 'https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757678680/Website_Development_Company_in_UAE_jsm83s.jpg',
         description: 'Build modern web applications with HTML, CSS, and JavaScript.'
       }
     ];
@@ -723,6 +731,7 @@
             document.getElementById('edit-course-trainer').value = course.trainer.toLowerCase().replace(' ', '-');
             document.getElementById('edit-course-duration').value = parseInt(course.duration);
             document.getElementById('edit-course-description').value = course.description;
+            document.getElementById('edit-course-avatar').value = course.avatar;
             // Store course id for update
             document.getElementById('edit-course-form').setAttribute('data-course-id', id);
             editModal.style.display = 'block';
@@ -788,6 +797,7 @@
       const trainer = document.getElementById('course-trainer').value;
       const duration = document.getElementById('course-duration').value;
       const description = document.getElementById('course-description').value.trim();
+      const avatar = document.getElementById('course-avatar').value.trim() || 'https://via.placeholder.com/50';
 
       if (!name || !trainer || !duration) {
         alert('Please fill in all required fields.');
@@ -801,7 +811,7 @@
         enrolledStudents: 0,
         duration: duration + ' weeks',
         status: 'Active',
-        avatar: 'https://via.placeholder.com/50',
+        avatar,
         description
       };
 
@@ -821,6 +831,7 @@
       const trainer = document.getElementById('edit-course-trainer').value;
       const duration = document.getElementById('edit-course-duration').value;
       const description = document.getElementById('edit-course-description').value.trim();
+      const avatar = document.getElementById('edit-course-avatar').value.trim() || 'https://via.placeholder.com/50';
 
       if (!name || !trainer || !duration) {
         alert('Please fill in all required fields.');
@@ -834,7 +845,8 @@
           name,
           trainer: document.getElementById('edit-course-trainer').options[document.getElementById('edit-course-trainer').selectedIndex].text,
           duration: duration + ' weeks',
-          description
+          description,
+          avatar
         };
         renderCoursesGrid(document.getElementById('search-input').value);
         editModal.style.display = 'none';
