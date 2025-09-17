@@ -20,11 +20,12 @@
         <li><a href="student.html"><i class="fas fa-user-graduate"></i><span>Student</span></a></li>
         <li><a href="courses.html"><i class="fas fa-book"></i><span>Courses</span></a></li>
         <li><a href="material.html" class="active"><i class="fas fa-file-alt"></i><span>Material Page</span></a></li>
-        <li><a href="#"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
-        <li><a href="#"><i class="fas fa-video"></i><span>Video Page</span></a></li>
-        <li><a href="#"><i class="fas fa-info-circle"></i><span>About Page</span></a></li>
-        <li><a href="#"><i class="fas fa-envelope"></i><span>Contact Page</span></a></li>
-        <li><a href="#"><i class="fas fa-cog"></i><span>Settings Page</span></a></li>
+        <li><a href="analytics.html"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
+        <li><a href="video.html"><i class="fas fa-video"></i><span>Video Page</span></a></li>
+        <li><a href="about.html"><i class="fas fa-info-circle"></i><span>About Page</span></a></li>
+        <li><a href="contact.html"><i class="fas fa-envelope"></i><span>Contact Page</span></a></li>
+        <li><a href="notifications.html"><i class="fas fa-bell"></i><span>Notifications</span></a></li>
+        <li><a href="settings.html"><i class="fas fa-cog"></i><span>Settings Page</span></a></li>
       </ul>
     </aside>
 
@@ -214,6 +215,7 @@
             <option value="document">Document</option>
             <option value="video">Video</option>
             <option value="presentation">Presentation</option>
+            <option value="assignment">Assignment</option>
             <option value="other">Other</option>
           </select>
         </div>
@@ -263,7 +265,7 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #14a191, #e74684);
+      background: linear-gradient(135deg, #497973, #585556);
       color: white;
     }
 
@@ -309,7 +311,7 @@
     }
 
     .materials-table th {
-      background: linear-gradient(135deg, #035e47, #027733);
+      background:  rgb(54, 51, 51);
       color: white;
       font-weight: 600;
     }
@@ -377,12 +379,20 @@
 
     .modal-content {
       background-color: white;
-      margin: 10% auto;
+      margin: 5% auto;
       padding: 0;
       border-radius: 12px;
       width: 90%;
-      max-width: 500px;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
       box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      animation: modalFadeIn 0.3s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .modal-header {
@@ -462,6 +472,19 @@
       }
     });
 
+    // Navbar icon handlers
+    document.getElementById('notifications').addEventListener('click', () => {
+      window.location.href = 'notifications.html';
+    });
+
+    // Add notifications link to sidebar on all pages
+    const sidebarMenu = document.querySelector('.sidebar-menu');
+    if (sidebarMenu && !sidebarMenu.querySelector('a[href="notifications.html"]')) {
+      const li = document.createElement('li');
+      li.innerHTML = '<a href="notifications.html"><i class="fas fa-bell"></i><span>Notifications</span></a>';
+      sidebarMenu.appendChild(li);
+    }
+
     // Modal functionality
     const modal = document.getElementById('add-material-modal');
     const addMaterialBtn = document.getElementById('add-material-btn');
@@ -469,20 +492,24 @@
     const cancelAdd = document.getElementById('cancel-add');
 
     addMaterialBtn.addEventListener('click', () => {
+      resetModalToAddMode();
       modal.style.display = 'block';
     });
 
     closeModal.addEventListener('click', () => {
       modal.style.display = 'none';
+      resetModalToAddMode();
     });
 
     cancelAdd.addEventListener('click', () => {
       modal.style.display = 'none';
+      resetModalToAddMode();
     });
 
     window.addEventListener('click', (e) => {
       if (e.target === modal) {
         modal.style.display = 'none';
+        resetModalToAddMode();
       }
     });
 
@@ -576,21 +603,21 @@
       document.querySelectorAll('.edit-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const id = btn.getAttribute('data-id');
-          alert(`Edit material functionality for ID: ${id} would be implemented here`);
+          editMaterial(id);
         });
       });
 
       document.querySelectorAll('.view-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const id = btn.getAttribute('data-id');
-          alert(`View material details functionality for ID: ${id} would be implemented here`);
+          viewMaterial(id);
         });
       });
 
       document.querySelectorAll('.download-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const id = btn.getAttribute('data-id');
-          alert(`Download functionality for ID: ${id} would be implemented here`);
+          downloadMaterial(id);
         });
       });
 
@@ -606,7 +633,115 @@
       });
     }
 
-    // Add new material form submission
+    // Edit material function
+    function editMaterial(id) {
+      const material = materials.find(m => m.id === id);
+      if (!material) return;
+
+      // Populate form with existing data
+      document.getElementById('material-name').value = material.name;
+      document.getElementById('material-type').value = material.type.toLowerCase();
+      document.getElementById('material-course').value = material.course.toLowerCase().replace(' ', '-');
+      document.getElementById('material-description').value = material.description || '';
+
+      // Make file input optional for editing
+      document.getElementById('material-file').required = false;
+      document.getElementById('material-file').value = ''; // Clear any previous selection
+
+      // Change modal title and button
+      document.querySelector('.modal-header h3').textContent = 'Edit Material';
+      document.querySelector('#add-material-form button[type="submit"]').textContent = 'Update Material';
+
+      // Store editing ID
+      document.getElementById('add-material-form').setAttribute('data-edit-id', id);
+
+      // Show modal
+      modal.style.display = 'block';
+    }
+
+    // View material function
+    function viewMaterial(id) {
+      const material = materials.find(m => m.id === id);
+      if (!material) return;
+
+      // Create view modal content
+      const viewModal = document.createElement('div');
+      viewModal.className = 'modal';
+      viewModal.id = 'view-material-modal';
+      viewModal.innerHTML = `
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Material Details</h3>
+            <span class="close-modal">&times;</span>
+          </div>
+          <div style="padding: 30px;">
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+              <i class="${material.icon} material-icon" style="font-size: 48px; margin-right: 20px;"></i>
+              <div>
+                <h4 style="margin: 0; color: #2f4f4f;">${material.name}</h4>
+                <small style="color: #6b8e6b;">ID: ${material.id}</small>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              <div>
+                <strong>Type:</strong> ${material.type}
+              </div>
+              <div>
+                <strong>Course:</strong> ${material.course}
+              </div>
+              <div>
+                <strong>Size:</strong> ${material.size}
+              </div>
+              <div>
+                <strong>Upload Date:</strong> ${material.uploadDate}
+              </div>
+              <div>
+                <strong>Status:</strong> <span class="status ${material.status.toLowerCase()}">${material.status}</span>
+              </div>
+            </div>
+            ${material.description ? `<div style="margin-top: 20px;"><strong>Description:</strong><br>${material.description}</div>` : ''}
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(viewModal);
+      viewModal.style.display = 'block';
+
+      // Close modal functionality
+      const closeBtn = viewModal.querySelector('.close-modal');
+      closeBtn.addEventListener('click', () => {
+        document.body.removeChild(viewModal);
+      });
+
+      window.addEventListener('click', (e) => {
+        if (e.target === viewModal) {
+          document.body.removeChild(viewModal);
+        }
+      });
+    }
+
+    // Download material function
+    function downloadMaterial(id) {
+      const material = materials.find(m => m.id === id);
+      if (!material) return;
+
+      // Simulate download by creating a blob with material info
+      const content = `Material Details:\n\nName: ${material.name}\nID: ${material.id}\nType: ${material.type}\nCourse: ${material.course}\nSize: ${material.size}\nUpload Date: ${material.uploadDate}\nStatus: ${material.status}\n\nDescription:\n${material.description || 'No description available'}`;
+
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${material.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_details.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      alert(`Download started for "${material.name}"`);
+    }
+
+    // Add/Edit material form submission
     document.getElementById('add-material-form').addEventListener('submit', (e) => {
       e.preventDefault();
 
@@ -615,8 +750,9 @@
       const course = document.getElementById('material-course').value;
       const file = document.getElementById('material-file').files[0];
       const description = document.getElementById('material-description').value.trim();
+      const editId = document.getElementById('add-material-form').getAttribute('data-edit-id');
 
-      if (!name || !type || !course || !file) {
+      if (!name || !type || !course) {
         alert('Please fill in all required fields.');
         return;
       }
@@ -629,24 +765,61 @@
       else if (type === 'video') icon = 'fas fa-video';
       else if (type === 'presentation') icon = 'fas fa-file-powerpoint';
 
-      const newMaterial = {
-        id: generateMaterialId(),
-        name,
-        type: typeText,
-        course: courseText,
-        size: (file.size / (1024 * 1024)).toFixed(1) + ' MB',
-        uploadDate: new Date().toISOString().split('T')[0],
-        status: 'Active',
-        icon,
-        description
-      };
+      if (editId) {
+        // Update existing material
+        const materialIndex = materials.findIndex(m => m.id === editId);
+        if (materialIndex !== -1) {
+          materials[materialIndex] = {
+            ...materials[materialIndex],
+            name,
+            type: typeText,
+            course: courseText,
+            icon,
+            description,
+            // Update size and upload date only if new file is provided
+            ...(file && {
+              size: (file.size / (1024 * 1024)).toFixed(1) + ' MB',
+              uploadDate: new Date().toISOString().split('T')[0]
+            })
+          };
+          alert('Material updated successfully!');
+        }
+      } else {
+        // Add new material
+        if (!file) {
+          alert('Please select a file.');
+          return;
+        }
 
-      materials.push(newMaterial);
+        const newMaterial = {
+          id: generateMaterialId(),
+          name,
+          type: typeText,
+          course: courseText,
+          size: (file.size / (1024 * 1024)).toFixed(1) + ' MB',
+          uploadDate: new Date().toISOString().split('T')[0],
+          status: 'Active',
+          icon,
+          description
+        };
+
+        materials.push(newMaterial);
+        alert('Material added successfully!');
+      }
+
       renderMaterialsTable(document.getElementById('search-input').value);
       modal.style.display = 'none';
       document.getElementById('add-material-form').reset();
-      alert('Material added successfully!');
+      resetModalToAddMode();
     });
+
+    // Reset modal to add mode
+    function resetModalToAddMode() {
+      document.querySelector('.modal-header h3').textContent = 'Add New Material';
+      document.querySelector('#add-material-form button[type="submit"]').textContent = 'Add Material';
+      document.getElementById('add-material-form').removeAttribute('data-edit-id');
+      document.getElementById('material-file').required = true;
+    }
 
     // Search functionality
     const searchInput = document.querySelector('.search-bar input');
@@ -709,5 +882,39 @@
     // Initial render
     renderMaterialsTable();
   </script>
+
+  <script>
+  const universalSearchInput = document.getElementById('universal-search-input');
+
+  universalSearchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      const query = this.value.trim().toLowerCase();
+      if (!query) return;
+
+      // Check keywords and redirect accordingly
+      if (query.includes("course")) {
+        window.location.href = "courses.html";
+      } else if (query.includes("trainer")) {
+        window.location.href = "trainers.html";
+      } else if (query.includes("video")) {
+        window.location.href = "video.html";
+      } else if (query.includes("analytic") || query.includes("report")) {
+        window.location.href = "analytics.html";
+      } else if (query.includes("student")) {
+        window.location.href = "student.html";
+      } else if (query.includes("contact")) {
+        window.location.href = "contact.html";
+      } else if (query.includes("about")) {
+        window.location.href = "about.html";
+      } else if (query.includes("setting")) {
+        window.location.href = "settings.html";
+      } else {
+        // Default → Dashboard
+        window.location.href = "dashboard.html";
+      }
+    }
+  });
+</script>
+
 </body>
 </html>

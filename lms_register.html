@@ -366,6 +366,116 @@
     .forgot-password-container a:hover {
       color: #ff4e50;
     }
+
+    /* Light mode styles */
+    body.light-mode {
+      background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+      color: #333;
+    }
+
+    body.light-mode .container {
+      background: linear-gradient(135deg, #ffffff, #f8f8f8);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+    }
+
+    body.light-mode .left-panel {
+      background: #f8f8f8;
+      color: #333;
+    }
+
+    body.light-mode .left-panel h1 {
+      color: #333;
+    }
+
+    body.light-mode .left-panel p {
+      color: #666;
+    }
+
+    body.light-mode .right-panel {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+    }
+
+    body.light-mode .right-panel h2 {
+      color: #333;
+    }
+
+    body.light-mode label {
+      color: #555;
+    }
+
+    body.light-mode input[type="text"],
+    body.light-mode input[type="password"] {
+      background: rgba(0, 0, 0, 0.05);
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    body.light-mode input[type="text"]::placeholder,
+    body.light-mode input[type="password"]::placeholder {
+      color: #999;
+    }
+
+    body.light-mode input[type="text"]:focus,
+    body.light-mode input[type="password"]:focus {
+      background: rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 10px rgba(255, 78, 80, 0.3);
+    }
+
+    body.light-mode .animated-icon {
+      color: rgba(0, 0, 0, 0.3);
+    }
+
+    body.light-mode .background-icon {
+      color: rgba(0, 0, 0, 0.05);
+    }
+
+    body.light-mode .shape1,
+    body.light-mode .shape2,
+    body.light-mode .shape3 {
+      background: #ddd;
+      opacity: 0.1;
+    }
+
+    body.light-mode .modal-content {
+      background: linear-gradient(135deg, #ffffff, #f8f8f8);
+      color: #333;
+    }
+
+    body.light-mode .modal-content h2 {
+      color: #333;
+    }
+
+    body.light-mode .close {
+      color: #ff4e50;
+    }
+
+    body.light-mode .role-btn {
+      background: linear-gradient(90deg, #ddd, #bbb);
+      color: #333;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    body.light-mode .role-btn.active {
+      background: linear-gradient(90deg, #ff4e50, #f9d423);
+      color: #1a0529;
+    }
+
+    body.light-mode .role-btn:hover:not(.active) {
+      background: linear-gradient(90deg, #bbb, #ddd);
+    }
+
+    body.light-mode .social-icons a {
+      color: #666;
+    }
+
+    body.light-mode .social-icons a:hover {
+      color: #ff4e50;
+    }
+
+    body.light-mode #theme-toggle {
+      color: #333;
+    }
   </style>
 
   <style>
@@ -475,7 +585,12 @@
       <div class="shape3"></div>
     </div>
     <div class="right-panel">
-      <h2>Register</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="margin: 0;">Register</h2>
+        <button id="theme-toggle" style="background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; padding: 5px;" aria-label="Toggle Dark/Light Mode" title="Toggle Dark/Light Mode">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
       <form action="register.html" method="post" onsubmit="return validateForm()">
         
 
@@ -696,6 +811,38 @@
         document.getElementById('user-role').value = button.getAttribute('data-role');
       });
     });
+  </script>
+
+  <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+
+    // Check for saved theme preference or default to dark mode
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    body.classList.add(currentTheme + '-mode');
+
+    // Update button icon based on current theme
+    updateThemeIcon();
+
+    themeToggle.addEventListener('click', () => {
+      const isLight = body.classList.contains('light-mode');
+      if (isLight) {
+        body.classList.remove('light-mode');
+        body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+        localStorage.setItem('theme', 'light');
+      }
+      updateThemeIcon();
+    });
+
+    function updateThemeIcon() {
+      const isLight = body.classList.contains('light-mode');
+      themeToggle.innerHTML = isLight ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+    }
   </script>
 </body>
 </html>

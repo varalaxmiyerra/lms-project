@@ -1,9 +1,10 @@
-# Update Courses Page to Grid Model and Add Assignments
+# TODO: Remove Dark Mode and Light Mode Toggle from All Pages
 
 ## Tasks
-- [ ] Replace courses table with grid layout using course cards
-- [ ] Add assignments section below courses grid
-- [ ] Update JavaScript to include assignments data and rendering
-- [ ] Add CSS styles for course cards and assignments if needed
-- [ ] Ensure responsive design for mobile devices
-- [ ] Test the updated layout and functionality
+- [ ] Remove theme toggle button and script from trainers.html
+- [ ] Remove theme toggle button and script from student.html
+- [ ] Remove theme toggle button and script from material.html
+- [ ] Remove theme toggle button and script from courses.html
+- [ ] Remove theme toggle button and script from lms_register.html
+- [ ] Remove dark mode CSS styles from dashboard-ui-update.css
+- [ ] Verify removal across all pages

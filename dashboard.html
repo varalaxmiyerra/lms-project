@@ -23,11 +23,12 @@
         <li><a href="student.html"><i class="fas fa-user-graduate"></i><span>Student</span></a></li>
         <li><a href="courses.html"><i class="fas fa-book"></i><span>Courses</span></a></li>
         <li><a href="analytics.html"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
-        <li><a href="material.html"><i class="fas fa-file-alt"></i><span>Material Page</span></a></li>
-        <li><a href="video.html" data-page="video"><i class="fas fa-video"></i><span>Video Page</span></a></li>
+        <li><a href="material.html"><i class="fas fa-file-alt"></i><span>Materials</span></a></li>
+        <li><a href="video.html" data-page="video"><i class="fas fa-video"></i><span>Videos</span></a></li>
         <li><a href="about.html"><i class="fas fa-info-circle"></i><span>About Page</span></a></li>
-        <li><a href="contact.html" data-page="contact"><i class="fas fa-envelope"></i><span>Contact Page</span></a></li>
-        <li><a href="settings.html" data-page="settings"><i class="fas fa-cog"></i><span>Settings Page</span></a></li>
+        <li><a href="contact.html" data-page="contact"><i class="fas fa-envelope"></i><span>Contact Info</span></a></li>
+        <li><a href="notifications.html"><i class="fas fa-bell"></i><span>Notifications</span></a></li>
+        <li><a href="settings.html" data-page="settings"><i class="fas fa-cog"></i><span>Settings</span></a></li>
       </ul>
     </aside>
 
@@ -37,16 +38,17 @@
         <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
           <i class="fas fa-bars"></i>
         </button>
-        <div class="search-bar">
-          <input type="text" placeholder="Search...">
-          <button><i class="fas fa-search"></i></button>
-        </div>
+      <div class="search-bar">
+        <input type="text" placeholder="Search..." id="universal-search-input" autocomplete="off">
+        <button><i class="fas fa-search"></i></button>
+      </div>
       </div>
       <div class="navbar-right">
         <button class="navbar-icon" id="notifications">
           <i class="fas fa-bell"></i>
           <span class="notification-badge">3</span>
         </button>
+
         <div class="profile-info">
           <span class="profile-name">vara</span>
           <img src="https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757430111/Screenshot_217_dys7md.png" alt="Profile Picture" class="profile-pic" />
@@ -247,7 +249,7 @@
    
     // Navbar icon handlers
     document.getElementById('notifications').addEventListener('click', () => {
-      alert('Notifications clicked');
+      window.location.href = 'notifications.html';
     });
 
     document.getElementById('logout').addEventListener('click', () => {
@@ -305,6 +307,84 @@
             alert('Redirecting to User Management page...');
             // window.location.href = 'manage_users.html';
             break;
+        }
+      });
+    });
+
+    // Universal Search Bar functionality
+    const universalSearchInput = document.getElementById('universal-search-input');
+
+    universalSearchInput.addEventListener('input', () => {
+      const query = universalSearchInput.value.toLowerCase().trim();
+
+      // Filter courses table rows
+      const coursesTableBody = document.getElementById('courses-table-body');
+      if (coursesTableBody) {
+        Array.from(coursesTableBody.children).forEach(row => {
+          const courseName = row.cells[0]?.textContent.toLowerCase() || '';
+          const trainerName = row.cells[1]?.textContent.toLowerCase() || '';
+          if (courseName.includes(query) || trainerName.includes(query)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      }
+
+      // Filter recent activity list items
+      const recentActivityItems = document.querySelectorAll('.recent-activity ul li');
+      recentActivityItems.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(query) ? '' : 'none';
+      });
+
+      // Filter tasks/reminders list items
+      const tasksRemindersItems = document.querySelectorAll('.tasks-reminders ul li');
+      tasksRemindersItems.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(query) ? '' : 'none';
+      });
+
+      // Filter notifications list items
+      const notificationItems = document.querySelectorAll('.notifications-list .notification-item');
+      notificationItems.forEach(item => {
+        const title = item.querySelector('.notification-title')?.textContent.toLowerCase() || '';
+        const desc = item.querySelector('.notification-desc')?.textContent.toLowerCase() || '';
+        if (title.includes(query) || desc.includes(query)) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      // Filter user profile shortcuts buttons
+      const profileButtons = document.querySelectorAll('.profile-buttons button');
+      profileButtons.forEach(button => {
+        const text = button.textContent.toLowerCase();
+        if (text.includes(query)) {
+          button.style.display = '';
+          // If the search query fully matches a button text, redirect to the corresponding page
+          if (text === query) {
+            switch(button.getAttribute('data-action')) {
+              case 'add-student':
+                window.location.href = 'student.html';
+                break;
+              case 'add-trainer':
+                window.location.href = 'trainers.html';
+                break;
+              case 'add-course':
+                window.location.href = 'courses.html';
+                break;
+              case 'view-reports':
+                window.location.href = 'analytics.html';
+                break;
+              case 'manage-users':
+                window.location.href = 'settings.html';
+                break;
+            }
+          }
+        } else {
+          button.style.display = 'none';
         }
       });
     });
@@ -590,6 +670,7 @@
         }
     }
   });
+  
 
   </script>
 
@@ -644,5 +725,6 @@
     // Call render on load
     renderCoursesTable();
   </script>
+  
 </body>
 </html>

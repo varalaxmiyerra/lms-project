@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notifications - LMS Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="dashboard-ui-update.css" rel="stylesheet" />
+  <style>
+    /* Contact Page New UI *//* Ensure layout respects sidebar */
+.dashboard-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Sidebar fixed width */
+.sidebar {
+  width: 250px;   /* or whatever your sidebar width is */
+  flex-shrink: 0;
+}
+
+/* Main content starts right after sidebar */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+   
+    /* Updated Notifications UI */
+    .notifications-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .notifications-header h1 {
+      margin: 0;
+    }
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    #filter {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .mark-all-btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    .mark-all-btn:hover {
+      background: #218838;
+    }
+    .clear-btn {
+      background: #d9534f;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    .clear-btn:hover {
+      background: #c9302c;
+    }
+    .notifications-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .notification-card {
+      background: #fff;
+      padding: 18px 20px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .notification-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+    .notification-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .notification-info i {
+      font-size: 22px;
+      padding: 12px;
+      border-radius: 50%;
+      color: white;
+    }
+    .notification-info.success i { background: #28a745; }
+    .notification-info.info i { background: #17a2b8; }
+    .notification-info.warning i { background: #ffc107; color: #333; }
+    .notification-info p {
+      margin: 0;
+      font-size: 15px;
+      color: #2f4f4f;
+    }
+    .notification-time {
+      font-size: 13px;
+      color: #6b8e6b;
+    }
+    .notification-actions button {
+      border: none;
+      background: #f1f3f1;
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin-left: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .notification-actions button:hover {
+      background: #dcdcdc;
+    }
+    .notification-card.unread {
+      border-left: 5px solid #0b7d58;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h2>ADMIN DASHBOARD</h2>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+        <li><a href="trainers.html"><i class="fas fa-chalkboard-teacher"></i><span>Trainer</span></a></li>
+        <li><a href="student.html"><i class="fas fa-user-graduate"></i><span>Student</span></a></li>
+        <li><a href="courses.html"><i class="fas fa-book"></i><span>Courses</span></a></li>
+        <li><a href="analytics.html"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
+        <li><a href="material.html"><i class="fas fa-file-alt"></i><span>Material</span></a></li>
+        <li><a href="video.html"><i class="fas fa-video"></i><span>Video</span></a></li>
+        <li><a href="about.html"><i class="fas fa-info-circle"></i><span>About</span></a></li>
+        <li><a href="contact.html"><i class="fas fa-envelope"></i><span>Contact</span></a></li>
+        <li><a href="notifications.html" class="active"><i class="fas fa-bell"></i><span>Notifications</span></a></li>
+        <li><a href="settings.html"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+      </ul>
+    </aside>
+
+    <!-- Top Navbar -->
+    <nav class="top-navbar redesigned-navbar">
+      <div class="navbar-left">
+        <button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button>
+        <div class="search-bar">
+          <input type="text" placeholder="Search notifications..." />
+          <button><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+      <div class="navbar-right">
+        <button class="navbar-icon" id="notifications"><i class="fas fa-bell"></i><span class="notification-badge">3</span></button>
+        <div class="profile-info">
+          <span class="profile-name">Admin</span>
+          <img src="https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757430111/Screenshot_217_dys7md.png" alt="Profile Picture" class="profile-pic" />
+        </div>
+        <button class="navbar-icon" id="logout"><i class="fas fa-sign-out-alt"></i></button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="notifications-header">
+        <h1>Notifications</h1>
+        <div class="header-actions">
+          <select id="filter" onchange="filterNotifications()">
+            <option value="all">All</option>
+            <option value="unread">Unread</option>
+            <option value="read">Read</option>
+          </select>
+          <button class="mark-all-btn" onclick="markAllAsRead()">Mark All as Read</button>
+          <button class="clear-btn" onclick="clearAll()">Clear All</button>
+        </div>
+      </div>
+      <p>Stay updated with the latest alerts</p>
+
+      <div class="notifications-container" id="notificationsList">
+        <div class="notification-card unread">
+          <div class="notification-info success">
+            <i class="fas fa-user-plus"></i>
+            <div>
+              <p>New student registered: John Doe</p>
+              <span class="notification-time">2 mins ago</span>
+            </div>
+          </div>
+          <div class="notification-actions">
+            <button onclick="markAsRead(this)">Mark as read</button>
+            <button onclick="removeNotification(this)">Delete</button>
+          </div>
+        </div>
+
+        <div class="notification-card unread">
+          <div class="notification-info info">
+            <i class="fas fa-book"></i>
+            <div>
+              <p>New course material uploaded: Python Basics</p>
+              <span class="notification-time">1 hour ago</span>
+            </div>
+          </div>
+          <div class="notification-actions">
+            <button onclick="markAsRead(this)">Mark as read</button>
+            <button onclick="removeNotification(this)">Delete</button>
+          </div>
+        </div>
+
+        <div class="notification-card">
+          <div class="notification-info warning">
+            <i class="fas fa-exclamation-circle"></i>
+            <div>
+              <p>Server maintenance scheduled for tonight</p>
+              <span class="notification-time">Yesterday</span>
+            </div>
+          </div>
+          <div class="notification-actions">
+            <button onclick="removeNotification(this)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- JS -->
+  <script>
+    // Sidebar toggle
+    document.getElementById("menu-toggle").onclick = () => {
+      document.getElementById("sidebar").classList.toggle("collapsed");
+    };
+
+    // Logout
+    document.getElementById("logout").onclick = () => {
+      if (confirm("Are you sure you want to logout?")) {
+        window.location.href = "lms_login_new.html";
+      }
+    };
+
+    // Mark as read
+    function markAsRead(btn) {
+      const card = btn.closest(".notification-card");
+      card.classList.remove("unread");
+      btn.remove(); // remove "mark as read" button
+    }
+
+    // Remove notification
+    function removeNotification(btn) {
+      const card = btn.closest(".notification-card");
+      card.remove();
+    }
+
+    // Clear all notifications
+    function clearAll() {
+      document.getElementById("notificationsList").innerHTML = "";
+    }
+
+    // Mark all as read
+    function markAllAsRead() {
+      const unreadCards = document.querySelectorAll('.notification-card.unread');
+      unreadCards.forEach(card => {
+        card.classList.remove('unread');
+        const markBtn = card.querySelector('button[onclick*="markAsRead"]');
+        if (markBtn) markBtn.remove();
+      });
+    }
+
+    // Filter notifications
+    function filterNotifications() {
+      const filter = document.getElementById('filter').value;
+      const cards = document.querySelectorAll('.notification-card');
+      cards.forEach(card => {
+        const isUnread = card.classList.contains('unread');
+        if (filter === 'all') {
+          card.style.display = '';
+        } else if (filter === 'unread' && isUnread) {
+          card.style.display = '';
+        } else if (filter === 'read' && !isUnread) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
