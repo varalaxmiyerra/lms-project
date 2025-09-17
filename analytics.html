@@ -68,28 +68,28 @@
           <i class="fas fa-chart-line card-icon"></i>
           <div>
             <h3>Total Views</h3>
-            <p>45,230</p>
+            <p id="total-views">45,230</p>
           </div>
         </div>
         <div class="card">
           <i class="fas fa-clock card-icon"></i>
           <div>
             <h3>Avg. Session Time</h3>
-            <p>24m 32s</p>
+            <p id="avg-session-time">24m 32s</p>
           </div>
         </div>
         <div class="card">
           <i class="fas fa-users card-icon"></i>
           <div>
             <h3>Active Users</h3>
-            <p>1,847</p>
+            <p id="active-users">1,847</p>
           </div>
         </div>
         <div class="card">
           <i class="fas fa-star card-icon"></i>
           <div>
             <h3>Avg. Rating</h3>
-            <p>4.7</p>
+            <p id="avg-rating">4.7</p>
           </div>
         </div>
       </div>
@@ -404,6 +404,149 @@
       }
     }
   });
+</script>
+
+<script>
+// Data for different date ranges
+const statsData = {
+  '7days': { totalViews: '5,230', avgSession: '22m 15s', activeUsers: '847', avgRating: '4.6' },
+  '30days': { totalViews: '15,230', avgSession: '24m 32s', activeUsers: '1,247', avgRating: '4.7' },
+  '90days': { totalViews: '35,230', avgSession: '25m 45s', activeUsers: '1,647', avgRating: '4.8' },
+  '1year': { totalViews: '145,230', avgSession: '26m 10s', activeUsers: '3,847', avgRating: '4.9' }
+};
+
+const engagementData = {
+  '7days': {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [{
+      label: 'Daily Active Users',
+      data: [1200, 1350, 1180, 1420, 1380, 950, 1100],
+      borderColor: 'rgba(20, 161, 145, 1)',
+      backgroundColor: 'rgba(20, 161, 145, 0.1)',
+      tension: 0.4,
+      fill: true
+    }, {
+      label: 'Session Duration (min)',
+      data: [25, 28, 22, 30, 27, 18, 24],
+      borderColor: 'rgba(231, 70, 132, 1)',
+      backgroundColor: 'rgba(231, 70, 132, 0.1)',
+      tension: 0.4,
+      fill: true
+    }]
+  },
+  '30days': {
+    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+    datasets: [{
+      label: 'Weekly Active Users',
+      data: [8500, 9200, 8800, 9600],
+      borderColor: 'rgba(20, 161, 145, 1)',
+      backgroundColor: 'rgba(20, 161, 145, 0.1)',
+      tension: 0.4,
+      fill: true
+    }, {
+      label: 'Avg Session Duration (min)',
+      data: [24, 26, 23, 28],
+      borderColor: 'rgba(231, 70, 132, 1)',
+      backgroundColor: 'rgba(231, 70, 132, 0.1)',
+      tension: 0.4,
+      fill: true
+    }]
+  },
+  '90days': {
+    labels: ['Month 1', 'Month 2', 'Month 3'],
+    datasets: [{
+      label: 'Monthly Active Users',
+      data: [25000, 28000, 26000],
+      borderColor: 'rgba(20, 161, 145, 1)',
+      backgroundColor: 'rgba(20, 161, 145, 0.1)',
+      tension: 0.4,
+      fill: true
+    }, {
+      label: 'Avg Session Duration (min)',
+      data: [25, 27, 24],
+      borderColor: 'rgba(231, 70, 132, 1)',
+      backgroundColor: 'rgba(231, 70, 132, 0.1)',
+      tension: 0.4,
+      fill: true
+    }]
+  },
+  '1year': {
+    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+    datasets: [{
+      label: 'Quarterly Active Users',
+      data: [75000, 82000, 78000, 85000],
+      borderColor: 'rgba(20, 161, 145, 1)',
+      backgroundColor: 'rgba(20, 161, 145, 0.1)',
+      tension: 0.4,
+      fill: true
+    }, {
+      label: 'Avg Session Duration (min)',
+      data: [26, 28, 25, 29],
+      borderColor: 'rgba(231, 70, 132, 1)',
+      backgroundColor: 'rgba(231, 70, 132, 0.1)',
+      tension: 0.4,
+      fill: true
+    }]
+  }
+};
+
+const popularityData = {
+  '7days': { data: [30, 28, 22, 12, 8] },
+  '30days': { data: [35, 25, 20, 15, 5] },
+  '90days': { data: [32, 27, 18, 17, 6] },
+  '1year': { data: [40, 30, 15, 10, 5] }
+};
+
+const revenueData = {
+  '7days': { labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'], data: [1800, 2100, 1900, 2200, 2000, 1700, 2300] },
+  '30days': { labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], data: [12500, 15200, 13800, 16800] },
+  '90days': { labels: ['Month 1', 'Month 2', 'Month 3'], data: [45000, 52000, 48000] },
+  '1year': { labels: ['Q1', 'Q2', 'Q3', 'Q4'], data: [125000, 145000, 138000, 152000] }
+};
+
+const geographicData = {
+  '7days': { data: [35, 32, 18, 10, 5] },
+  '30days': { data: [40, 30, 20, 7, 3] },
+  '90days': { data: [38, 28, 22, 8, 4] },
+  '1year': { data: [42, 26, 24, 6, 2] }
+};
+
+// Function to update stats
+function updateStats(range) {
+  const data = statsData[range];
+  document.getElementById('total-views').textContent = data.totalViews;
+  document.getElementById('avg-session-time').textContent = data.avgSession;
+  document.getElementById('active-users').textContent = data.activeUsers;
+  document.getElementById('avg-rating').textContent = data.avgRating;
+}
+
+// Function to update charts
+function updateCharts(range) {
+  // Update engagement chart
+  engagementChart.data.labels = engagementData[range].labels;
+  engagementChart.data.datasets = engagementData[range].datasets;
+  engagementChart.update();
+
+  // Update popularity chart
+  popularityChart.data.datasets[0].data = popularityData[range].data;
+  popularityChart.update();
+
+  // Update revenue chart
+  revenueChart.data.labels = revenueData[range].labels;
+  revenueChart.data.datasets[0].data = revenueData[range].data;
+  revenueChart.update();
+
+  // Update geographic chart
+  geographicChart.data.datasets[0].data = geographicData[range].data;
+  geographicChart.update();
+}
+
+// Event listener for date range select
+document.getElementById('date-range').addEventListener('change', function() {
+  const selectedRange = this.value;
+  updateStats(selectedRange);
+  updateCharts(selectedRange);
+});
 </script>
 
 </body>

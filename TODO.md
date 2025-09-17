@@ -1,4 +1,7 @@
-- [ ] Add "Avatar URL" input field to the add course form in courses.html
-- [ ] Add "Avatar URL" input field to the edit course form in courses.html
-- [ ] Update JavaScript for add course to use the provided avatar URL instead of placeholder
-- [ ] Update JavaScript for edit course to populate the avatar URL field and save changes
+# TODO for Analytics Page Filter Functionality
+
+- [x] Add JavaScript event listener for the date range select element.
+- [x] Define different data sets for charts and stats for each date range option.
+- [x] Update the charts (engagementChart, popularityChart, revenueChart, geographicChart) dynamically based on selected date range.
+- [x] Update the stats cards (Total Views, Avg. Session Time, Active Users, Avg. Rating) dynamically based on selected date range.
+- [ ] Test the filter functionality to ensure charts and stats update correctly.

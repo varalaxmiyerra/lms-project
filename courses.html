@@ -266,82 +266,6 @@
       padding: 30px;
     }
 
-    .courses-table-container {
-      overflow-x: auto;
-      margin-top: 20px;
-    }
-
-    .courses-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .courses-table th,
-    .courses-table td {
-      padding: 15px;
-      text-align: left;
-      border-bottom: 1px solid #e6f3e6;
-    }
-
-    .courses-table th {
-      background: linear-gradient(135deg, #035e47, #027733);
-      color: white;
-      font-weight: 600;
-    }
-
-    .course-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .course-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .course-info small {
-      color: #6b8e6b;
-      font-size: 12px;
-    }
-
-    .status {
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .status.active {
-      background: #d4edda;
-      color: #155724;
-    }
-
-    .status.inactive {
-      background: #f8d7da;
-      color: #721c24;
-    }
-
-    .action-btn {
-      background: none;
-      border: none;
-      padding: 8px;
-      margin-right: 5px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .edit-btn:hover { background: #cce5ff; color: #0066cc; }
-    .view-btn:hover { background: #d1ecf1; color: #0c5460; }
-    .delete-btn:hover { background: #f8d7da; color: #721c24; }
 
     /* Modal Styles */
     .modal {
@@ -934,38 +858,6 @@
       });
     });
   </script>
-  <script>
-  const universalSearchInput = document.getElementById('universal-search-input');
-
-  universalSearchInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      const query = this.value.trim().toLowerCase();
-      if (!query) return;
-
-      // Check keywords and redirect accordingly
-      if (query.includes("course")) {
-        window.location.href = "courses.html";
-      } else if (query.includes("trainer")) {
-        window.location.href = "trainers.html";
-      } else if (query.includes("video")) {
-        window.location.href = "video.html";
-      } else if (query.includes("analytic") || query.includes("report")) {
-        window.location.href = "analytics.html";
-      } else if (query.includes("student")) {
-        window.location.href = "student.html";
-      } else if (query.includes("contact")) {
-        window.location.href = "contact.html";
-      } else if (query.includes("about")) {
-        window.location.href = "about.html";
-      } else if (query.includes("setting")) {
-        window.location.href = "settings.html";
-      } else {
-        // Default → Dashboard
-        window.location.href = "dashboard.html";
-      }
-    }
-  });
-</script>
 
 </body>
 </html>
