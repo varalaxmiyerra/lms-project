@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -634,9 +634,7 @@
         <button class="btn-secondary" id="export-materials-btn">
           <i class="fas fa-download"></i> Export List
         </button>
-        <button class="btn-secondary" id="refresh-materials-btn">
-          <i class="fas fa-sync-alt"></i> Refresh
-        </button>
+        
       </div>
 
       <!-- Materials Stats Cards -->
@@ -980,7 +978,7 @@
         uploadDate: '2023-10-15',
         status: 'Active',
         icon: 'fas fa-file-pdf',
-        url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+        url: 'https://www.iitk.ac.in/esc101/share/downloads/javanotes5.pdf',
         downloads: 245
       },
       {
@@ -992,7 +990,7 @@
         uploadDate: '2023-10-12',
         status: 'Active',
         icon: 'fas fa-video',
-        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        url: 'https://www.youtube.com/watch?v=OnDr4J2UXSA',
         downloads: 187
       },
       {
@@ -1019,78 +1017,6 @@
         url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
         downloads: 421
       },
-      {
-        id: 'MAT005',
-        name: 'JavaScript Fundamentals',
-        type: 'Presentation',
-        course: 'Web Development',
-        size: '5.7 MB',
-        uploadDate: '2023-10-05',
-        status: 'Active',
-        icon: 'fas fa-file-powerpoint',
-        url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-        downloads: 389
-      },
-      {
-        id: 'MAT006',
-        name: 'Database Design',
-        type: 'Document',
-        course: 'Java Basics',
-        size: '4.1 MB',
-        uploadDate: '2023-10-03',
-        status: 'Active',
-        icon: 'fas fa-file-pdf',
-        url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-        downloads: 276
-      },
-      {
-        id: 'MAT007',
-        name: 'Object-Oriented Programming',
-        type: 'Video',
-        course: 'Java Basics',
-        size: '78 MB',
-        uploadDate: '2023-10-01',
-        status: 'Active',
-        icon: 'fas fa-video',
-        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
-        downloads: 198
-      },
-      {
-        id: 'MAT008',
-        name: 'Python Data Structures',
-        type: 'Assignment',
-        course: 'Python Fundamentals',
-        size: '1.2 MB',
-        uploadDate: '2023-09-28',
-        status: 'Inactive',
-        icon: 'fas fa-file-alt',
-        url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-        downloads: 154
-      },
-      {
-        id: 'MAT009',
-        name: 'Advanced CSS Techniques',
-        type: 'Document',
-        course: 'Web Development',
-        size: '2.9 MB',
-        uploadDate: '2023-09-25',
-        status: 'Active',
-        icon: 'fas fa-file-pdf',
-        url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-        downloads: 332
-      },
-      {
-        id: 'MAT010',
-        name: 'Java Spring Framework',
-        type: 'Video',
-        course: 'Java Basics',
-        size: '92 MB',
-        uploadDate: '2023-09-22',
-        status: 'Active',
-        icon: 'fas fa-video',
-        url: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
-        downloads: 217
-      }
     ];
 
     // Pagination variables
@@ -1524,11 +1450,7 @@
       renderMaterialsTable();
     });
 
-    // Refresh button
-    document.getElementById('refresh-materials-btn').addEventListener('click', function() {
-      renderMaterialsTable();
-      showToast('Materials refreshed!');
-    });
+    
 
     // Export functionality
     document.getElementById('export-materials-btn').addEventListener('click', function() {
