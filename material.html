@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -768,7 +768,6 @@
             <option value="document">Document</option>
             <option value="video">Video</option>
             <option value="presentation">Presentation</option>
-            <option value="assignment">Assignment</option>
           </select>
         </div>
         <div class="filter-group">
@@ -1072,7 +1071,8 @@
         status: 'Active',
         icon: 'fas fa-file-pdf',
         url: 'https://www.iitk.ac.in/esc101/share/downloads/javanotes5.pdf',
-        downloads: 245
+        downloads: 245,
+        fileData: null // Will store file data when uploaded
       },
       {
         id: 'MAT002',
@@ -1084,7 +1084,8 @@
         status: 'Active',
         icon: 'fas fa-video',
         url: 'https://www.youtube.com/watch?v=OnDr4J2UXSA',
-        downloads: 187
+        downloads: 187,
+        fileData: null
       },
       {
         id: 'MAT003',
@@ -1096,7 +1097,8 @@
         status: 'Inactive',
         icon: 'fas fa-file-word',
         url: 'https://www.w3.org/TR/html5/single-page.html',
-        downloads: 312
+        downloads: 312,
+        fileData: null
       },
       {
         id: 'MAT004',
@@ -1107,172 +1109,50 @@
         uploadDate: '2023-10-08',
         status: 'Active',
         icon: 'fas fa-file-pdf',
-        url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-        downloads: 421
-      },
+        url: 'https://wtf.tw/ref/duckett.pdf',
+        downloads: 421,
+        fileData: null
+      }
     ];
 
-    // Pagination variables
-    let currentPage = 1;
-    const itemsPerPage = 5;
-
-    // Utility to generate unique ID
-    function generateMaterialId() {
-      return 'MAT' + Math.floor(1000 + Math.random() * 9000);
-    }
-
-    // Update stats cards
-    function updateStats() {
-      const totalMaterials = materials.length;
-      const totalDocuments = materials.filter(m => m.type === 'Document').length;
-      const totalVideos = materials.filter(m => m.type === 'Video').length;
-      const totalDownloads = materials.reduce((sum, m) => sum + m.downloads, 0);
+    // Function to render materials table
+    function renderMaterialsTable(materialsToRender) {
+      const tableBody = document.getElementById('materials-table-body');
+      tableBody.innerHTML = '';
       
-      document.getElementById('total-materials').textContent = totalMaterials;
-      document.getElementById('total-documents').textContent = totalDocuments;
-      document.getElementById('total-videos').textContent = totalVideos;
-      document.getElementById('total-downloads').textContent = totalDownloads.toLocaleString();
-    }
-
-    // Render pagination
-    function renderPagination(totalItems) {
-      const totalPages = Math.ceil(totalItems / itemsPerPage);
-      const paginationContainer = document.getElementById('pagination');
-      paginationContainer.innerHTML = '';
-      
-      if (totalPages <= 1) return;
-      
-      // Previous button
-      const prevButton = document.createElement('button');
-      prevButton.innerHTML = '&laquo;';
-      prevButton.disabled = currentPage === 1;
-      prevButton.addEventListener('click', () => {
-        if (currentPage > 1) {
-          currentPage--;
-          renderMaterialsTable(document.getElementById('search-input').value);
-        }
-      });
-      paginationContainer.appendChild(prevButton);
-      
-      // Page buttons
-      for (let i = 1; i <= totalPages; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.textContent = i;
-        pageButton.classList.toggle('active', i === currentPage);
-        pageButton.addEventListener('click', () => {
-          currentPage = i;
-          renderMaterialsTable(document.getElementById('search-input').value);
-        });
-        paginationContainer.appendChild(pageButton);
-      }
-      
-      // Next button
-      const nextButton = document.createElement('button');
-      nextButton.innerHTML = '&raquo;';
-      nextButton.disabled = currentPage === totalPages;
-      nextButton.addEventListener('click', () => {
-        if (currentPage < totalPages) {
-          currentPage++;
-          renderMaterialsTable(document.getElementById('search-input').value);
-        }
-      });
-      paginationContainer.appendChild(nextButton);
-    }
-
-    // Render materials table
-    function renderMaterialsTable(searchFilter = '') {
-      const tbody = document.getElementById('materials-table-body');
-      tbody.innerHTML = '';
-
-      const typeFilter = document.getElementById('type-filter').value;
-      const statusFilter = document.getElementById('status-filter').value;
-      const courseFilter = document.getElementById('course-filter').value;
-      const sortBy = document.getElementById('sort-by').value;
-
-      let filteredMaterials = materials.filter(material => {
-        const searchStr = searchFilter.toLowerCase();
-        const matchesSearch = (
-          material.name.toLowerCase().includes(searchStr) ||
-          material.type.toLowerCase().includes(searchStr) ||
-          material.course.toLowerCase().includes(searchStr) ||
-          material.id.toLowerCase().includes(searchStr)
-        );
-        const matchesType = typeFilter === 'all' || material.type.toLowerCase() === typeFilter;
-        const matchesStatus = statusFilter === 'all' || material.status.toLowerCase() === statusFilter;
-        const matchesCourse = courseFilter === 'all' || material.course.toLowerCase().replace(' ', '-') === courseFilter;
-        return matchesSearch && matchesType && matchesStatus && matchesCourse;
-      });
-
-      // Sorting
-      filteredMaterials.sort((a, b) => {
-        switch (sortBy) {
-          case 'newest':
-            return new Date(b.uploadDate) - new Date(a.uploadDate);
-          case 'oldest':
-            return new Date(a.uploadDate) - new Date(b.uploadDate);
-          case 'name':
-            return a.name.localeCompare(b.name);
-          case 'name-desc':
-            return b.name.localeCompare(a.name);
-          case 'size':
-            return parseFloat(a.size) - parseFloat(b.size);
-          case 'size-desc':
-            return parseFloat(b.size) - parseFloat(a.size);
-          default:
-            return 0;
-        }
-      });
-
-      // Update stats
-      updateStats();
-      
-      // Calculate pagination
-      const totalItems = filteredMaterials.length;
-      const totalPages = Math.ceil(totalItems / itemsPerPage);
-      
-      // Adjust current page if needed
-      if (currentPage > totalPages) {
-        currentPage = totalPages > 0 ? totalPages : 1;
-      }
-      
-      const startIndex = (currentPage - 1) * itemsPerPage;
-      const paginatedMaterials = filteredMaterials.slice(startIndex, startIndex + itemsPerPage);
-
-      // Render pagination
-      renderPagination(totalItems);
-
-      if (paginatedMaterials.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="7">
-              <div class="empty-state">
-                <i class="fas fa-file-alt"></i>
-                <p>No materials found</p>
-                <button class="btn-primary" id="add-first-material">
-                  <i class="fas fa-plus"></i> Add Your First Material
-                </button>
-              </div>
-            </td>
-          </tr>
+      if (materialsToRender.length === 0) {
+        const emptyRow = document.createElement('tr');
+        emptyRow.innerHTML = `
+          <td colspan="8">
+            <div class="empty-state">
+              <i class="fas fa-folder-open"></i>
+              <p>No materials found</p>
+              <button class="btn-primary" id="add-material-empty-btn">
+                <i class="fas fa-plus"></i> Add New Material
+              </button>
+            </div>
+          </td>
         `;
-
-        document.getElementById('add-first-material').addEventListener('click', () => {
+        tableBody.appendChild(emptyRow);
+        
+        document.getElementById('add-material-empty-btn').addEventListener('click', () => {
           modal.style.display = 'block';
         });
-
+        
         return;
       }
-
-      paginatedMaterials.forEach(material => {
-        const tr = document.createElement('tr');
-
-        tr.innerHTML = `
+      
+      materialsToRender.forEach(material => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
           <td class="checkbox-column">
             <input type="checkbox" class="material-checkbox" data-id="${material.id}">
           </td>
           <td>
             <div class="material-info">
-              <i class="${material.icon} material-icon"></i>
+              <div class="material-icon">
+                <i class="${material.icon}"></i>
+              </div>
               <div>
                 <strong>${material.name}</strong>
                 <small>ID: ${material.id}</small>
@@ -1285,134 +1165,179 @@
           <td>${material.uploadDate}</td>
           <td><span class="status ${material.status.toLowerCase()}">${material.status}</span></td>
           <td>
-            <button class="action-btn edit-btn" title="Edit" data-id="${material.id}"><i class="fas fa-edit"></i></button>
-            <button class="action-btn view-btn" title="View" data-id="${material.id}"><i class="fas fa-eye"></i></button>
-            <button class="action-btn download-btn" title="Download" data-id="${material.id}"><i class="fas fa-download"></i></button>
-            <button class="action-btn delete-btn" title="Delete" data-id="${material.id}"><i class="fas fa-trash"></i></button>
+            <button class="action-btn view-btn" title="View" onclick="viewMaterial('${material.id}')">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="action-btn download-btn" title="Download" onclick="downloadMaterial('${material.id}')">
+              <i class="fas fa-download"></i>
+            </button>
+            <button class="action-btn edit-btn" title="Edit" onclick="editMaterial('${material.id}')">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="action-btn delete-btn" title="Delete" onclick="deleteMaterial('${material.id}')">
+              <i class="fas fa-trash"></i>
+            </button>
           </td>
         `;
-
-        tbody.appendChild(tr);
+        tableBody.appendChild(row);
       });
-
-      attachTableEventListeners();
-    }
-
-    // Attach event listeners to table buttons
-    function attachTableEventListeners() {
-      document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          editMaterial(id);
-        });
+      
+      // Add event listeners to checkboxes
+      document.querySelectorAll('.material-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', updateBulkActionsBar);
       });
-
-      document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          viewMaterial(id);
+      
+      document.getElementById('select-all-checkbox').addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('.material-checkbox');
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = this.checked;
         });
-      });
-
-      document.querySelectorAll('.download-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          downloadMaterial(id);
-        });
-      });
-
-      document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          if (confirm('Are you sure you want to delete this material?')) {
-            materials = materials.filter(m => m.id !== id);
-            renderMaterialsTable(document.getElementById('search-input').value);
-            showToast('Material deleted successfully!');
-          }
-        });
+        updateBulkActionsBar();
       });
     }
 
-    // Edit material function
-    function editMaterial(id) {
-      const material = materials.find(m => m.id === id);
+    // Function to update bulk actions bar
+    function updateBulkActionsBar() {
+      const selectedCount = document.querySelectorAll('.material-checkbox:checked').length;
+      const bulkActionsBar = document.getElementById('bulk-actions-bar');
+      const selectedCountElement = document.getElementById('selected-count');
+      
+      if (selectedCount > 0) {
+        bulkActionsBar.style.display = 'flex';
+        selectedCountElement.textContent = `${selectedCount} item${selectedCount !== 1 ? 's' : ''} selected`;
+      } else {
+        bulkActionsBar.style.display = 'none';
+      }
+    }
+
+    // Function to download material
+    function downloadMaterial(materialId) {
+      const material = materials.find(m => m.id === materialId);
       if (!material) return;
+      
+      // If we have file data (from upload), use it
+      if (material.fileData) {
+        const blob = new Blob([material.fileData], { type: 'application/octet-stream' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = material.name + getFileExtension(material.type);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        // Update download count
+        material.downloads++;
+        updateStats();
+        showToast(`Downloaded ${material.name} successfully!`);
+      } else if (material.url) {
+        // For demo purposes, we'll simulate a download
+        // In a real application, this would be the actual file URL
+        showToast(`Downloading ${material.name}...`);
+        
+        // Simulate download delay
+        setTimeout(() => {
+          // Update download count
+          material.downloads++;
+          updateStats();
+          showToast(`Downloaded ${material.name} successfully!`);
+        }, 1500);
+      }
+    }
 
-      // Populate form with existing data
+    // Helper function to get file extension based on type
+    function getFileExtension(type) {
+      switch(type.toLowerCase()) {
+        case 'document': return '.pdf';
+        case 'video': return '.mp4';
+        case 'presentation': return '.pptx';
+        case 'assignment': return '.docx';
+        default: return '';
+      }
+    }
+
+    // Function to view material
+    function viewMaterial(materialId) {
+      const material = materials.find(m => m.id === materialId);
+      if (!material) return;
+      
+      if (material.url) {
+        window.open(material.url, '_blank');
+      } else {
+        showToast('No preview available for this material', 'error');
+      }
+    }
+
+    // Function to edit material
+    function editMaterial(materialId) {
+      const material = materials.find(m => m.id === materialId);
+      if (!material) return;
+      
+      // Fill the form with material data
       document.getElementById('material-name').value = material.name;
       document.getElementById('material-type').value = material.type.toLowerCase();
       document.getElementById('material-course').value = material.course.toLowerCase().replace(' ', '-');
       document.getElementById('material-description').value = material.description || '';
-
-      // Make file input optional for editing
-      document.getElementById('material-file').required = false;
-      document.getElementById('material-file').value = ''; // Clear any previous selection
-      fileNameDisplay.textContent = 'Current file: ' + material.name;
-
-      // Change modal title and button
+      
+      // Change modal title and button text
       document.querySelector('.modal-header h3').textContent = 'Edit Material';
-      document.querySelector('#add-material-form button[type="submit"]').textContent = 'Update Material';
-
-      // Store editing ID
-      document.getElementById('add-material-form').setAttribute('data-edit-id', id);
-
-      // Show modal
+      document.querySelector('.form-actions button[type="submit"]').textContent = 'Update Material';
+      
+      // Store the material ID being edited
+      document.getElementById('add-material-form').dataset.editId = materialId;
+      
+      // Show the modal
       modal.style.display = 'block';
     }
 
-    // View material function
-    function viewMaterial(id) {
-      const material = materials.find(m => m.id === id);
-      if (!material) return;
-
-      // Open the material in a new tab/window
-      window.open(material.url, '_blank');
+    // Function to delete material
+    function deleteMaterial(materialId) {
+      if (confirm('Are you sure you want to delete this material?')) {
+        materials = materials.filter(m => m.id !== materialId);
+        renderMaterialsTable(materials);
+        updateStats();
+        showToast('Material deleted successfully!');
+      }
     }
 
-    // Download material function
-    function downloadMaterial(id) {
-      const material = materials.find(m => m.id === id);
-      if (!material) return;
-
-      // Increment download count
-      material.downloads++;
-      updateStats();
-
-      // Simulate download by creating a blob with material info
-      const content = `Material Details:\n\nName: ${material.name}\nID: ${material.id}\nType: ${material.type}\nCourse: ${material.course}\nSize: ${material.size}\nUpload Date: ${material.uploadDate}\nStatus: ${material.status}`;
-      const blob = new Blob([content], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${material.name}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('Material downloaded successfully!');
-    }
-
-    // Reset modal to add mode
+    // Function to reset modal to add mode
     function resetModalToAddMode() {
       document.getElementById('add-material-form').reset();
-      document.getElementById('material-file').required = true;
       document.querySelector('.modal-header h3').textContent = 'Add New Material';
-      document.querySelector('#add-material-form button[type="submit"]').textContent = 'Add Material';
-      document.getElementById('add-material-form').removeAttribute('data-edit-id');
+      document.querySelector('.form-actions button[type="submit"]').textContent = 'Add Material';
       fileNameDisplay.textContent = 'Choose a file or drag it here';
-
+      delete document.getElementById('add-material-form').dataset.editId;
+      
       // Clear validation errors
       document.querySelectorAll('.form-group').forEach(group => {
         group.classList.remove('error');
       });
     }
 
-    // Form validation
-    function validateForm() {
+    // Function to update stats
+    function updateStats() {
+      document.getElementById('total-materials').textContent = materials.length;
+      document.getElementById('total-documents').textContent = materials.filter(m => m.type === 'Document').length;
+      document.getElementById('total-videos').textContent = materials.filter(m => m.type === 'Video').length;
+      
+      const totalDownloads = materials.reduce((sum, material) => sum + material.downloads, 0);
+      document.getElementById('total-downloads').textContent = totalDownloads.toLocaleString();
+    }
+
+    // Form validation and submission
+    document.getElementById('add-material-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Validate form
       let isValid = true;
       
-      // Validate name
       const name = document.getElementById('material-name').value.trim();
+      const type = document.getElementById('material-type').value;
+      const course = document.getElementById('material-course').value;
+      const file = document.getElementById('material-file').files[0];
+      const description = document.getElementById('material-description').value.trim();
+      
       if (!name) {
         document.getElementById('name-group').classList.add('error');
         isValid = false;
@@ -1420,8 +1345,6 @@
         document.getElementById('name-group').classList.remove('error');
       }
       
-      // Validate type
-      const type = document.getElementById('material-type').value;
       if (!type) {
         document.getElementById('type-group').classList.add('error');
         isValid = false;
@@ -1429,8 +1352,6 @@
         document.getElementById('type-group').classList.remove('error');
       }
       
-      // Validate course
-      const course = document.getElementById('material-course').value;
       if (!course) {
         document.getElementById('course-group').classList.add('error');
         isValid = false;
@@ -1438,280 +1359,296 @@
         document.getElementById('course-group').classList.remove('error');
       }
       
-      // Validate file (only for new materials)
-      const editId = document.getElementById('add-material-form').getAttribute('data-edit-id');
-      const file = document.getElementById('material-file').files[0];
-      if (!editId && !file) {
+      if (!file && !this.dataset.editId) {
         document.getElementById('file-group').classList.add('error');
         isValid = false;
       } else {
         document.getElementById('file-group').classList.remove('error');
       }
       
-      return isValid;
-    }
-
-    // Form submission handler
-    document.getElementById('add-material-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      if (!validateForm()) {
-        showToast('Please fill in all required fields.', 'error');
+      if (!isValid) {
+        showToast('Please fill all required fields', 'error');
         return;
       }
-
-      const name = document.getElementById('material-name').value.trim();
-      const type = document.getElementById('material-type').value;
-      const course = document.getElementById('material-course').value;
-      const file = document.getElementById('material-file').files[0];
-      const description = document.getElementById('material-description').value.trim();
-
-      const editId = this.getAttribute('data-edit-id');
+      
+      // Check if we're editing or adding
+      const editId = this.dataset.editId;
+      
       if (editId) {
         // Update existing material
-        const material = materials.find(m => m.id === editId);
-        if (material) {
-          material.name = name;
-          material.type = type.charAt(0).toUpperCase() + type.slice(1);
-          material.course = course.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-          material.description = description;
+        const materialIndex = materials.findIndex(m => m.id === editId);
+        if (materialIndex !== -1) {
+          materials[materialIndex].name = name;
+          materials[materialIndex].type = type.charAt(0).toUpperCase() + type.slice(1);
+          materials[materialIndex].course = course.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+          materials[materialIndex].description = description;
+          
+          // If a new file was selected, update it
           if (file) {
-            material.size = (file.size / (1024 * 1024)).toFixed(1) + ' MB';
-            material.url = URL.createObjectURL(file); // In real app, upload to server
+            materials[materialIndex].size = formatFileSize(file.size);
+            materials[materialIndex].uploadDate = new Date().toISOString().split('T')[0];
+            
+            // Read file data for download
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              materials[materialIndex].fileData = e.target.result;
+            };
+            reader.readAsArrayBuffer(file);
           }
+          
+          renderMaterialsTable(materials);
           showToast('Material updated successfully!');
         }
       } else {
         // Add new material
         const newMaterial = {
-          id: generateMaterialId(),
+          id: 'MAT' + String(materials.length + 1).padStart(3, '0'),
           name: name,
           type: type.charAt(0).toUpperCase() + type.slice(1),
           course: course.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-          size: file ? (file.size / (1024 * 1024)).toFixed(1) + ' MB' : '0 MB',
+          size: formatFileSize(file.size),
           uploadDate: new Date().toISOString().split('T')[0],
           status: 'Active',
-          icon: type === 'document' ? 'fas fa-file-pdf' : 
-                type === 'video' ? 'fas fa-video' : 
-                type === 'presentation' ? 'fas fa-file-powerpoint' : 
-                type === 'assignment' ? 'fas fa-file-alt' : 'fas fa-file',
-          url: file ? URL.createObjectURL(file) : '#', // In real app, upload to server
+          icon: getIconForType(type),
+          url: null,
+          downloads: 0,
           description: description,
-          downloads: 0
+          fileData: null
         };
-        materials.push(newMaterial);
+        
+        // Read file data for download
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          newMaterial.fileData = e.target.result;
+        };
+        reader.readAsArrayBuffer(file);
+        
+        materials.unshift(newMaterial);
+        renderMaterialsTable(materials);
         showToast('Material added successfully!');
       }
-
+      
+      // Update stats and close modal
+      updateStats();
       modal.style.display = 'none';
       resetModalToAddMode();
-      renderMaterialsTable();
     });
 
-    // Search functionality
-    document.getElementById('search-input').addEventListener('input', function() {
-      currentPage = 1; // Reset to first page when searching
-      renderMaterialsTable(this.value);
-    });
+    // Helper function to format file size
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' bytes';
+      else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+      else return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+
+    // Helper function to get icon based on type
+    function getIconForType(type) {
+      switch(type) {
+        case 'document': return 'fas fa-file-pdf';
+        case 'video': return 'fas fa-video';
+        case 'presentation': return 'fas fa-file-powerpoint';
+        case 'assignment': return 'fas fa-file-alt';
+        default: return 'fas fa-file';
+      }
+    }
 
     // Filter functionality
-    document.getElementById('type-filter').addEventListener('change', function() {
-      currentPage = 1;
-      renderMaterialsTable(document.getElementById('search-input').value);
-    });
-    
-    document.getElementById('status-filter').addEventListener('change', function() {
-      currentPage = 1;
-      renderMaterialsTable(document.getElementById('search-input').value);
-    });
-    
-    document.getElementById('course-filter').addEventListener('change', function() {
-      currentPage = 1;
-      renderMaterialsTable(document.getElementById('search-input').value);
-    });
-    
-    document.getElementById('sort-by').addEventListener('change', function() {
-      currentPage = 1;
-      renderMaterialsTable(document.getElementById('search-input').value);
-    });
+    document.getElementById('type-filter').addEventListener('change', applyFilters);
+    document.getElementById('status-filter').addEventListener('change', applyFilters);
+    document.getElementById('course-filter').addEventListener('change', applyFilters);
+    document.getElementById('sort-by').addEventListener('change', applyFilters);
+    document.getElementById('clear-filters-btn').addEventListener('click', clearFilters);
+    document.getElementById('search-input').addEventListener('input', applyFilters);
 
-    // Clear filters
-    document.getElementById('clear-filters-btn').addEventListener('click', function() {
+    function applyFilters() {
+      const typeFilter = document.getElementById('type-filter').value;
+      const statusFilter = document.getElementById('status-filter').value;
+      const courseFilter = document.getElementById('course-filter').value;
+      const sortBy = document.getElementById('sort-by').value;
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      
+      let filteredMaterials = materials.filter(material => {
+        // Type filter
+        if (typeFilter !== 'all' && material.type.toLowerCase() !== typeFilter) {
+          return false;
+        }
+        
+        // Status filter
+        if (statusFilter !== 'all' && material.status.toLowerCase() !== statusFilter) {
+          return false;
+        }
+        
+        // Course filter
+        if (courseFilter !== 'all' && material.course.toLowerCase().replace(' ', '-') !== courseFilter) {
+          return false;
+        }
+        
+        // Search term
+        if (searchTerm && !material.name.toLowerCase().includes(searchTerm) && 
+            !material.course.toLowerCase().includes(searchTerm) && 
+            !material.id.toLowerCase().includes(searchTerm)) {
+          return false;
+        }
+        
+        return true;
+      });
+      
+      // Sort materials
+      switch(sortBy) {
+        case 'newest':
+          filteredMaterials.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+          break;
+        case 'oldest':
+          filteredMaterials.sort((a, b) => new Date(a.uploadDate) - new Date(b.uploadDate));
+          break;
+        case 'name':
+          filteredMaterials.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case 'name-desc':
+          filteredMaterials.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+        case 'size':
+          filteredMaterials.sort((a, b) => parseFloat(a.size) - parseFloat(b.size));
+          break;
+        case 'size-desc':
+          filteredMaterials.sort((a, b) => parseFloat(b.size) - parseFloat(a.size));
+          break;
+      }
+      
+      renderMaterialsTable(filteredMaterials);
+    }
+
+    function clearFilters() {
       document.getElementById('type-filter').value = 'all';
       document.getElementById('status-filter').value = 'all';
       document.getElementById('course-filter').value = 'all';
       document.getElementById('sort-by').value = 'newest';
       document.getElementById('search-input').value = '';
-      currentPage = 1;
-      renderMaterialsTable();
-    });
-
-    
+      
+      applyFilters();
+    }
 
     // Export functionality
-    document.getElementById('export-materials-btn').addEventListener('click', function() {
-      const csvContent = 'data:text/csv;charset=utf-8,' +
-        'ID,Name,Type,Course,Size,Upload Date,Status,Downloads\n' +
-        materials.map(m => `${m.id},${m.name},${m.type},${m.course},${m.size},${m.uploadDate},${m.status},${m.downloads}`).join('\n');
-      const encodedUri = encodeURI(csvContent);
+    document.getElementById('export-materials-btn').addEventListener('click', () => {
+      // Create CSV content
+      let csvContent = 'ID,Name,Type,Course,Size,Upload Date,Status,Downloads\n';
+      
+      materials.forEach(material => {
+        csvContent += `"${material.id}","${material.name}","${material.type}","${material.course}","${material.size}","${material.uploadDate}","${material.status}","${material.downloads}"\n`;
+      });
+      
+      // Create download link
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', 'materials.csv');
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'materials_export.csv');
+      link.style.visibility = 'hidden';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      
       showToast('Materials exported successfully!');
     });
 
-    // Initial render
-    renderMaterialsTable();
-
-    // Bulk selection functionality
-    let selectedMaterials = new Set();
-
-    // Select all checkbox functionality
-    document.getElementById('select-all-checkbox').addEventListener('change', function() {
-      const checkboxes = document.querySelectorAll('.material-checkbox');
-      const isChecked = this.checked;
-
-      checkboxes.forEach(checkbox => {
-        checkbox.checked = isChecked;
-        const materialId = checkbox.getAttribute('data-id');
-        if (isChecked) {
-          selectedMaterials.add(materialId);
-        } else {
-          selectedMaterials.delete(materialId);
-        }
-      });
-
-      updateBulkActionsBar();
-    });
-
-    // Individual checkbox functionality
-    document.addEventListener('change', function(e) {
-      if (e.target.classList.contains('material-checkbox')) {
-        const materialId = e.target.getAttribute('data-id');
-        if (e.target.checked) {
-          selectedMaterials.add(materialId);
-        } else {
-          selectedMaterials.delete(materialId);
-        }
-
-        // Update select all checkbox state
-        const allCheckboxes = document.querySelectorAll('.material-checkbox');
-        const checkedCheckboxes = document.querySelectorAll('.material-checkbox:checked');
-        const selectAllCheckbox = document.getElementById('select-all-checkbox');
-
-        if (checkedCheckboxes.length === 0) {
-          selectAllCheckbox.checked = false;
-          selectAllCheckbox.indeterminate = false;
-        } else if (checkedCheckboxes.length === allCheckboxes.length) {
-          selectAllCheckbox.checked = true;
-          selectAllCheckbox.indeterminate = false;
-        } else {
-          selectAllCheckbox.checked = false;
-          selectAllCheckbox.indeterminate = true;
-        }
-
-        updateBulkActionsBar();
+    // Bulk actions
+    document.getElementById('bulk-delete-btn').addEventListener('click', () => {
+      const selectedIds = getSelectedMaterialIds();
+      if (selectedIds.length === 0) return;
+      
+      if (confirm(`Are you sure you want to delete ${selectedIds.length} material(s)?`)) {
+        materials = materials.filter(m => !selectedIds.includes(m.id));
+        renderMaterialsTable(materials);
+        updateStats();
+        showToast(`${selectedIds.length} material(s) deleted successfully!`);
       }
     });
 
-    // Update bulk actions bar visibility and count
-    function updateBulkActionsBar() {
-      const bulkActionsBar = document.getElementById('bulk-actions-bar');
-      const selectedCount = document.getElementById('selected-count');
-
-      if (selectedMaterials.size > 0) {
-        bulkActionsBar.style.display = 'flex';
-        selectedCount.textContent = `${selectedMaterials.size} item${selectedMaterials.size > 1 ? 's' : ''} selected`;
-      } else {
-        bulkActionsBar.style.display = 'none';
-      }
-    }
-
-    // Bulk delete functionality
-    document.getElementById('bulk-delete-btn').addEventListener('click', function() {
-      if (selectedMaterials.size === 0) return;
-
-      const confirmMessage = `Are you sure you want to delete ${selectedMaterials.size} selected material${selectedMaterials.size > 1 ? 's' : ''}?`;
-      if (confirm(confirmMessage)) {
-        const deletedCount = selectedMaterials.size;
-        materials = materials.filter(material => !selectedMaterials.has(material.id));
-        selectedMaterials.clear();
-        renderMaterialsTable(document.getElementById('search-input').value);
-        updateBulkActionsBar();
-        showToast(`${deletedCount} material${deletedCount > 1 ? 's' : ''} deleted successfully!`);
-      }
-    });
-
-    // Bulk activate functionality
-    document.getElementById('bulk-activate-btn').addEventListener('click', function() {
-      if (selectedMaterials.size === 0) return;
-
-      materials.forEach(material => {
-        if (selectedMaterials.has(material.id)) {
-          material.status = 'Active';
+    document.getElementById('bulk-activate-btn').addEventListener('click', () => {
+      const selectedIds = getSelectedMaterialIds();
+      if (selectedIds.length === 0) return;
+      
+      materials.forEach(m => {
+        if (selectedIds.includes(m.id)) {
+          m.status = 'Active';
         }
       });
-
-      selectedMaterials.clear();
-      renderMaterialsTable(document.getElementById('search-input').value);
-      updateBulkActionsBar();
-      showToast(`${selectedMaterials.size} material${selectedMaterials.size > 1 ? 's' : ''} activated successfully!`);
+      
+      renderMaterialsTable(materials);
+      showToast(`${selectedIds.length} material(s) activated successfully!`);
     });
 
-    // Bulk deactivate functionality
-    document.getElementById('bulk-deactivate-btn').addEventListener('click', function() {
-      if (selectedMaterials.size === 0) return;
-
-      materials.forEach(material => {
-        if (selectedMaterials.has(material.id)) {
-          material.status = 'Inactive';
+    document.getElementById('bulk-deactivate-btn').addEventListener('click', () => {
+      const selectedIds = getSelectedMaterialIds();
+      if (selectedIds.length === 0) return;
+      
+      materials.forEach(m => {
+        if (selectedIds.includes(m.id)) {
+          m.status = 'Inactive';
         }
       });
-
-      selectedMaterials.clear();
-      renderMaterialsTable(document.getElementById('search-input').value);
-      updateBulkActionsBar();
-      showToast(`${selectedMaterials.size} material${selectedMaterials.size > 1 ? 's' : ''} deactivated successfully!`);
+      
+      renderMaterialsTable(materials);
+      showToast(`${selectedIds.length} material(s) deactivated successfully!`);
     });
 
-    // Bulk export functionality
-    document.getElementById('bulk-export-btn').addEventListener('click', function() {
-      if (selectedMaterials.size === 0) return;
-
-      const selectedMaterialsData = materials.filter(material => selectedMaterials.has(material.id));
-      const csvContent = 'data:text/csv;charset=utf-8,' +
-        'ID,Name,Type,Course,Size,Upload Date,Status,Downloads\n' +
-        selectedMaterialsData.map(m => `${m.id},${m.name},${m.type},${m.course},${m.size},${m.uploadDate},${m.status},${m.downloads}`).join('\n');
-      const encodedUri = encodeURI(csvContent);
+    document.getElementById('bulk-export-btn').addEventListener('click', () => {
+      const selectedIds = getSelectedMaterialIds();
+      if (selectedIds.length === 0) return;
+      
+      const selectedMaterials = materials.filter(m => selectedIds.includes(m.id));
+      
+      // Create CSV content
+      let csvContent = 'ID,Name,Type,Course,Size,Upload Date,Status,Downloads\n';
+      
+      selectedMaterials.forEach(material => {
+        csvContent += `"${material.id}","${material.name}","${material.type}","${material.course}","${material.size}","${material.uploadDate}","${material.status}","${material.downloads}"\n`;
+      });
+      
+      // Create download link
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', 'selected_materials.csv');
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'selected_materials_export.csv');
+      link.style.visibility = 'hidden';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      showToast(`${selectedMaterials.size} selected material${selectedMaterials.size > 1 ? 's' : ''} exported successfully!`);
+      
+      showToast(`${selectedIds.length} material(s) exported successfully!`);
     });
 
-    // Clear selection functionality
-    document.getElementById('clear-selection-btn').addEventListener('click', function() {
-      selectedMaterials.clear();
+    document.getElementById('clear-selection-btn').addEventListener('click', () => {
       document.querySelectorAll('.material-checkbox').forEach(checkbox => {
         checkbox.checked = false;
       });
       document.getElementById('select-all-checkbox').checked = false;
-      document.getElementById('select-all-checkbox').indeterminate = false;
       updateBulkActionsBar();
     });
 
-    // Update bulk actions bar when table is re-rendered
-    const originalRenderMaterialsTable = renderMaterialsTable;
-    renderMaterialsTable = function(searchFilter = '') {
-      originalRenderMaterialsTable(searchFilter);
-      updateBulkActionsBar();
-    };
+    function getSelectedMaterialIds() {
+      const selectedCheckboxes = document.querySelectorAll('.material-checkbox:checked');
+      return Array.from(selectedCheckboxes).map(checkbox => checkbox.dataset.id);
+    }
+
+    // Initialize the page
+    function initPage() {
+      renderMaterialsTable(materials);
+      updateStats();
+      applyFilters();
+      
+      // Add event listeners
+      document.querySelectorAll('.close-modal, #cancel-add').forEach(element => {
+        element.addEventListener('click', () => {
+          modal.style.display = 'none';
+          resetModalToAddMode();
+        });
+      });
+    }
+
+    // Run initialization when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initPage);
   </script>
 </body>
 </html>
