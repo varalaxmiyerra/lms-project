@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -35,7 +35,7 @@
           <i class="fas fa-bars"></i>
         </button>
         <div class="search-bar">
-          <input type="text" placeholder="Search students...">
+          <input type="text" placeholder="Search students..." id="search-input">
           <button><i class="fas fa-search"></i></button>
           
         </div>
@@ -65,9 +65,9 @@
 
       <!-- Action Buttons -->
       <div class="action-buttons" style="margin-bottom: 30px;">
-        <button class="btn-primary" id="add-student-btn" onclick="window.location.href='lms_register.html'">
-          <i class="fas fa-plus"></i> Add New Student
-        </button>
+<button class="btn-primary" id="add-student-btn">
+  <i class="fas fa-plus"></i> Add New Student
+</button>
         <button class="btn-secondary" id="export-students-btn">
           <i class="fas fa-download"></i> Export List
         </button>
@@ -79,21 +79,21 @@
           <i class="fas fa-user-graduate card-icon"></i>
           <div>
             <h3>Total Students</h3>
-            <p>3</p>
+            <p id="total-students">3</p>
           </div>
         </div>
         <div class="card">
           <i class="fas fa-user-check card-icon"></i>
           <div>
             <h3>Active Students</h3>
-            <p>2</p>
+            <p id="active-students">2</p>
           </div>
         </div>
         <div class="card">
           <i class="fas fa-clock card-icon"></i>
           <div>
             <h3>Pending Enrollments</h3>
-            <p>1</p>
+            <p id="pending-enrollments">1</p>
           </div>
         </div>
         <div class="card">
@@ -195,7 +195,39 @@
   </div>
 
   <!-- Add Student Modal -->
-  <!-- Removed Add Student Modal as per new plan -->
+  <div id="add-student-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New Student</h3>
+        <span class="close-modal" id="close-add-modal">&times;</span>
+      </div>
+      <form id="add-student-form">
+        <div class="form-group">
+          <label for="add-name">Full Name</label>
+          <input type="text" id="add-name" required>
+        </div>
+        <div class="form-group">
+          <label for="add-email">Email</label>
+          <input type="email" id="add-email" required>
+        </div>
+        <div class="form-group">
+          <label for="add-avatar">Avatar URL</label>
+          <input type="url" id="add-avatar" required>
+        </div>
+        <div class="form-group">
+          <label for="add-status">Status</label>
+          <select id="add-status" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" id="cancel-add-btn">Cancel</button>
+          <button type="submit" class="btn-primary">Add Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <style>
     /* Additional styles for students page */
@@ -487,6 +519,19 @@
       }
     ];
 
+    // Function to update stats
+    function updateStats() {
+      const total = students.length;
+      const active = students.filter(s => s.status === 'Active').length;
+      const inactive = students.filter(s => s.status === 'Inactive').length;
+      document.getElementById('total-students').textContent = total;
+      document.getElementById('active-students').textContent = active;
+      document.getElementById('pending-enrollments').textContent = inactive;
+    }
+
+    // Initial update
+    updateStats();
+
     let currentStatusFilter = 'all';
 
     // Utility to generate unique ID
@@ -583,6 +628,7 @@
           if (confirm('Are you sure you want to delete this student?')) {
             students = students.filter(s => s.id !== id);
             renderStudentsTable(document.getElementById('search-input').value);
+            updateStats();
             alert('Student deleted successfully!');
           }
         });
@@ -808,6 +854,7 @@
       student.enrolledCoursesList = selectedCourses;
       student.enrolledCourses = selectedCourses.length;
 
+      updateStats();
       renderStudentsTable(document.getElementById('search-input').value);
       closeEditModal();
     });
@@ -846,36 +893,56 @@
 
   </script>
   <script>
-  const universalSearchInput = document.getElementById('universal-search-input');
+  // Removed universalSearchInput event listener because element with id 'universal-search-input' does not exist
 
-  universalSearchInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      const query = this.value.trim().toLowerCase();
-      if (!query) return;
+  // Add Student Modal functionality
+  const addStudentBtn = document.getElementById('add-student-btn');
+  const addStudentModal = document.getElementById('add-student-modal');
+  const closeAddModalBtn = document.getElementById('close-add-modal');
+  const cancelAddBtn = document.getElementById('cancel-add-btn');
+  const addStudentForm = document.getElementById('add-student-form');
 
-      // Check keywords and redirect accordingly
-      if (query.includes("course")) {
-        window.location.href = "courses.html";
-      } else if (query.includes("trainer")) {
-        window.location.href = "trainers.html";
-      } else if (query.includes("video")) {
-        window.location.href = "video.html";
-      } else if (query.includes("analytic") || query.includes("report")) {
-        window.location.href = "analytics.html";
-      } else if (query.includes("student")) {
-        window.location.href = "student.html";
-      } else if (query.includes("contact")) {
-        window.location.href = "contact.html";
-      } else if (query.includes("about")) {
-        window.location.href = "about.html";
-      } else if (query.includes("setting")) {
-        window.location.href = "settings.html";
-      } else {
-        // Default → Dashboard
-        window.location.href = "dashboard.html";
-      }
+  addStudentBtn.addEventListener('click', () => {
+    addStudentModal.style.display = 'block';
+  });
+
+  closeAddModalBtn.addEventListener('click', () => {
+    addStudentModal.style.display = 'none';
+    addStudentForm.reset();
+  });
+
+  cancelAddBtn.addEventListener('click', () => {
+    addStudentModal.style.display = 'none';
+    addStudentForm.reset();
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === addStudentModal) {
+      addStudentModal.style.display = 'none';
+      addStudentForm.reset();
     }
   });
+
+    addStudentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const newStudent = {
+        id: generateStudentId(),
+        name: document.getElementById('add-name').value.trim(),
+        email: document.getElementById('add-email').value.trim(),
+        avatar: document.getElementById('add-avatar').value.trim() || 'https://via.placeholder.com/40',
+        status: document.getElementById('add-status').value,
+        enrolledCourses: 0,
+        progress: '0%',
+        grade: 'N/A'
+      };
+
+      students.push(newStudent);
+      renderStudentsTable(document.getElementById('search-input').value);
+      updateStats();
+      addStudentModal.style.display = 'none';
+      addStudentForm.reset();
+    });
 </script>
 
 </body>

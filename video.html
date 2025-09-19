@@ -36,7 +36,7 @@
           <i class="fas fa-bars"></i>
         </button>
         <div class="search-bar">
-          <input type="text" placeholder="Search videos...">
+          <input type="text" id="search-input" placeholder="Search videos...">
           <button><i class="fas fa-search"></i></button>
         </div>
       </div>
@@ -133,6 +133,8 @@
         </div>
       </div>
       <form id="add-video-form">
+        <input type="hidden" id="video-id" value="">
+        <input type="hidden" id="edit-mode" value="false">
         <div class="form-group">
           <label for="video-title">Video Title</label>
           <input type="text" id="video-title" required>
@@ -153,13 +155,32 @@
           <input type="text" id="video-duration" placeholder="15:30" required>
         </div>
         <div class="form-group">
+          <label>Add Method</label>
+          <div class="radio-group">
+            <input type="radio" id="add-link" name="add-method" value="link" checked>
+            <label for="add-link">Via Link</label>
+            <input type="radio" id="add-upload" name="add-method" value="upload">
+            <label for="add-upload">Via Upload</label>
+          </div>
+        </div>
+        <div class="form-group link-fields">
           <label for="video-url">Video URL</label>
           <input type="url" id="video-url" placeholder="https://example.com/video.mp4">
         </div>
-        <div class="form-group">
+        <div class="form-group link-fields">
           <label for="video-thumbnail">Video Thumbnail URL</label>
           <input type="url" id="video-thumbnail" placeholder="https://example.com/thumbnail.jpg">
           <small>Enter the URL for the video thumbnail (optional)</small>
+        </div>
+        <div class="form-group upload-fields" style="display: none;">
+          <label for="video-file">Video File</label>
+          <input type="file" id="video-file" accept="video/*">
+          <div id="video-file-name" class="file-name-display"></div>
+        </div>
+        <div class="form-group upload-fields" style="display: none;">
+          <label for="thumbnail-file">Thumbnail File</label>
+          <input type="file" id="thumbnail-file" accept="image/*">
+          <div id="thumbnail-file-name" class="file-name-display"></div>
         </div>
         <div class="form-group">
           <label for="video-status">Status</label>
@@ -363,6 +384,27 @@
       font-size: 14px;
     }
 
+    .radio-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 5px;
+    }
+
+    .radio-group label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: normal;
+      cursor: pointer;
+    }
+
+    .file-name-display {
+      margin-top: 5px;
+      font-size: 12px;
+      color: #666;
+      font-style: italic;
+    }
+
     .form-actions {
       display: flex;
       justify-content: flex-end;
@@ -471,358 +513,512 @@
       .video-card {
         margin: 0 10px;
       }
+      
+      .radio-group {
+        flex-direction: column;
+        gap: 8px;
+      }
     }
   </style>
 
-    <script>
-    // Sidebar toggle
-    const sidebar = document.getElementById('sidebar');
-    const menuToggle = document.getElementById('menu-toggle');
+  <script>
+    
+  // Sidebar toggle
+  const sidebar = document.getElementById('sidebar');
+  const menuToggle = document.getElementById('menu-toggle');
 
-    if(menuToggle) {
-      menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
+  if(menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+    });
+  }
+
+  // Logout functionality
+  document.getElementById('logout').addEventListener('click', () => {
+    if (confirm('Are you sure you want to logout?')) {
+      window.location.href = 'lms_login_new.html';
+    }
+  });
+
+  // Navbar icon handlers
+  document.getElementById('notifications').addEventListener('click', () => {
+    window.location.href = 'notifications.html';
+  });
+
+  // Modal functionality
+  const modal = document.getElementById('add-video-modal');
+  const addVideoBtn = document.getElementById('add-video-btn');
+  const closeModal = document.querySelector('.close-modal');
+  const cancelAdd = document.getElementById('cancel-add');
+
+  closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+    resetForm();
+  });
+
+  cancelAdd.addEventListener('click', () => {
+    modal.style.display = 'none';
+    resetForm();
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+      resetForm();
+    }
+  });
+
+  // Scroll button functionality
+  const scrollUpBtn = document.getElementById('scroll-up-btn');
+  const scrollDownBtn = document.getElementById('scroll-down-btn');
+
+  scrollUpBtn.addEventListener('click', () => {
+    const modalContent = modal.querySelector('.modal-content');
+    if (modalContent) {
+      modalContent.scrollTo({
+        top: 0,
+        behavior: 'smooth'
       });
     }
+  });
 
-    // Logout functionality
-    document.getElementById('logout').addEventListener('click', () => {
-      if (confirm('Are you sure you want to logout?')) {
-        window.location.href = 'lms_login_new.html';
-      }
-    });
+  scrollDownBtn.addEventListener('click', () => {
+    const modalContent = modal.querySelector('.modal-content');
+    if (modalContent) {
+      modalContent.scrollTo({
+        top: modalContent.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  });
 
-    // Navbar icon handlers
-    document.getElementById('notifications').addEventListener('click', () => {
-      window.location.href = 'notifications.html';
-    });
+  // Add method radio button functionality
+  const addLinkRadio = document.getElementById('add-link');
+  const addUploadRadio = document.getElementById('add-upload');
+  const linkFields = document.querySelectorAll('.link-fields');
+  const uploadFields = document.querySelectorAll('.upload-fields');
 
-    // Modal functionality
-    const modal = document.getElementById('add-video-modal');
-    const addVideoBtn = document.getElementById('add-video-btn');
-    const closeModal = document.querySelector('.close-modal');
-    const cancelAdd = document.getElementById('cancel-add');
+  function toggleFields() {
+    if (addLinkRadio.checked) {
+      linkFields.forEach(field => field.style.display = 'block');
+      uploadFields.forEach(field => field.style.display = 'none');
+    } else if (addUploadRadio.checked) {
+      linkFields.forEach(field => field.style.display = 'none');
+      uploadFields.forEach(field => field.style.display = 'block');
+    }
+  }
 
-    addVideoBtn.addEventListener('click', () => {
-      modal.style.display = 'block';
-      // Scroll modal content to top when opened
-      const modalContent = modal.querySelector('.modal-content');
-      if (modalContent) {
-        modalContent.scrollTop = 0;
-      }
-    });
+  addLinkRadio.addEventListener('change', toggleFields);
+  addUploadRadio.addEventListener('change', toggleFields);
 
-    closeModal.addEventListener('click', () => {
-      modal.style.display = 'none';
-    });
+  // File name display functionality
+  document.getElementById('video-file').addEventListener('change', function() {
+    const fileName = this.files[0] ? this.files[0].name : 'No file chosen';
+    document.getElementById('video-file-name').textContent = fileName;
+  });
 
-    cancelAdd.addEventListener('click', () => {
-      modal.style.display = 'none';
-    });
+  document.getElementById('thumbnail-file').addEventListener('change', function() {
+    const fileName = this.files[0] ? this.files[0].name : 'No file chosen';
+    document.getElementById('thumbnail-file-name').textContent = fileName;
+  });
 
-    window.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.style.display = 'none';
-      }
-    });
+  // Reset form function
+  function resetForm() {
+    document.getElementById('add-video-form').reset();
+    document.getElementById('video-id').value = '';
+    document.getElementById('edit-mode').value = 'false';
+    document.querySelector('.modal-header h3').textContent = 'Add New Video';
+    document.querySelector('#add-video-form button[type="submit"]').textContent = 'Add Video';
+    document.getElementById('video-file-name').textContent = '';
+    document.getElementById('thumbnail-file-name').textContent = '';
+    document.getElementById('add-link').checked = true;
+    toggleFields();
+  }
 
-    // Scroll button functionality
-    const scrollUpBtn = document.getElementById('scroll-up-btn');
-    const scrollDownBtn = document.getElementById('scroll-down-btn');
+  // Initialize fields on modal open
+  addVideoBtn.addEventListener('click', () => {
+    resetForm();
+    modal.style.display = 'block';
+    // Scroll modal content to top when opened
+    const modalContent = modal.querySelector('.modal-content');
+    if (modalContent) {
+      modalContent.scrollTop = 0;
+    }
+  });
 
-    scrollUpBtn.addEventListener('click', () => {
-      const modalContent = modal.querySelector('.modal-content');
-      if (modalContent) {
-        modalContent.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      }
-    });
+  // Store uploaded files in a more persistent way
+  const uploadedFiles = new Map();
 
-    scrollDownBtn.addEventListener('click', () => {
-      const modalContent = modal.querySelector('.modal-content');
-      if (modalContent) {
-        modalContent.scrollTo({
-          top: modalContent.scrollHeight,
-          behavior: 'smooth'
-        });
-      }
-    });
+  // Store original add video submit handler
+  let addVideoSubmitHandler = (e) => {
+    e.preventDefault();
 
-    // Store original add video submit handler
-    let addVideoSubmitHandler = (e) => {
-      e.preventDefault();
+    const title = document.getElementById('video-title').value.trim();
+    const course = document.getElementById('video-course').value;
+    const duration = document.getElementById('video-duration').value.trim();
+    const addMethod = document.querySelector('input[name="add-method"]:checked').value;
+    const status = document.getElementById('video-status').value;
+    let url = '';
+    let thumbnailUrl = '';
+    let videoFile = null;
+    let thumbnailFile = null;
 
-      const title = document.getElementById('video-title').value.trim();
-      const course = document.getElementById('video-course').value;
-      const duration = document.getElementById('video-duration').value.trim();
-      const url = document.getElementById('video-url').value.trim();
-      const status = document.getElementById('video-status').value;
-      const thumbnailUrl = document.getElementById('video-thumbnail').value.trim();
+    if (!title || !course || !duration || !status) {
+      alert('Please fill in all required fields.');
+      return;
+    }
 
-      if (!title || !course || !duration || !status) {
-        alert('Please fill in all required fields.');
+    if (addMethod === 'link') {
+      url = document.getElementById('video-url').value.trim();
+      thumbnailUrl = document.getElementById('video-thumbnail').value.trim();
+      
+      if (!url) {
+        alert('Please provide a video URL.');
         return;
       }
+    } else if (addMethod === 'upload') {
+      videoFile = document.getElementById('video-file').files[0];
+      thumbnailFile = document.getElementById('thumbnail-file').files[0];
+      
+      if (!videoFile) {
+        alert('Please select a video file to upload.');
+        return;
+      }
+      
+      // Store the file in our Map for later retrieval
+      const videoId = document.getElementById('video-id').value || generateVideoId();
+      uploadedFiles.set(videoId, {
+        videoFile: videoFile,
+        thumbnailFile: thumbnailFile || null
+      });
+      
+      // Create object URLs for display
+      url = URL.createObjectURL(videoFile);
+      thumbnailUrl = thumbnailFile ? URL.createObjectURL(thumbnailFile) : 'https://via.placeholder.com/300x200?text=Video+Thumbnail';
+    }
 
-      const newVideo = {
-        id: generateVideoId(),
-        title,
-        course,
-        duration,
-        views: 0,
-        status: status.charAt(0).toUpperCase() + status.slice(1),
-        thumbnail: thumbnailUrl || 'https://via.placeholder.com/60x40',
-        url: url || ''
-      };
-
-      videos.push(newVideo);
-      renderVideosGrid(document.getElementById('search-input').value);
-      modal.style.display = 'none';
-      document.getElementById('add-video-form').reset();
-      alert('Video added successfully!');
+    const newVideo = {
+      id: document.getElementById('video-id').value || generateVideoId(),
+      title,
+      course,
+      duration,
+      views: 0,
+      status: status.charAt(0).toUpperCase() + status.slice(1),
+      thumbnail: thumbnailUrl || 'https://via.placeholder.com/300x200?text=Video+Thumbnail',
+      url: url || '',
+      addMethod: addMethod,
+      // Store file references for uploaded videos
+      hasUploadedFile: addMethod === 'upload'
     };
 
-    // Attach the add handler
-    document.getElementById('add-video-form').addEventListener('submit', addVideoSubmitHandler);
+    if (document.getElementById('edit-mode').value === 'true') {
+      // Update existing video
+      const videoId = document.getElementById('video-id').value;
+      const index = videos.findIndex(v => v.id === videoId);
+      if (index !== -1) {
+        // Preserve views count when editing
+        newVideo.views = videos[index].views;
+        videos[index] = newVideo;
+      }
+    } else {
+      // Add new video
+      videos.push(newVideo);
+    }
+    
+    renderVideosGrid(document.getElementById('search-input').value);
+    modal.style.display = 'none';
+    resetForm();
+    alert(document.getElementById('edit-mode').value === 'true' ? 'Video updated successfully!' : 'Video added successfully!');
+  };
 
-    // Attach event listeners to grid buttons
-    function attachGridEventListeners() {
-      // Edit video functionality
-      document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const video = videos.find(v => v.id === id);
-          if (video) {
-            // Open modal and change title
-            modal.style.display = 'block';
-            document.querySelector('.modal-header h3').textContent = 'Edit Video';
+  // Attach the add handler
+  document.getElementById('add-video-form').addEventListener('submit', addVideoSubmitHandler);
 
-            // Fill form with video data
-            document.getElementById('video-title').value = video.title;
-            document.getElementById('video-course').value = video.course;
-            document.getElementById('video-duration').value = video.duration;
+  // Function to play uploaded videos
+  function playUploadedVideo(videoId) {
+    if (uploadedFiles.has(videoId)) {
+      const fileData = uploadedFiles.get(videoId);
+      const videoUrl = URL.createObjectURL(fileData.videoFile);
+      
+      // Create a video player modal
+      const playerModal = document.createElement('div');
+      playerModal.className = 'modal';
+      playerModal.innerHTML = `
+        <div class="modal-content" style="max-width: 800px;">
+          <div class="modal-header">
+            <h3>Video Player</h3>
+            <span class="close-modal">&times;</span>
+          </div>
+          <div style="padding: 20px;">
+            <video controls autoplay style="width: 100%;">
+              <source src="${videoUrl}" type="${fileData.videoFile.type}">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(playerModal);
+      playerModal.style.display = 'block';
+      
+      // Close functionality
+      const closeBtn = playerModal.querySelector('.close-modal');
+      closeBtn.addEventListener('click', () => {
+        document.body.removeChild(playerModal);
+      });
+      
+      // Also close when clicking outside
+      playerModal.addEventListener('click', (e) => {
+        if (e.target === playerModal) {
+          document.body.removeChild(playerModal);
+        }
+      });
+    } else {
+      alert('Video file not found. Please re-upload the video.');
+    }
+  }
+
+  // Attach event listeners to grid buttons
+  function attachGridEventListeners() {
+    // Edit video functionality
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        const video = videos.find(v => v.id === id);
+        if (video) {
+          // Open modal and change title
+          modal.style.display = 'block';
+          document.querySelector('.modal-header h3').textContent = 'Edit Video';
+          document.getElementById('edit-mode').value = 'true';
+          document.getElementById('video-id').value = video.id;
+
+          // Fill form with video data
+          document.getElementById('video-title').value = video.title;
+          document.getElementById('video-course').value = video.course;
+          document.getElementById('video-duration').value = video.duration;
+          document.getElementById('video-status').value = video.status.toLowerCase();
+          
+          // Set the correct add method
+          if (video.addMethod === 'upload') {
+            document.getElementById('add-upload').checked = true;
+          } else {
+            document.getElementById('add-link').checked = true;
+          }
+          
+          // Toggle fields based on method
+          toggleFields();
+          
+          // Fill URL fields if using link method
+          if (video.addMethod === 'link' || !video.addMethod) {
             document.getElementById('video-url').value = video.url;
             document.getElementById('video-thumbnail').value = video.thumbnail;
-            document.getElementById('video-status').value = video.status.toLowerCase();
-
-            // Change submit button text
-            document.querySelector('#add-video-form button[type="submit"]').textContent = 'Update Video';
-
-            // Store original submit handler
-            const form = document.getElementById('add-video-form');
-            const originalHandler = addVideoSubmitHandler;
-
-            // Remove original handler and add update handler
-            form.removeEventListener('submit', originalHandler);
-            form.addEventListener('submit', function updateVideoSubmitHandler(e) {
-              e.preventDefault();
-
-              const thumbnailUrl = document.getElementById('video-thumbnail').value.trim();
-
-              video.title = document.getElementById('video-title').value.trim();
-              video.course = document.getElementById('video-course').value;
-              video.duration = document.getElementById('video-duration').value.trim();
-              video.url = document.getElementById('video-url').value.trim();
-              video.status = document.getElementById('video-status').value.charAt(0).toUpperCase() + document.getElementById('video-status').value.slice(1);
-              video.thumbnail = thumbnailUrl || video.thumbnail;
-
-              renderVideosGrid(document.getElementById('search-input').value);
-              modal.style.display = 'none';
-              form.reset();
-
-              // Restore original handler and UI
-              form.removeEventListener('submit', updateVideoSubmitHandler);
-              form.addEventListener('submit', originalHandler);
-              document.querySelector('.modal-header h3').textContent = 'Add New Video';
-              document.querySelector('#add-video-form button[type="submit"]').textContent = 'Add Video';
-
-              alert('Video updated successfully!');
-            });
+          } else {
+            // For uploads, show file names if available
+            if (uploadedFiles.has(video.id)) {
+              const fileData = uploadedFiles.get(video.id);
+              document.getElementById('video-file-name').textContent = fileData.videoFile.name;
+              if (fileData.thumbnailFile) {
+                document.getElementById('thumbnail-file-name').textContent = fileData.thumbnailFile.name;
+              }
+            }
           }
-        });
-      });
 
-      // View video details functionality
-      document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const video = videos.find(v => v.id === id);
-          if (video) {
-            alert(`📹 Video Details:\n\nTitle: ${video.title}\nCourse: ${video.course.replace(/-/g, ' ')}\nDuration: ${video.duration}\nViews: ${video.views}\nStatus: ${video.status}\nURL: ${video.url || 'N/A'}`);
-          }
-        });
+          // Change submit button text
+          document.querySelector('#add-video-form button[type="submit"]').textContent = 'Update Video';
+        }
       });
+    });
 
-      // Play video functionality
-      document.querySelectorAll('.play-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          const video = videos.find(v => v.id === id);
-          if (video && video.url) {
+    // View video details functionality
+    document.querySelectorAll('.view-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        const video = videos.find(v => v.id === id);
+        if (video) {
+          alert(`📹 Video Details:\n\nTitle: ${video.title}\nCourse: ${video.course.replace(/-/g, ' ')}\nDuration: ${video.duration}\nViews: ${video.views}\nStatus: ${video.status}\nMethod: ${video.addMethod || 'link'}\nURL: ${video.url || 'N/A'}`);
+        }
+      });
+    });
+
+    // Play video functionality
+    document.querySelectorAll('.play-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        const video = videos.find(v => v.id === id);
+        if (video) {
+          if (video.addMethod === 'upload') {
+            // Handle uploaded videos
+            playUploadedVideo(id);
+          } else if (video.url) {
+            // Handle linked videos
             window.open(video.url, '_blank');
           } else {
             alert('Video URL not available');
           }
-        });
+        }
       });
+    });
 
-      // Delete video functionality
-      document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          if (confirm('Are you sure you want to delete this video?')) {
-            videos = videos.filter(v => v.id !== id);
-            renderVideosGrid(document.getElementById('search-input').value);
-            alert('Video deleted successfully!');
+    // Delete video functionality
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        if (confirm('Are you sure you want to delete this video?')) {
+          videos = videos.filter(v => v.id !== id);
+          // Also remove from uploaded files if it exists there
+          if (uploadedFiles.has(id)) {
+            uploadedFiles.delete(id);
           }
-        });
+          renderVideosGrid(document.getElementById('search-input').value);
+          alert('Video deleted successfully!');
+        }
       });
+    });
+  }
+
+  // Search functionality
+  const searchInput = document.getElementById('search-input');
+  searchInput.addEventListener('input', () => {
+    renderVideosGrid(searchInput.value);
+  });
+
+  // Export videos list as CSV
+  document.getElementById('export-videos-btn').addEventListener('click', () => {
+    if (videos.length === 0) {
+      alert('No videos to export.');
+      return;
     }
 
-    // Search functionality
-    const searchInput = document.querySelector('.search-bar input');
-    searchInput.setAttribute('id', 'search-input');
-    searchInput.addEventListener('input', () => {
-      renderVideosGrid(searchInput.value);
+    const csvRows = [];
+    const headers = ['ID', 'Title', 'Course', 'Duration', 'Views', 'Status', 'URL', 'Method'];
+    csvRows.push(headers.join(','));
+
+    videos.forEach(video => {
+      const row = [
+        video.id,
+        `"${video.title}"`,
+        video.course,
+        video.duration,
+        video.views,
+        video.status,
+        video.url || '',
+        video.addMethod || 'link'
+      ];
+      csvRows.push(row.join(','));
     });
 
-    // Export videos list as CSV
-    document.getElementById('export-videos-btn').addEventListener('click', () => {
-      if (videos.length === 0) {
-        alert('No videos to export.');
-        return;
-      }
+    const csvString = csvRows.join('\n');
+    const blob = new Blob([csvString], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'videos_list.csv');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
 
-      const csvRows = [];
-      const headers = ['ID', 'Title', 'Course', 'Duration', 'Views', 'Status', 'URL'];
-      csvRows.push(headers.join(','));
+  // Example videos data to display initially
+  let videos = [
+    {
+      id: 'vid1',
+      title: 'Introduction to Java',
+      course: 'java-basics',
+      duration: '12:34',
+      views: 1200,
+      status: 'Active',
+      thumbnail: 'https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757678323/Java_final_keyword____How_to_use_final_keyword_in_bi0fjn.jpg',
+      url: 'https://youtu.be/t54pgbVy6t0',
+      addMethod: 'link'
+    },
+    {
+      id: 'vid2',
+      title: 'Python Basics',
+      course: 'python-fundamentals',
+      duration: '15:20',
+      views: 980,
+      status: 'Active',
+      thumbnail: 'https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757678326/Introduction_to_Python_-_The_Engineering_Projects_vks58s.jpg',
+      url: 'https://youtu.be/xkZMUX_oQX4',
+      addMethod: 'link'
+    },
+    {
+      id: 'vid3',
+      title: 'Web Development Overview',
+      course: 'web-development',
+      duration: '20:10',
+      views: 1500,
+      status: 'Pending',
+      thumbnail: 'https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757678680/Website_Development_Company_in_UAE_jsm83s.jpg',
+      url: 'https://youtu.be/XBu54nfzxAQ',
+      addMethod: 'link'
+    }
+  ];
 
-      videos.forEach(video => {
-        const row = [
-          video.id,
-          `"${video.title}"`,
-          video.course,
-          video.duration,
-          video.views,
-          video.status,
-          video.url || ''
-        ];
-        csvRows.push(row.join(','));
-      });
+  // Function to generate unique video IDs
+  function generateVideoId() {
+    return 'vid' + Math.random().toString(36).substr(2, 9);
+  }
 
-      const csvString = csvRows.join('\n');
-      const blob = new Blob([csvString], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.setAttribute('hidden', '');
-      a.setAttribute('href', url);
-      a.setAttribute('download', 'videos_list.csv');
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    });
+  // Function to render videos in grid layout
+  function renderVideosGrid(filter = '') {
+    const container = document.querySelector('.videos-grid-container');
+    container.innerHTML = '';
 
-    // Example videos data to display initially
-    let videos = [
-      {
-        id: 'vid1',
-        title: 'Introduction to Java',
-        course: 'java-basics',
-        duration: '12:34',
-        views: 1200,
-        status: 'Active',
-        thumbnail: 'https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757678323/Java_final_keyword____How_to_use_final_keyword_in_bi0fjn.jpg',
-        url: 'https://youtu.be/t54pgbVy6t0'
-      },
-      {
-        id: 'vid2',
-        title: 'Python Basics',
-        course: 'python-fundamentals',
-        duration: '15:20',
-        views: 980,
-        status: 'Active',
-        thumbnail: 'https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757678326/Introduction_to_Python_-_The_Engineering_Projects_vks58s.jpg',
-        url: 'https://youtu.be/xkZMUX_oQX4' 
-      },
-      {
-        id: 'vid3',
-        title: 'Web Development Overview',
-        course: 'web-development',
-        duration: '20:10',
-        views: 1500,
-        status: 'Pending',
-        thumbnail: 'https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757678680/Website_Development_Company_in_UAE_jsm83s.jpg',
-        url: 'https://youtu.be/XBu54nfzxAQ'
-      }
-    ];
+    const filteredVideos = videos.filter(video =>
+      video.title.toLowerCase().includes(filter.toLowerCase()) ||
+      video.course.toLowerCase().includes(filter.toLowerCase())
+    );
 
-    // Function to generate unique video IDs
-    function generateVideoId() {
-      return 'vid' + Math.random().toString(36).substr(2, 9);
+    if (filteredVideos.length === 0) {
+      container.innerHTML = '<p>No videos found.</p>';
+      return;
     }
 
-    // Function to render videos in grid layout
-    function renderVideosGrid(filter = '') {
-      const container = document.querySelector('.videos-grid-container');
-      container.innerHTML = '';
+    filteredVideos.forEach(video => {
+      const card = document.createElement('div');
+      card.className = 'video-card';
 
-      const filteredVideos = videos.filter(video =>
-        video.title.toLowerCase().includes(filter.toLowerCase()) ||
-        video.course.toLowerCase().includes(filter.toLowerCase())
-      );
+      card.innerHTML = `
+        <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail" />
+        <div class="video-info">
+          <h4 class="video-title">${video.title}</h4>
+          <p class="video-course">${video.course.replace(/-/g, ' ')}</p>
+          <p class="video-duration">Duration: ${video.duration}</p>
+          <p class="video-views">Views: ${video.views}</p>
+          <span class="status ${video.status.toLowerCase()}">${video.status}</span>
+        </div>
+        <div class="video-actions">
+          <button class="action-btn play-btn" data-id="${video.id}" title="Play"><i class="fas fa-play"></i></button>
+          <button class="action-btn view-btn" data-id="${video.id}" title="View"><i class="fas fa-eye"></i></button>
+          <button class="action-btn edit-btn" data-id="${video.id}" title="Edit"><i class="fas fa-edit"></i></button>
+          <button class="action-btn delete-btn" data-id="${video.id}" title="Delete"><i class="fas fa-trash"></i></button>
+        </div>
+      `;
 
-      if (filteredVideos.length === 0) {
-        container.innerHTML = '<p>No videos found.</p>';
-        return;
-      }
-
-      filteredVideos.forEach(video => {
-        const card = document.createElement('div');
-        card.className = 'video-card';
-
-        card.innerHTML = `
-          <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail" />
-          <div class="video-info">
-            <h4 class="video-title">${video.title}</h4>
-            <p class="video-course">${video.course.replace(/-/g, ' ')}</p>
-            <p class="video-duration">Duration: ${video.duration}</p>
-            <p class="video-views">Views: ${video.views}</p>
-            <span class="status ${video.status.toLowerCase()}">${video.status}</span>
-          </div>
-          <div class="video-actions">
-            <button class="action-btn play-btn" data-id="${video.id}" title="Play"><i class="fas fa-play"></i></button>
-            <button class="action-btn view-btn" data-id="${video.id}" title="View"><i class="fas fa-eye"></i></button>
-            <button class="action-btn edit-btn" data-id="${video.id}" title="Edit"><i class="fas fa-edit"></i></button>
-            <button class="action-btn delete-btn" data-id="${video.id}" title="Delete"><i class="fas fa-trash"></i></button>
-          </div>
-        `;
-
-        container.appendChild(card);
-      });
-
-      attachGridEventListeners();
-    }
-
-    // Responsive sidebar
-    window.addEventListener('resize', () => {
-      if (window.innerWidth <= 768) {
-        sidebar.classList.add('collapsed');
-      } else {
-        sidebar.classList.remove('collapsed');
-      }
+      container.appendChild(card);
     });
 
-    // Initialize
+    attachGridEventListeners();
+  }
+
+  // Responsive sidebar
+  window.addEventListener('resize', () => {
     if (window.innerWidth <= 768) {
       sidebar.classList.add('collapsed');
+    } else {
+      sidebar.classList.remove('collapsed');
     }
+  });
 
-    // Initial render
-    renderVideosGrid();
+  // Initialize
+  if (window.innerWidth <= 768) {
+    sidebar.classList.add('collapsed');
+  }
+
+  // Initial render
+  renderVideosGrid();
   </script>
-
-
 </body>
 </html>

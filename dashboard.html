@@ -64,6 +64,18 @@
       padding: 0 2px;
       border-radius: 3px;
     }
+    
+    /* Added for section highlighting */
+    .section-highlight {
+      animation: highlight 2s ease;
+      border: 2px solid #14a191;
+      border-radius: 8px;
+    }
+    
+    @keyframes highlight {
+      0% { background-color: rgba(20, 161, 145, 0.3); }
+      100% { background-color: transparent; }
+    }
   </style>
 </head>
 <body>
@@ -178,7 +190,7 @@
       </div>
 
       <!-- Course Overview Section -->
-      <div class="course-overview-section">
+      <div class="course-overview-section" id="course-overview-section">
         <div class="card">
           <div class="card-header">
             <h3>Course Overview</h3>
@@ -203,7 +215,7 @@
       </div>
 
       <div class="dashboard-low active">
-        <div class="chart-like-container">
+        <div class="chart-like-container" id="recent-activity-container">
           <div class="recent-activity card">
             <h3>Recent Activity</h3>
             <ul id="recent-activity-list">
@@ -218,7 +230,7 @@
             </ul>
           </div>
         </div>
-        <div class="chart-like-container">
+        <div class="chart-like-container" id="tasks-reminders-container">
           <div class="tasks-reminders card">
             <h3>Tasks / Reminders</h3>
             <ul id="tasks-list">
@@ -233,7 +245,7 @@
             </ul>
           </div>
         </div>
-        <div class="chart-like-container">
+        <div class="chart-like-container" id="notifications-container">
           <div class="notifications-panel card">
             <h3>Notifications</h3>
             <ul class="notifications-list" id="notifications-list">
@@ -264,7 +276,7 @@
             </ul>
           </div>
         </div>
-        <div class="chart-like-container">
+        <div class="chart-like-container" id="user-profile-container">
           <div class="user-profile card">
             <h3>User Profile Details</h3>
             <div class="profile-info">
@@ -293,8 +305,8 @@
     function extractDashboardData() {
       const data = {
         courses: [],
-        students: [], // Note: Students data not directly on dashboard, keeping sample or remove if not needed
-        trainers: [], // Note: Trainers data not directly on dashboard, keeping sample or remove if not needed
+        students: [],
+        trainers: [],
         activities: [],
         tasks: [],
         notifications: []
@@ -445,166 +457,212 @@
     const searchResults = document.getElementById('search-results');
     const searchButton = document.getElementById('search-button');
 
-    // Function to perform search
-    function performSearch(query) {
-      if (!query || query.length < 2) {
-        searchResults.style.display = 'none';
-        return;
+      // Function to perform search
+      function performSearch(query) {
+        if (!query || query.length < 2) {
+          searchResults.style.display = 'none';
+          return;
+        }
+
+        const results = {
+          courses: [],
+          students: [],
+          trainers: [],
+          activities: [],
+          tasks: [],
+          notifications: [],
+          graphs: [],
+          profile: []
+        };
+
+        // Search courses
+        results.courses = searchData.courses.filter(item =>
+          item.name.toLowerCase().includes(query) ||
+          item.trainer.toLowerCase().includes(query)
+        );
+
+        // Search students
+        results.students = searchData.students.filter(item =>
+          item.name.toLowerCase().includes(query) ||
+          item.course.toLowerCase().includes(query)
+        );
+
+        // Search trainers
+        results.trainers = searchData.trainers.filter(item =>
+          item.name.toLowerCase().includes(query) ||
+          item.expertise.toLowerCase().includes(query)
+        );
+
+        // Search activities using extracted data
+        results.activities = searchData.activities.filter(item =>
+          item.text.toLowerCase().includes(query)
+        );
+
+        // Search tasks using extracted data
+        results.tasks = searchData.tasks.filter(item =>
+          item.text.toLowerCase().includes(query)
+        );
+
+        // Search notifications using extracted data
+        results.notifications = searchData.notifications.filter(item =>
+          item.title.toLowerCase().includes(query) ||
+          item.description.toLowerCase().includes(query)
+        );
+
+        // Search graphs
+        results.graphs = searchData.graphs.filter(item =>
+          item.name.toLowerCase().includes(query)
+        );
+
+        // Search profile
+        results.profile = searchData.profile.filter(item =>
+          item.name.toLowerCase().includes(query) ||
+          item.role.toLowerCase().includes(query) ||
+          item.email.toLowerCase().includes(query) ||
+          item.department.toLowerCase().includes(query)
+        );
+
+        // Display results
+        displaySearchResults(results, query);
       }
 
-      const results = {
-        courses: [],
-        students: [],
-        trainers: [],
-        activities: [],
-        tasks: [],
-        notifications: []
-      };
+      // Function to display search results
+      function displaySearchResults(results, query) {
+        let hasResults = false;
+        let resultsHTML = '';
 
-      // Search courses
-      results.courses = searchData.courses.filter(item =>
-        item.name.toLowerCase().includes(query) ||
-        item.trainer.toLowerCase().includes(query)
-      );
+        // Highlight text in results
+        function highlightText(text, query) {
+          const regex = new RegExp(`(${query})`, 'gi');
+          return text.replace(regex, '<span class="highlight">$1</span>');
+        }
 
-      // Search students
-      results.students = searchData.students.filter(item =>
-        item.name.toLowerCase().includes(query) ||
-        item.course.toLowerCase().includes(query)
-      );
-
-      // Search trainers
-      results.trainers = searchData.trainers.filter(item =>
-        item.name.toLowerCase().includes(query) ||
-        item.expertise.toLowerCase().includes(query)
-      );
-
-      // Search activities using extracted data
-      results.activities = searchData.activities.filter(item =>
-        item.text.toLowerCase().includes(query)
-      );
-
-      // Search tasks using extracted data
-      results.tasks = searchData.tasks.filter(item =>
-        item.text.toLowerCase().includes(query)
-      );
-
-      // Search notifications using extracted data
-      results.notifications = searchData.notifications.filter(item =>
-        item.title.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query)
-      );
-
-      // Display results
-      displaySearchResults(results, query);
-    }
-
-    // Function to display search results
-    function displaySearchResults(results, query) {
-      let hasResults = false;
-      let resultsHTML = '';
-
-      // Highlight text in results
-      function highlightText(text, query) {
-        const regex = new RegExp(`(${query})`, 'gi');
-        return text.replace(regex, '<span class="highlight">$1</span>');
-      }
-
-      // Courses results
-      if (results.courses.length > 0) {
-        hasResults = true;
-        resultsHTML += '<div class="search-result-category">Courses</div>';
-        results.courses.forEach(course => {
-          resultsHTML += `
-            <div class="search-result-item" data-type="course" data-id="${course.id}">
-              <i class="fas fa-book"></i>
-              <div>
-                <div>${highlightText(course.name, query)}</div>
-                <small>Trainer: ${highlightText(course.trainer, query)}</small>
+        // Courses results
+        if (results.courses.length > 0) {
+          hasResults = true;
+          resultsHTML += '<div class="search-result-category">Courses</div>';
+          results.courses.forEach(course => {
+            resultsHTML += `
+              <div class="search-result-item" data-type="course" data-id="${course.id}">
+                <i class="fas fa-book"></i>
+                <div>
+                  <div>${highlightText(course.name, query)}</div>
+                  <small>Trainer: ${highlightText(course.trainer, query)}</small>
+                </div>
               </div>
-            </div>
-          `;
-        });
-      }
+            `;
+          });
+        }
 
-      // Students results
-      if (results.students.length > 0) {
-        hasResults = true;
-        resultsHTML += '<div class="search-result-category">Students</div>';
-        results.students.forEach(student => {
-          resultsHTML += `
-            <div class="search-result-item" data-type="student" data-id="${student.id}">
-              <i class="fas fa-user-graduate"></i>
-              <div>
-                <div>${highlightText(student.name, query)}</div>
-                <small>Course: ${highlightText(student.course, query)}</small>
+        // Students results
+        if (results.students.length > 0) {
+          hasResults = true;
+          resultsHTML += '<div class="search-result-category">Students</div>';
+          results.students.forEach(student => {
+            resultsHTML += `
+              <div class="search-result-item" data-type="student" data-id="${student.id}">
+                <i class="fas fa-user-graduate"></i>
+                <div>
+                  <div>${highlightText(student.name, query)}</div>
+                  <small>Course: ${highlightText(student.course, query)}</small>
+                </div>
               </div>
-            </div>
-          `;
-        });
-      }
+            `;
+          });
+        }
 
-      // Trainers results
-      if (results.trainers.length > 0) {
-        hasResults = true;
-        resultsHTML += '<div class="search-result-category">Trainers</div>';
-        results.trainers.forEach(trainer => {
-          resultsHTML += `
-            <div class="search-result-item" data-type="trainer" data-id="${trainer.id}">
-              <i class="fas fa-chalkboard-teacher"></i>
-              <div>
-                <div>${highlightText(trainer.name, query)}</div>
-                <small>Expertise: ${highlightText(trainer.expertise, query)}</small>
+        // Trainers results
+        if (results.trainers.length > 0) {
+          hasResults = true;
+          resultsHTML += '<div class="search-result-category">Trainers</div>';
+          results.trainers.forEach(trainer => {
+            resultsHTML += `
+              <div class="search-result-item" data-type="trainer" data-id="${trainer.id}">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <div>
+                  <div>${highlightText(trainer.name, query)}</div>
+                  <small>Expertise: ${highlightText(trainer.expertise, query)}</small>
+                </div>
               </div>
-            </div>
-          `;
-        });
-      }
+            `;
+          });
+        }
 
-      // Activities results
-      if (results.activities.length > 0) {
-        hasResults = true;
-        resultsHTML += '<div class="search-result-category">Recent Activities</div>';
-        results.activities.forEach(activity => {
-          resultsHTML += `
-            <div class="search-result-item">
-              <i class="fas fa-history"></i>
-              <div>${highlightText(activity, query)}</div>
-            </div>
-          `;
-        });
-      }
-
-      // Tasks results
-      if (results.tasks.length > 0) {
-        hasResults = true;
-        resultsHTML += '<div class="search-result-category">Tasks</div>';
-        results.tasks.forEach(task => {
-          resultsHTML += `
-            <div class="search-result-item" data-type="task">
-              <i class="fas fa-tasks"></i>
-              <div>${highlightText(task.text, query)}</div>
-            </div>
-          `;
-        });
-      }
-
-      // Notifications results
-      if (results.notifications.length > 0) {
-        hasResults = true;
-        resultsHTML += '<div class="search-result-category">Notifications</div>';
-        results.notifications.forEach(notification => {
-          resultsHTML += `
-            <div class="search-result-item" data-type="notification" data-id="${notification.id}">
-              <i class="fas fa-bell"></i>
-              <div>
-                <div>${highlightText(notification.title, query)}</div>
-                <small>${highlightText(notification.description, query)}</small>
+        // Activities results
+        if (results.activities.length > 0) {
+          hasResults = true;
+          resultsHTML += '<div class="search-result-category">Recent Activities</div>';
+          results.activities.forEach(activity => {
+            resultsHTML += `
+              <div class="search-result-item" data-type="activity">
+                <i class="fas fa-history"></i>
+                <div>${highlightText(activity.text, query)}</div>
               </div>
-            </div>
-          `;
-        });
-      }
+            `;
+          });
+        }
+
+        // Tasks results
+        if (results.tasks.length > 0) {
+          hasResults = true;
+          resultsHTML += '<div class="search-result-category">Tasks</div>';
+          results.tasks.forEach(task => {
+            resultsHTML += `
+              <div class="search-result-item" data-type="task">
+                <i class="fas fa-tasks"></i>
+                <div>${highlightText(task.text, query)}</div>
+              </div>
+            `;
+          });
+        }
+
+        // Notifications results
+        if (results.notifications.length > 0) {
+          hasResults = true;
+          resultsHTML += '<div class="search-result-category">Notifications</div>';
+          results.notifications.forEach(notification => {
+            resultsHTML += `
+              <div class="search-result-item" data-type="notification" data-id="${notification.id}">
+                <i class="fas fa-bell"></i>
+                <div>
+                  <div>${highlightText(notification.title, query)}</div>
+                  <small>${highlightText(notification.description, query)}</small>
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        // Graphs results
+        if (results.graphs.length > 0) {
+          hasResults = true;
+          resultsHTML += '<div class="search-result-category">Graphs</div>';
+          results.graphs.forEach(graph => {
+            resultsHTML += `
+              <div class="search-result-item" data-type="graph" data-id="${graph.id}">
+                <i class="fas fa-chart-bar"></i>
+                <div>${highlightText(graph.name, query)}</div>
+              </div>
+            `;
+          });
+        }
+
+        // Profile results
+        if (results.profile.length > 0) {
+          hasResults = true;
+          resultsHTML += '<div class="search-result-category">Profile</div>';
+          results.profile.forEach(profile => {
+            resultsHTML += `
+              <div class="search-result-item" data-type="profile" data-id="${profile.id}">
+                <i class="fas fa-user"></i>
+                <div>
+                  <div>${highlightText(profile.name, query)}</div>
+                  <small>${highlightText(profile.role, query)}</small>
+                </div>
+              </div>
+            `;
+          });
+        }
 
       if (!hasResults) {
         resultsHTML = '<div class="no-results">No results found for "' + query + '"</div>';
@@ -623,37 +681,66 @@
           switch(type) {
             case 'course':
               // Scroll to courses section
-              document.querySelector('.course-overview-section').scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-              });
+              const courseSection = document.getElementById('course-overview-section');
+              courseSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              courseSection.classList.add('section-highlight');
+              setTimeout(() => {
+                courseSection.classList.remove('section-highlight');
+              }, 2000);
               break;
             case 'student':
-              window.location.href = 'student.html';
-              break;
             case 'trainer':
-              window.location.href = 'trainers.html';
+              // These would normally redirect to other pages
+              alert(`Would navigate to ${type} details page for ID: ${id}`);
               break;
             case 'activity':
               // Scroll to activities section
-              document.querySelector('.recent-activity').scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-              });
+              const activitySection = document.getElementById('recent-activity-container');
+              activitySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              activitySection.classList.add('section-highlight');
+              setTimeout(() => {
+                activitySection.classList.remove('section-highlight');
+              }, 2000);
               break;
             case 'task':
               // Scroll to tasks section
-              document.querySelector('.tasks-reminders').scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-              });
+              const taskSection = document.getElementById('tasks-reminders-container');
+              taskSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              taskSection.classList.add('section-highlight');
+              setTimeout(() => {
+                taskSection.classList.remove('section-highlight');
+              }, 2000);
               break;
             case 'notification':
               // Scroll to notifications section
-              document.querySelector('.notifications-panel').scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-              });
+              const notificationSection = document.getElementById('notifications-container');
+              notificationSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              notificationSection.classList.add('section-highlight');
+              setTimeout(() => {
+                notificationSection.classList.remove('section-highlight');
+              }, 2000);
+              break;
+            case 'graph':
+              // Scroll to graphs section (scroll to first graph container)
+              const graphsSection = document.querySelector('.graphs-row');
+              if (graphsSection) {
+                graphsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                graphsSection.classList.add('section-highlight');
+                setTimeout(() => {
+                  graphsSection.classList.remove('section-highlight');
+                }, 2000);
+              }
+              break;
+            case 'profile':
+              // Scroll to user profile section
+              const profileSection = document.getElementById('user-profile-container');
+              if (profileSection) {
+                profileSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                profileSection.classList.add('section-highlight');
+                setTimeout(() => {
+                  profileSection.classList.remove('section-highlight');
+                }, 2000);
+              }
               break;
             default:
               // Close the results
@@ -728,6 +815,24 @@
         duration: '12 weeks',
         status: 'Inactive',
         avatar: 'https://via.placeholder.com/40'
+      },
+      {
+        id: 'CS004',
+        name: 'Data Science',
+        trainer: 'Sarah Williams',
+        enrolledStudents: 80,
+        duration: '14 weeks',
+        status: 'Active',
+        avatar: 'https://via.placeholder.com/40'
+      },
+      {
+        id: 'CS005',
+        name: 'Machine Learning',
+        trainer: 'Robert Brown',
+        enrolledStudents: 60,
+        duration: '16 weeks',
+        status: 'Active',
+        avatar: 'https://via.placeholder.com/40'
       }
     ];
 
@@ -752,6 +857,25 @@
 
     // Initialize search data after DOM is populated
     let searchData = extractDashboardData();
+
+    // Add graphs data to searchData
+    searchData.graphs = [
+      { id: 'graph1', name: 'Combined Enrollment and Completion Trends' },
+      { id: 'graph2', name: 'User Distribution' },
+      { id: 'graph3', name: 'Enrollment by Course' },
+      { id: 'graph4', name: 'Trainer Performance' }
+    ];
+
+    // Add profile data to searchData
+    searchData.profile = [
+      {
+        id: 'profile1',
+        name: 'VARALAXMI Y',
+        role: 'Admin',
+        email: 'varalaxmi.y@gmail.com',
+        department: 'Administration'
+      }
+    ];
   </script>
 
   <!-- Chart scripts remain unchanged -->
@@ -934,30 +1058,28 @@
         maintainAspectRatio: false,
         width: 800,
         height: 500,
-        animation: false,
-        hover: {
-          mode: null
-        },
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top',
-            labels: {
-              color: '#035e47',
-              font: {
-                size: 14,
-                weight: 'bold'
-              }
-            }
-          },
-          tooltip: {
-            enabled: true
+        elements: {
+          line: {
+            borderWidth: 3
           }
         },
         scales: {
           r: {
-            beginAtZero: true,
+            angleLines: {
+              display: true,
+              color: 'rgba(3, 94, 71, 0.2)'
+            },
+            suggestedMin: 50,
+            suggestedMax: 100,
             ticks: {
+              stepSize: 20,
+              color: '#035e47',
+              font: {
+                size: 12,
+                weight: 'bold'
+              }
+            },
+            pointLabels: {
               color: '#035e47',
               font: {
                 size: 12,
@@ -968,45 +1090,9 @@
               color: 'rgba(3, 94, 71, 0.1)'
             }
           }
-        }
-      }
-    });
-  </script>
-  <script>
-    // User Distribution Chart
-    const ctxDistribution = document.getElementById('userDistributionChart').getContext('2d');
-    const userDistributionChart = new Chart(ctxDistribution, {
-      type: 'pie',
-      data: {
-        labels: ['Students', 'Trainers', 'Admins'],
-        datasets: [{
-          label: 'User Distribution',
-          data: [1250, 75, 10],
-          backgroundColor: [
-            'rgba(20, 161, 145, 0.6)',
-            'rgba(255, 99, 132, 0.6)',
-            'rgba(54, 162, 235, 0.6)'
-          ],
-          borderColor: [
-            'rgba(20, 161, 145, 1)',
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: false,
-        maintainAspectRatio: false,
-        width: 800,
-        height: 500,
-        animation: false,
-        hover: {
-          mode: null
         },
         plugins: {
           legend: {
-            display: true,
             position: 'top',
             labels: {
               color: '#035e47',
@@ -1015,23 +1101,70 @@
                 weight: 'bold'
               }
             }
+          }
+        }
+      }
+    });
+  </script>
+  <script>
+    // User Distribution Chart
+    const ctxUserDistribution = document.getElementById('userDistributionChart').getContext('2d');
+    const userDistributionChart = new Chart(ctxUserDistribution, {
+      type: 'doughnut',
+      data: {
+        labels: ['Students', 'Trainers', 'Administrators'],
+        datasets: [{
+          data: [1250, 75, 15],
+          backgroundColor: [
+            'rgba(20, 161, 145, 0.8)',
+            'rgba(255, 99, 132, 0.8)',
+            'rgba(54, 162, 235, 0.8)'
+          ],
+          borderColor: [
+            'rgba(20, 161, 145, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)'
+          ],
+          borderWidth: 1,
+          hoverOffset: 20
+        }]
+      },
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        width: 800,
+        height: 500,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              color: '#035e47',
+              font: {
+                size: 14,
+                weight: 'bold'
+              },
+              padding: 20
+            }
           },
           tooltip: {
-            enabled: true,
             callbacks: {
               label: function(context) {
                 const label = context.label || '';
-                const value = context.parsed;
+                const value = context.raw || 0;
                 const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                const percentage = ((value / total) * 100).toFixed(1);
+                const percentage = Math.round((value / total) * 100);
                 return `${label}: ${value} (${percentage}%)`;
               }
             }
           }
+        },
+        cutout: '60%',
+        animation: {
+          animateScale: true,
+          animateRotate: true
         }
-    }
-  });
+      }
+    });
   </script>
-  
 </body>
 </html>
