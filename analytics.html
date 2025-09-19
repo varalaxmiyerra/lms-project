@@ -246,6 +246,10 @@
     if (window.innerWidth <= 768) {
       sidebar.classList.add('collapsed');
     }
+     // Notifications
+    document.getElementById('notifications').addEventListener('click', () => {
+      window.location.href = 'notifications.html';
+    });
   </script>
 
   <!-- Chart.js Scripts -->

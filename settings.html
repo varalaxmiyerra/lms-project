@@ -414,10 +414,10 @@
       document.getElementById("sidebar").classList.toggle("collapsed");
     };
 
-    // Notifications
-    document.getElementById("notifications").onclick = () => {
-      alert("You have 1 new notification.");
-    };
+     // Notifications
+    document.getElementById('notifications').addEventListener('click', () => {
+      window.location.href = 'notifications.html';
+    });
 
     // Logout
     document.getElementById("logout").onclick = () => {

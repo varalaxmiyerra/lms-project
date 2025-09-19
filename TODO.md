@@ -1,9 +1,11 @@
-# TODO: Make Dashboard Search Bar Work
+# TODO: Fix Notification Icon Navigation
 
-## Steps to Complete
-- [x] Extract real data from dashboard DOM elements (courses table, recent activities, tasks, notifications)
-- [x] Update performSearch function to filter real data instead of sample data
-- [x] Modify displaySearchResults to show filtered results with highlighting
-- [x] Add functionality to highlight or scroll to matching items on the dashboard
-- [ ] Test search bar functionality in browser
-- [ ] Refine search logic or UI if needed
+## Tasks
+- [ ] Update student.html notification onclick to navigate to notifications.html
+- [ ] Update trainers.html notification onclick to navigate to notifications.html
+- [ ] Update analytics.html notification onclick to navigate to notifications.html
+- [ ] Update settings.html notification onclick to navigate to notifications.html
+- [ ] Update about.html notification onclick to navigate to notifications.html
+- [ ] Update contact.html notification onclick to navigate to notifications.html
+- [ ] Update notifications.html notification onclick to navigate to notifications.html (optional for consistency)
+- [ ] Test navigation on all pages

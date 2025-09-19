@@ -608,7 +608,10 @@
         sidebar.classList.toggle('collapsed');
       });
     }
-
+ // Notifications
+    document.getElementById('notifications').addEventListener('click', () => {
+      window.location.href = 'notifications.html';
+    });
     // Logout functionality
     document.getElementById('logout').addEventListener('click', () => {
       if (confirm('Are you sure you want to logout?')) {

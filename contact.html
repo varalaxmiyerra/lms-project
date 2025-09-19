@@ -220,9 +220,9 @@
     };
 
     // Notifications
-    document.getElementById("notifications").onclick = () => {
-      alert("🔔 You have 3 new notifications.");
-    };
+    document.getElementById('notifications').addEventListener('click', () => {
+      window.location.href = 'notifications.html';
+    });
 
     // Logout
     document.getElementById("logout").onclick = () => {
