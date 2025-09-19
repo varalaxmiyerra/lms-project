@@ -88,6 +88,7 @@ body, html {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: auto;
 }
 
 .sidebar.collapsed {
@@ -906,6 +907,7 @@ body, html {
   margin-bottom: 8px;   /* space between sentences */
   line-height: 1.6;     /* increases line spacing */
 }
+
 
 
 

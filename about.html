@@ -9,7 +9,7 @@
   <style>
     /* About Page Specific Styles */
     .about-hero {
-      background: linear-gradient(135deg, #a3c9a8 0%, #55cea6 100%);
+      background: linear-gradient(135deg, #a3c9a8 0%, #056948 100%);
       color: white;
       padding: 20px 20px;
       border-radius: 12px;
@@ -69,7 +69,7 @@
     }
 
     .about-content .card h3 {
-      color: #55cea6;
+      color: #2d725b;
       margin-bottom: 15px;
       display: flex;
       align-items: center;
@@ -98,7 +98,7 @@
 
     .btn-secondary {
       display: inline-block;
-      background: #55cea6;
+      background: #057e55;
       color: white;
       padding: 10px 20px;
       border-radius: 5px;
@@ -108,7 +108,7 @@
     }
 
     .btn-secondary:hover {
-      background: #0f9e5b;
+      background: #038a4b;
     }
 
     /* Stats Section */
@@ -131,7 +131,7 @@
     .stat-number {
       font-size: 2.5rem;
       font-weight: bold;
-      color: #55cea6;
+      color: #046b49;
       margin-bottom: 10px;
     }
 
@@ -166,7 +166,11 @@
       transform: translateY(-5px);
     }
 
-    /* Removed .team-img styles since images are removed */
+    .team-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
 
     .team-info {
       padding: 20px;
@@ -228,14 +232,6 @@
     .testimonial-author {
       display: flex;
       align-items: center;
-    }
-
-    .testimonial-author img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      margin-right: 15px;
-      object-fit: cover;
     }
 
     .author-info h4 {
@@ -362,7 +358,7 @@
       transform: translateX(-50%);
       width: 80px;
       height: 3px;
-      background: linear-gradient(to right, #a3c9a8, #55cea6);
+      background: linear-gradient(to right, #a3c9a8, #0c6346);
     }
 
     @keyframes fadeInUp {
@@ -390,11 +386,13 @@
         <li><a href="student.html"><i class="fas fa-user-graduate"></i><span>Student</span></a></li>
         <li><a href="courses.html"><i class="fas fa-book"></i><span>Courses</span></a></li>
         <li><a href="analytics.html"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
-        <li><a href="material.html"><i class="fas fa-file-alt"></i><span>Material Page</span></a></li>
-        <li><a href="video.html" data-page="video"><i class="fas fa-video"></i><span>Video Page</span></a></li>
-        <li><a href="about.html" class="active"><i class="fas fa-info-circle"></i><span>About Page</span></a></li>
-        <li><a href="contact.html" data-page="contact"><i class="fas fa-envelope"></i><span>Contact Page</span></a></li>
-        <li><a href="settings.html" data-page="settings"><i class="fas fa-cog"></i><span>Settings Page</span></a></li>
+        <li><a href="material.html"><i class="fas fa-file-alt"></i><span>Materials</span></a></li>
+        <li><a href="video.html" data-page="video"><i class="fas fa-video"></i><span>Total-videos</span></a></li>
+        <li><a href="about.html" class="active"><i class="fas fa-info-circle"></i><span>About us</span></a></li>
+        <li><a href="contact.html" data-page="contact"><i class="fas fa-envelope"></i><span>Contact Info</span></a></li>
+                <li><a href="notifications.html"><i class="fas fa-bell"></i><span>Notifications</span></a></li>
+
+        <li><a href="settings.html" data-page="settings"><i class="fas fa-cog"></i><span>System Settings</span></a></li>
       </ul>
     </aside>
 
@@ -404,16 +402,14 @@
         <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
           <i class="fas fa-bars"></i>
         </button>
-        <div class="search-bar">
-          <input type="text" placeholder="Search...">
-          <button><i class="fas fa-search"></i></button>
-        </div>
+        
       </div>
-      <div class="navbar-right">
+     <div class="navbar-right">
         <button class="navbar-icon" id="notifications">
           <i class="fas fa-bell"></i>
           <span class="notification-badge">3</span>
         </button>
+
         <div class="profile-info">
           <span class="profile-name">vara</span>
           <img src="https://res.cloudinary.com/ds3wuvkwo/image/upload/v1757430111/Screenshot_217_dys7md.png" alt="Profile Picture" class="profile-pic" />
@@ -495,7 +491,6 @@
         <h2 class="section-title">Meet Our Leadership Team</h2>
         <div class="team-grid">
           <div class="team-member">
-            <!-- Removed image as requested -->
             <div class="team-info">
               <h3 class="team-name">Sarah Johnson</h3>
               <p class="team-role">CEO & Founder</p>
@@ -503,7 +498,6 @@
             </div>
           </div>
           <div class="team-member">
-            <!-- Removed image as requested -->
             <div class="team-info">
               <h3 class="team-name">Michael Chen</h3>
               <p class="team-role">CTO</p>
@@ -511,7 +505,6 @@
             </div>
           </div>
           <div class="team-member">
-            <!-- Removed image as requested -->
             <div class="team-info">
               <h3 class="team-name">Priya Sharma</h3>
               <p class="team-role">Head of Education</p>
@@ -519,7 +512,6 @@
             </div>
           </div>
           <div class="team-member">
-            <!-- Removed image as requested -->
             <div class="team-info">
               <h3 class="team-name">David Wilson</h3>
               <p class="team-role">Product Manager</p>
@@ -578,7 +570,6 @@
           <div class="testimonial-card">
             <p class="testimonial-text">This platform has transformed how we deliver education. The analytics features have given us insights we never had before.</p>
             <div class="testimonial-author">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="User">
               <div class="author-info">
                 <h4>Robert Kim</h4>
                 <p>University Professor</p>
@@ -588,7 +579,6 @@
           <div class="testimonial-card">
             <p class="testimonial-text">As a student, I love the intuitive interface and the wealth of resources available. It makes learning enjoyable and effective.</p>
             <div class="testimonial-author">
-              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="User">
               <div class="author-info">
                 <h4>Jessica Lee</h4>
                 <p>Graduate Student</p>
@@ -598,7 +588,6 @@
           <div class="testimonial-card">
             <p class="testimonial-text">The administrative tools have saved our institution countless hours. Managing courses and users has never been easier.</p>
             <div class="testimonial-author">
-              <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="User">
               <div class="author-info">
                 <h4>Maria Gonzalez</h4>
                 <p>Education Administrator</p>
