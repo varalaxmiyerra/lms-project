@@ -6,6 +6,15 @@
   <title>LMS Register</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="login.css" />
+  <style>
+    .right-panel h2 {
+      color: #ffffff !important;
+      text-shadow: 0 0 5px #ff4e50;
+    }
+    .right-panel {
+      background: rgba(255, 255, 255, 0.15) !important;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -15,9 +24,18 @@
       <p>Register for your Learning Management System to start managing courses, users, and reports.</p>
       
       <p>Teachers can manage courses and track student progress in one place.</p>
-     
+
       <p>Students can access lessons, assignments, and exams with just one click.</p>
-      <button onclick="showModal()">Learn More</button>
+
+      <h3>Key Benefits:</h3>
+      <ul style="list-style-type: disc; padding-left: 20px; color: #d1c4e9; font-size: 14px; line-height: 1.5;">
+        <li>Personalized learning paths</li>
+        <li>Real-time progress tracking</li>
+        <li>Interactive quizzes and assignments</li>
+        <li>24/7 access to resources</li>
+        <li>Community forums for collaboration</li>
+      </ul>
+
       <i class="fas fa-book animated-icon" id="book-icon"></i>
       <i class="fas fa-graduation-cap animated-icon" id="grad-icon"></i>
       <i class="fas fa-pencil-alt animated-icon" id="pencil-icon"></i>
@@ -60,7 +78,7 @@
         <input type="hidden" id="user-role" name="user-role" value="admin" />
         <button type="submit">Register</button>
         <div class="login-here-container" style="text-align: center; margin-top: 10px;">
-          <a href="lms_login_new.html" id="login-here-link" style="color: #ff4e50; cursor: pointer; text-decoration: underline;">Login Here</a>
+          <a href="lms_login_new.html" id="login-here-link" style="color: #faf8f8; cursor: pointer; text-decoration: underline;">Login Here</a>
         </div>
       </form>
       <div class="social-icons">
